@@ -39,7 +39,7 @@ func (c *auth) RegisterSubmit(ctx *gin.Context) {
 	if err := frontend.UserService(ctx).Register(&req); err != nil {
 		s.Back().WithError(err).Redirect()
 	} else {
-		s.To(p).WithMsg("注册成功， 欢迎来到 JTS 社区").Redirect()
+		s.To(p).WithMsg("注册成功， 欢迎来到酷社区").Redirect()
 	}
 }
 
@@ -74,7 +74,7 @@ func (c *auth) LoginSubmit(ctx *gin.Context) {
 	if err := frontend.UserService(ctx).Login(&req); err != nil {
 		s.Back().WithError(err).Redirect()
 	} else {
-		s.To(p).WithMsg("登录成功， 欢迎来到 JTS 社区").Redirect()
+		s.To(p).WithMsg("登录成功， 欢迎来到酷社区").Redirect()
 	}
 }
 
