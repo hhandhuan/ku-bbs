@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"github.com/huhaophp/hblog/pkg/utils/time"
-	"github.com/huhaophp/hblog/pkg/utils/view"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/time"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/view"
 	"html/template"
 )
 

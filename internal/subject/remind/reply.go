@@ -2,8 +2,8 @@ package remind
 
 import (
 	"fmt"
-	"github.com/huhaophp/hblog/internal/consts"
-	"github.com/huhaophp/hblog/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/consts"
+	"github.com/hhandhuan/ku-bbs/internal/model"
 	"log"
 )
 

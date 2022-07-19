@@ -4,11 +4,11 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/huhaophp/hblog/internal/consts"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	"github.com/huhaophp/hblog/internal/model"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/pkg/utils/page"
+	"github.com/hhandhuan/ku-bbs/internal/consts"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	"gorm.io/gorm"
 )
 

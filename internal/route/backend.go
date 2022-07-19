@@ -2,7 +2,7 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/huhaophp/hblog/internal/app/backend"
+	"github.com/hhandhuan/ku-bbs/internal/app/backend"
 )
 
 func RegisterBackendRoute(engine *gin.Engine) {

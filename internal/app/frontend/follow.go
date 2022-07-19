@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/frame/g"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Follow = cFollow{}

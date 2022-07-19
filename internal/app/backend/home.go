@@ -2,7 +2,7 @@ package backend
 
 import (
 	"github.com/gin-gonic/gin"
-	srv "github.com/huhaophp/hblog/internal/service"
+	srv "github.com/hhandhuan/ku-bbs/internal/service"
 )
 
 var Home = cHome{}

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/huhaophp/hblog/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/db"
 	"gorm.io/gorm"
 )
 

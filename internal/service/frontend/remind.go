@@ -2,7 +2,7 @@ package frontend
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/huhaophp/hblog/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
 func RemindService(ctx *gin.Context) *sRemind {

@@ -3,12 +3,12 @@ package frontend
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/huhaophp/hblog/internal/consts"
-	"github.com/huhaophp/hblog/internal/entity/frontend"
-	"github.com/huhaophp/hblog/internal/model"
-	"github.com/huhaophp/hblog/internal/service"
-	remindSub "github.com/huhaophp/hblog/internal/subject/remind"
-	"github.com/huhaophp/hblog/pkg/db"
+	"github.com/hhandhuan/ku-bbs/internal/consts"
+	"github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
+	"github.com/hhandhuan/ku-bbs/pkg/db"
 	"gorm.io/gorm"
 )
 

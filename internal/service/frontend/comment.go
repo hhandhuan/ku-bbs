@@ -2,16 +2,16 @@ package frontend
 
 import (
 	"errors"
-	"github.com/huhaophp/hblog/internal/consts"
-	"github.com/huhaophp/hblog/internal/entity/frontend"
-	remindSub "github.com/huhaophp/hblog/internal/subject/remind"
+	"github.com/hhandhuan/ku-bbs/internal/consts"
+	"github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"github.com/huhaophp/hblog/internal/model"
-	"github.com/huhaophp/hblog/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
 func CommentService(ctx *gin.Context) *sComment {

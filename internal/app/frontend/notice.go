@@ -2,9 +2,9 @@ package frontend
 
 import (
 	"github.com/gin-gonic/gin"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	srv "github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	srv "github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Notice = cNotice{}

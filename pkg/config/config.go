@@ -36,10 +36,10 @@ type upload struct {
 
 type redis struct {
 	Host        string `yaml:"host"`
-	Port        int    `yaml:"port"`
+	Port        string `yaml:"port"`
 	Pass        string `yaml:"pass"`
-	DB          int    `yaml:"db"`
-	IdleTimeout int    `yaml:"idleTimeout"`
+	DB          string `yaml:"db"`
+	IdleTimeout string `yaml:"idleTimeout"`
 }
 
 type conf struct {

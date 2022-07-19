@@ -1,18 +1,18 @@
 package webserver
 
 import (
-	"github.com/huhaophp/hblog/pkg/config"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"log"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 
-	"github.com/huhaophp/hblog/internal/route"
-	_ "github.com/huhaophp/hblog/pkg/config"
-	_ "github.com/huhaophp/hblog/pkg/db"
-	_ "github.com/huhaophp/hblog/pkg/redis"
-	"github.com/huhaophp/hblog/pkg/utils"
+	"github.com/hhandhuan/ku-bbs/internal/route"
+	_ "github.com/hhandhuan/ku-bbs/pkg/config"
+	_ "github.com/hhandhuan/ku-bbs/pkg/db"
+	_ "github.com/hhandhuan/ku-bbs/pkg/redis"
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 )
 
 func Run() {

@@ -1,6 +1,6 @@
 package backend
 
-import "github.com/huhaophp/hblog/internal/model"
+import "github.com/hhandhuan/ku-bbs/internal/model"
 
 type GetNoticeListReq struct {
 	Page     int    `form:"page"`

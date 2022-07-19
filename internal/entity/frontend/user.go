@@ -1,6 +1,6 @@
 package frontend
 
-import "github.com/huhaophp/hblog/internal/model"
+import "github.com/hhandhuan/ku-bbs/internal/model"
 
 type LoginReq struct {
 	Name     string `v:"required|regex:[\u4e00-\u9fa5a-zA-Z0-9]{2,8}#用户名错误|用户名格式错误" form:"name"`
