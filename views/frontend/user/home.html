@@ -1,0 +1,232 @@
+{{define "frontend.user.home"}}
+{{template "frontend.layout.header" .}}
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <!--左边布局-->
+            <div class="left-content bg-white p-3">
+                <div>
+                    <div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class='nav-link text-secondary {{if eq .data.req.Tab "topic"}} active {{end}}'
+                                   aria-current="page"
+                                   href="/user?id={{.data.user.ID}}&tab=topic">话题</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class='nav-link text-secondary  text-secondary {{if eq .data.req.Tab "follow"}} active {{end}}'
+                                   href="/user?id={{.data.user.ID}}&tab=follow">关注</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class='nav-link text-secondary {{if eq .data.req.Tab "fans"}} active {{end}}'
+                                   href="/user?id={{.data.user.ID}}&tab=fans">粉丝</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <!-- 话题 -->
+                        {{if eq .data.req.Tab "topic"}}
+                        {{if .data.list}}
+                        {{range .data.list}}
+                        <div class="d-flex p-3 border-bottom">
+                            <div class="d-flex w-100 ps-3">
+                                <div>
+                                    <p class="fw-bold">
+                                        <a href="/topics/{{.ID}}"
+                                           class="text-secondary text-decoration-none">{{.Title}}</a>
+                                    </p>
+                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5 text-secondary"
+                                        style="font-size: 14px;">
+                                        <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{.CreatedAt |
+                                            DiffForHumans}}
+                                        </li>
+                                        <li role="button" class="me-2"><span class="badge text-bg-secondary me-2"
+                                                                             style="color: #adaaa8;">{{.Node.Name}}</span>
+                                        </li>
+                                        <li role="button" class="me-2"><i class="fa fa-heart-o summary"></i> 点赞
+                                            ({{.LikeCount}})
+                                        </li>
+                                        <li role="button" class="me-2"><i class="fa fa-commenting-o"></i> 评论
+                                            ({{.CommentCount}})
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                        {{else}}
+                        <div class="text-center mt-2 p-3 text-secondary">
+                            暂无数据
+                        </div>
+                        {{end}}
+                        {{end}}
+
+                        <!-- 关注 -->
+                        {{if eq .data.req.Tab "follow"}}
+                        {{if .data.list}}
+                        <div class="mt-2">
+                            {{range .data.list}}
+                            <div class="container text-dark mb-1">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="card border-0 border-bottom">
+                                        <div class="card-body">
+                                            <div class="d-flex flex-start">
+                                                <img class="rounded-1 me-3"
+                                                     src="{{.Fans.Avatar}}" alt="avatar" width="40"
+                                                     height="40"/>
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-center align-middle mb-1">
+                                                        <h6 class="text-primary fw-bold {{if .Fans.Desc}}mb-1{{else}}mt-2{{end}} text-secondary">
+                                                           {{.Fans.Name}}
+                                                            <span class="text-secondary">
+                                                                {{if eq .Fans.Gender 1}}
+                                                                <i class="fa fa-mars"></i>
+                                                                {{else}}
+                                                                <i class="fa fa-intersex"></i>
+                                                                {{end}}
+                                                            </span>
+                                                        </h6>
+                                                    </div>
+                                                    {{if .Fans.Desc}}
+                                                    <div class="d-flex justify-content-between align-items-center small text-secondary">
+                                                        {{.Fans.Desc}}
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{end}}
+                        </div>
+                        {{else}}
+                        <div class="text-center mt-2 p-3 text-secondary">
+                            暂无关注
+                        </div>
+                        {{end}}
+                        {{end}}
+
+                        <!-- 粉丝 -->
+                        {{if eq .data.req.Tab "fans"}}
+                        {{if .data.list}}
+                        <div class="mt-2">
+                            {{range .data.list}}
+                            <div class="container text-dark mb-1">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="card border-0 border-bottom">
+                                        <div class="card-body">
+                                            <div class="d-flex flex-start">
+                                                <img class="shadow-1-strong me-3 rounded-1"
+                                                     src="{{.Follower.Avatar}}" alt="avatar" width="40"
+                                                     height="40"/>
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-center align-middle mb-1">
+                                                        <h6 class="text-primary fw-bold {{if .Follower.Desc}}mb-1{{else}}mt-2{{end}} text-secondary">
+                                                            {{.Follower.Name}}
+                                                            <span class="text-secondary">
+                                                                {{if eq .Follower.Gender 1}}
+                                                                <i class="fa fa-mars"></i>
+                                                                {{else}}
+                                                                <i class="fa fa-intersex"></i>
+                                                                {{end}}
+                                                            </span>
+                                                        </h6>
+                                                    </div>
+                                                    {{if .Follower.Desc}}
+                                                    <div class="d-flex justify-content-between align-items-center small text-secondary">
+                                                        {{.Follower.Desc}}
+                                                    </div>
+                                                    {{end}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{end}}
+                        </div>
+                        {{else}}
+                        <div class="text-center mt-2 p-3 text-secondary">
+                            暂无粉丝
+                        </div>
+                        {{end}}
+                        {{end}}
+                    </div>
+                    <div class="mt-2">
+                        {{.data.page.Render}}
+                    </div>
+                </div>
+            </div>
+            <!-- 右边布局-->
+            <div class="right-content">
+                <div class="p-4 bg-white rounded-1">
+                    <div class="text-center">
+                        <img src="{{.data.user.Avatar}}" alt="avatar" class="rounded-1" width="160" height="160">
+                        <hr>
+                    </div>
+                    <div class="mt-4 mb-4 ps-1" style="font-size: 14px;">
+                        <p class="text-muted mb-1">
+                            <i class="fa fa-user-o"></i><span class="ms-3">{{.data.user.Name}}</span>
+                            {{if eq .data.user.Gender 1}}<i class="fa fa-mars"></i>{{else if eq .data.user.Gender 2}}<i
+                                class="fa fa-intersex"></i>{{else}}{{end}}
+                            <span style="font-size: 12px;" class="text-secondary">(第{{.data.user.ID}}位用户)</span>
+                        </p>
+                        {{if .data.user.City}}<p class="text-muted mb-1"><i class="fa fa-location-arrow"></i><span
+                            class="ms-3">{{.data.user.City}}</span></p>{{end}}
+                        {{if .data.user.Email}}<p class="text-muted mb-1"><i class="fa fa-envelope-o"></i><span
+                            class="ms-3">{{.data.user.Email}}</span></p>{{end}}
+                        {{if .data.user.Job}}<p class="text-muted mb-1"><i class="fa fa-suitcase"></i><span
+                            class="ms-3">{{.data.user.Job}}</span></p>{{end}}
+                        {{if .data.user.Site}}<p class="text-muted mb-1"><i class="fa fa-home"></i><span class="ms-3">{{.data.user.Site}}</span>
+                    </p>{{end}}
+                        <p class="text-muted mb-1"><i class="fa fa-circle-o-notch"></i><span class="ms-3">6秒前</span></p>
+                    </div>
+                    {{if .user}}
+                    <div class="p-1 text-center">
+                        <button class="btn {{if .data.user.Follow}}btn-secondary{{else}}btn-dark{{end}} col-12 follow-btn"
+                                data-id="{{.data.user.ID}}">{{if .data.user.Follow}}已关注{{else}}关注{{end}}
+                        </button>
+<!--                        <button class="btn btn-dark col-12 mt-1">私信</button>-->
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/a/f/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        // 点赞
+        $('.follow-btn').on('click', function () {
+            let self = $(this)
+            $.ajax({
+                url: '/follows',
+                type: 'POST',
+                data: {
+                    user_id: $(this).attr("data-id"),
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code === 0) {
+                        let followed = "btn-secondary"
+                        let unFollowed = "btn-dark"
+                        if (res.state === 1) {
+                            self.removeClass(unFollowed).addClass(followed).html("已关注")
+                        } else {
+                            self.removeClass(followed).addClass(unFollowed).html("关注")
+                        }
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+    })
+</script>
+{{template "frontend.layout.footer" .}}
+{{end}}

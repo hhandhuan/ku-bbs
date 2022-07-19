@@ -1,0 +1,71 @@
+{{ define "backend.user.index" }}
+{{ template "backend.layout.header" .}}
+<div class="container-fluid px-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <b>用户管理</b>
+        </div>
+        <div class="card-body">
+
+            <div class="col-2">
+                <form class="form-inline mb-2" method="GET" action="/backend/users">
+                    <div class="input-group mr-1">
+                        <input type="text" class="form-control" name="keywords" placeholder="姓名进行检索" value="{{.data.req.Keywords}}">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark">搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"># ID</th>
+                    <th scope="col">头像</th>
+                    <th scope="col">账户</th>
+                    <th scope="col">性别</th>
+                    <th scope="col">邮箱</th>
+                    <th scope="col">职业</th>
+                    <th scope="col">管理员</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody class="lh-lg">
+                {{range .data.list}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>
+                        <a href="/user/{{.ID}}" target="_blank">
+                            <img src="{{.Avatar}}" height="48" width="48" class="rounded-circle img-thumbnail">
+                        </a>
+                    </td>
+                    <td>{{.Name}}</td>
+                    <td>{{if eq .IsAdmin 1}}男{{else}}女{{end}}</td>
+                    <td>{{if .Email}}{{.Email}}{{else}}-{{end}}</td>
+                    <td>{{if .Job}}{{.Job}}{{else}}-{{end}}</td>
+                    <td>
+                        {{if eq .IsAdmin 1}}
+                        <span class="text-success">是</span>
+                        {{else}}
+                        <span class="text-secondary">否</span>
+                        {{end}}
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-success" target="_blank" href="/user?id={{.ID}}">查看</a>
+                        {{if eq .State 0}}
+                        <a class="btn btn-sm btn-success">启用</a>
+                        {{else}}
+                        <a class="btn btn-sm btn-danger">禁用</a>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+            {{ .data.page.Render }}
+        </div>
+    </div>
+</div>
+{{ template "backend.layout.footer" .}}
+{{end}}

@@ -1,0 +1,117 @@
+{{define "frontend.home.index"}}
+{{template "frontend.layout.header" .}}
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <div class="left-content bg-white rounded-top shadow-sm">
+                <div class="p-2 bg-white font-monospace border-bottom rounded-top">
+                    <a href="/?type=reply"
+                       class='ms-2 {{if eq .data.type "reply"}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>活跃</a>
+                    <a href="/?type=latest"
+                       class='ms-2 {{if eq .data.type "latest"}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>最新</a>
+                    {{range .data.nodes}}
+                    <a href="/?type={{.Alias}}"
+                       class='ms-2 {{if eq $.data.type .Alias}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>{{.Name}}</a>
+                    {{end}}
+                </div>
+                <div class="list p-3  bg-white">
+                    {{if .data.topics}}
+                    {{range .data.topics}}
+                    <div class="item mb-3 border-bottom pb-3 pe-3 ps-3">
+                        <div class="avatar d-inline-block">
+                            <a href="/user?id={{.Publisher.ID}}">
+                                <img src="{{.Publisher.Avatar}}" class="rounded-2" height="48" width="48">
+                            </a>
+                        </div>
+                        <div style="width: 700px;" class="ms-2 text-secondary d-inline-block align-top">
+                            <p class="mb-0 mb-1">
+                                <a href="/topics/{{.ID}}"
+                                   class="text-decoration-none table-hover text-dark">{{.Title}}</a>
+                            </p>
+                            <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">
+                                <span class="badge text-bg-secondary me-2" style="color: #adaaa8;">{{.Node.Name}}</span>
+                                <span class="me-1">
+                                    <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
+                                       style="color: #adaaa8;">
+                                        <i class="fa fa-user-circle-o"></i> {{.Publisher.Name}} •
+                                    </a>
+                                </span>
+                                {{if .Responder.ID}}
+                                <span class="me-0">最后回复来自</span>
+                                <a href="/user?id={{.Responder.ID}}" class="text-decoration-none fw-normal"
+                                   style="color: #adaaa8;">
+                                    <i class="fa fa-user"></i> {{.Responder.Name}} •
+                                </a>
+                                {{end}}
+                                <span class="me-1"> <i
+                                        class="fa fa-clock-o"></i> {{.CreatedAt | DiffForHumans}} •</span>
+                                <span class="me-1"> <i class="fa fa-commenting-o"></i> {{.CommentCount}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    {{end}}
+                    {{else}}
+                    <div class="p-4 text-secondary text-center small">
+                        暂无内容
+                    </div>
+                    {{end}}
+                </div>
+                <div class="pe-4 ps-4 pb-2 mt-4">
+                    {{ .data.pagination.Render }}
+                </div>
+            </div>
+            <div class="right-content">
+                <div class="p-4 bg-white rounded-1 shadow-sm">
+                    <a class="btn btn-dark col-12" href="/publish">发布话题</a>
+                    {{if .user}}
+                    <button class="btn {{if .data.checked}} btn-secondary {{else}} btn-dark {{end}} col-12 mt-1 checkin-btn">
+                        {{if .data.checked}}已签到{{else}}签到{{end}}
+                    </button>
+                    {{end}}
+                </div>
+                <div class="mt-3 p-3 bg-white rounded-1 shadow-sm rounded-2">
+                    <b>社区介绍</b>
+                    <hr>
+                    <p class="small">
+                        酷社区是一个使用 Go Gin 框架搭建的社区，主要功能包含用户登录、注册、签到、关注、提醒/系统消息、内容点赞、话题发布、回复评论等基础功能，目前功能还在完善中。
+                        欢迎各位小伙伴在反馈区提出问题，让我更好的区完善它。
+                    </p>
+                </div>
+<!--                <div class="mt-3 bg-white p-2 rounded-1 shadow-sm rounded-2">-->
+<!--                    <b>广告位</b>-->
+<!--                    <hr>-->
+<!--                    <img src="/u/a/b38613aafbb61e73501999370e6cc4a8.png" class="img-fluid">-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/a/f/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        // 点赞
+        $('.checkin-btn').on('click', function () {
+            let self = $(this)
+            self.attr("disabled", true)
+            $.ajax({
+                url: '/checkins',
+                type: 'POST',
+                data: {
+                    user_id: $(this).attr("data-id"),
+                },
+                dataType: 'json',
+                success: function (res) {
+                    self.attr("disabled", false)
+                    if (res.code === 0) {
+                        self.removeClass("btn-dark").addClass("btn-secondary").html("已签到")
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+    })
+</script>
+{{template "frontend.layout.footer" .}}
+{{end}}

@@ -1,0 +1,96 @@
+{{define "frontend.user.edit"}}
+{{template "frontend.layout.header" .}}
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <div class="content">
+                <div class="notice-nav shadow-sm">
+                    <ul class="list-group">
+                        <li class='list-group-item {{if eq .data.tab "info"}}bg-light{{else}}{{end}}'>
+                            <a href="/user/edit?tab=info" class="text-secondary text-decoration-none d-inline-block">
+                                <i class="fa fa-list"> 个人信息</i>
+                            </a>
+                        </li>
+                        <li class='list-group-item {{if eq .data.tab "pass"}}bg-light{{else}}{{end}}'>
+                            <a href="/user/edit?tab=pass" class="text-secondary text-decoration-none d-inline-block">
+                                <i class="fa fa-lock"> 修改密码</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-1 notice-content">
+                    <div class="notice-remind p-4 shadow-sm">
+                        {{if eq .data.tab "info"}}
+                        <span class="text-secondary"> <i class="fa fa-edit fa-lg"></i> 修改资料</span>
+                        <div class="row mt-4">
+                            <form class="text-secondary col-8" method="POST" action="/user/edit?tab=info">
+                                <div class="mb-1">
+                                    <label class="form-label">用户名</label>
+                                    <input type="text" class="form-control" name="name" value="{{.user.Name}}">
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">性别</label>
+                                    <select class="form-control" name="gender">
+                                        <option value="1" {{if eq .user.Gender 1}} selected {{end}}>男</option>
+                                        <option value="2" {{if eq .user.Gender 2}} selected {{end}}>女</option>
+                                    </select>
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">邮箱</label>
+                                    <input type="text" class="form-control" name="email" value="{{.user.Email}}">
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">城市</label>
+                                    <input type="text" class="form-control" name="city" value="{{.user.City}}">
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">职业</label>
+                                    <input type="text" class="form-control" name="job" value="{{.user.Job}}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">个人网站</label>
+                                    <input type="text" class="form-control" name="site" value="{{.user.Site}}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">个人介绍</label>
+                                    <textarea class="form-control" rows="3" name="desc">{{.user.Desc}}</textarea>
+                                    <input type="hidden" name="tab" value="info">
+                                </div>
+                                <div class="mb-1">
+                                    <button type="submit" class="btn btn-dark col-12">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                        {{end}}
+                        {{if eq .data.tab "pass"}}
+                        <span class="text-secondary"> <i class="fa fa-lock fa-lg"></i> 修改密码</span>
+                        <div class="row mt-4">
+                            <form class="text-secondary col-8" method="POST" action="/user/edit?tab=pass">
+                                <div class="mb-1">
+                                    <label class="form-label">旧密码</label>
+                                    <input type="password" class="form-control" name="old_password">
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">新密码</label>
+                                    <input type="password" class="form-control" name="password">
+                                </div>
+                                <div class="mb-1">
+                                    <label class="form-label">确认密码</label>
+                                    <input type="password" class="form-control" name="confirm_password">
+                                </div>
+                                <div class="mb-1">
+                                    <button type="submit" class="btn btn-dark col-12">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                        {{end}}
+                    </div>
+                    <div class="notice-system"></div>
+                    <div class="notice-letter"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{template "frontend.layout.footer" .}}
+{{end}}
