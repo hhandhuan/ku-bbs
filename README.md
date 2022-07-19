@@ -1,2 +1,1 @@
-# hmall
-hmall
+# ku-bbs 酷社区
