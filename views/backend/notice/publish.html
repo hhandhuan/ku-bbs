@@ -1,0 +1,131 @@
+{{ define "backend.notice.publish" }}
+{{ template "backend.layout.header" .}}
+<div class="container-fluid px-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <b>发布系统消息</b>
+        </div>
+        <div class="card-body">
+            <div class="bg-white p-2 rounded-2">
+                <div class="alert alert-warning col-sm-10"><i class="fa fa-bullhorn"></i>
+                    当前仅支持给全体用户发送消息，能否接收到消息取决用户的最后活跃时间( 2个月内 )
+                </div>
+                <form action="/backend/notices/publish" method="POST">
+                    <div class="mb-2 col-sm-10">
+                        <input type="text" class="form-control" name="title" placeholder="消息标题">
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" class="form-control visually-hidden" name="target_id" value="0">
+                    </div>
+                    <div class="mb-2 col-sm-10">
+                        <div id="md-editor"></div>
+                    </div>
+                    <div class="mb-2 error-box"></div>
+                    <div class="mb-3">
+                        <input type="hidden" name="md_content" id="md_content">
+                        <input type="hidden" name="content" id="content">
+                        <button class="btn btn-dark col-2 form-control-lg submit-btn">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/a/editor/editormd.min.js"></script>
+<script>
+    $(function () {
+        const editor = editormd("md-editor", {
+            width: "100%",
+            height: 600,
+            syncScrolling: "single",
+            path: "/a/editor/lib/",
+            toolbarIcons: function () {
+                return ["h2", "h3", "quote", "list-ol", "list-ul", "link", "image", "code-block", "table", "watch", "fullscreen"]
+            },
+            placeholder: "请使用 Markdown 语法",
+            imageUpload: true,
+            // watch: false,
+            lineNumbers: false,
+            imageFormats: ["jpg", "jpeg", "gif", "png"],
+            imageUploadURL: "/md-upload",
+            saveHTMLToTextarea: true,
+            onchange: function () {
+                console.log(12313123213)
+                $("#content").val(this.getHTML())
+                $("#md_content").val(this.getMarkdown())
+            },
+        });
+
+        // 图片粘贴处理
+        const doc = document.getElementById(editor.id);
+        doc.addEventListener('paste', function (event) {
+            const items = (event.clipboardData || window.clipboardData).items;
+            let file = null;
+            if (items && items.length) {
+                // 搜索剪切板items
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        file = items[i].getAsFile();
+                        break;
+                    }
+                }
+            } else {
+                console.log("当前浏览器不支持");
+                return;
+            }
+            if (!file) {
+                console.log("粘贴内容非图片");
+                return;
+            }
+            uploadImg(file, editor);
+        });
+
+        const dashboard = document.getElementById(editor.id);
+        dashboard.addEventListener("dragover", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+        })
+        dashboard.addEventListener("dragenter", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+        })
+        dashboard.addEventListener("drop", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+            const files = this.files || e.dataTransfer.files;
+            uploadImg(files[0], editor);
+        })
+
+        function uploadImg(file, Editor) {
+            const formData = new FormData();
+            const fileName = new Date().getTime() + "." + file.name.split(".").pop();
+            formData.append('editormd-image-file', file, fileName);
+            $.ajax({
+                url: Editor.settings.imageUploadURL,
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function (data) {
+                    const success = data['success'];
+                    if (success === 1) {
+                        const url = data["url"];
+                        if (/\.(png|jpg|jpeg|gif)$/.test(url)) {
+                            Editor.insertValue("![图片alt](" + data["url"] + " ''图片title'')");
+                        } else {
+                            Editor.insertValue("[下载附件](" + data["url"] + ")");
+                        }
+                    } else {
+                        $('.error-box').html('<div class="alert alert-warning alert-dismissible fade show" role="alert">\n' +
+                            '  ' + data.message + '' +
+                            '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+                            '</div>')
+                    }
+                }
+            });
+        }
+    })
+</script>
+{{ template "backend.layout.footer" .}}
+{{end}}

@@ -1,0 +1,20 @@
+{{ define "backend.home.index" }}
+{{ template "backend.layout.header" .}}
+<main>
+    <div class="container-fluid mt-2">
+        {{if .err}}
+        <div class="alert alert-danger mt-1">
+            {{.err}}
+        </div>
+        {{end}}
+        {{if .msg}}
+        <div class="alert alert-success">
+            {{.msg}}
+        </div>
+        {{end}}
+        {{block "content" .}}{{end}}
+    </div>
+</main>
+{{ template "backend.layout.footer" .}}
+
+{{end}}

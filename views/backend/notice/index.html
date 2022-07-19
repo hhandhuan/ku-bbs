@@ -1,0 +1,59 @@
+{{ define "backend.notice.index" }}
+{{ template "backend.layout.header" .}}
+<div class="container-fluid px-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <b>系统消息管理</b>
+        </div>
+        <div class="card-body">
+            <div class="col-4">
+                <form class="form-inline mb-2" method="GET">
+                    <div class="input-group mr-1">
+                        <a class="btn btn-success" href="/backend/notices/publish">添加</a>
+                    </div>
+                </form>
+            </div>
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"># ID</th>
+                    <th scope="col">发布人</th>
+                    <th scope="col">标题</th>
+                    <th scope="col">目标</th>
+                    <th scope="col">时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                {{range .data.list}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>
+                        <a href="/user?id={{.Publisher.ID}}">
+                            <img src="{{.Publisher.Avatar}}" height="30" width="30" class="rounded-circle img-thumbnail">
+                        </a>
+                        {{.Publisher.Name}}<span class="text-success">#</span>{{.Publisher.ID}}
+                    </td>
+                    <td>{{.Title}}</td>
+                    <td>
+                        {{if .TargetUser}}
+                        <img src="{{.TargetUser.Avatar}}" height="30" width="30" class="rounded-circle img-thumbnail">
+                        {{.TargetUser.Name}}<span class="text-success">#</span>{{.TargetUser.ID}}
+                        {{else}}
+                        全员
+                        {{end}}
+                    </td>
+                  <td>{{.CreatedAt | FormatTime}}</td>
+                    <td>
+                        <a href="/backend/notices/{{.ID}}/edit" class="btn btn-success">编辑</a>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+            {{ .data.page.Render }}
+        </div>
+    </div>
+</div>
+{{ template "backend.layout.footer" .}}
+{{end}}

@@ -1,0 +1,348 @@
+{{define "frontend.topic.detail"}}
+{{template "frontend.layout.header" .}}
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <!--左边布局-->
+            <div class="left-content">
+                <!-- 话题信息 --->
+                <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
+                    <h5>{{.data.topic.Title}}</h5>
+                    <div class="mb-0 mt-3" style="font-size: 14px;color: #adb1af;">
+                        <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span> &nbsp;
+                        <span class="me-2">
+                            <a href="/user?id={{.data.topic.Publisher.ID}}" class="text-decoration-none text-secondary"> {{.data.topic.Publisher.Name}} </a>
+                        </span>
+                        <span class="me-2"><i class="fa fa-commenting-o"></i> {{.data.topic.CommentCount}} </span>
+                        <span class="me-2"><i class="fa fa-heart {{if .data.topic.Like}} text-danger {{end}}"></i> {{.data.topic.LikeCount}} </span>
+                        &nbsp;
+                        <span class="me-2"><i class="fa fa-eye"></i> {{.data.topic.ViewCount}} </span> &nbsp;
+                        <span class="me-2">
+                            <i class="fa fa-clock-o"></i> {{.data.topic.CreatedAt | DiffForHumans}}
+                        </span> &nbsp;
+                    </div>
+                    <hr>
+                </div>
+                <!-- 话题内容 --->
+                <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white rounded-bottom lh-lg"
+                     style="font-size: 16px;">
+                    {{.data.topic.Content | Html}}
+                </div>
+                <div class="topic-operation bg-white pe-4 ps-4 pb-4">
+                    <span class="text-secondary like-btn p-1" type="button" data-id="{{.data.topic.ID}}"
+                          data-tuser="{{.data.topic.UserId}}" data-type="topic">
+                        <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
+                        <span class="like-count ms-1">{{.data.topic.LikeCount}}</span> 个赞
+                    </span>
+                </div>
+                <!-- 话题评论 --->
+                <div class="topic-comments text-secondary pe-4 ps-4 pt-2 bg-white mt-2 rounded-2 shadow-sm">
+                    <div class="comment-list pb-4">
+                        {{if .data.comments}}
+                        {{range .data.comments}}
+                        <div class="d-flex p-3" id="comment{{.ID}}">
+                            <a href="/user?id={{.Publisher.ID}}">
+                                <img src="{{.Publisher.Avatar}}" class="rounded-2"
+                                     height="48" alt="Avatar" loading="lazy"/>
+                            </a>
+                            <div class="w-100 ps-3">
+                                <div>
+                                    <p class="text-dark">
+                                        <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
+                                            {{.Publisher.Name}}</a>
+                                        {{if .Responder}}
+                                        <a href="/user?id={{.Responder.ID}}" class="text-decoration-none text-dark">
+                                            <span class="small text-muted font-weight-normal">@{{.Responder.Name}}</span>
+                                        </a>
+                                        {{end}}
+                                        <span class="small text-muted font-weight-normal"> • </span>
+                                        <span class="small text-muted font-weight-normal">{{.CreatedAt | DiffForHumans}}</span>
+                                    </p>
+                                    <div class="comment-content lh-lg p-1 text-secondary">
+                                        {{.Content | Html}}
+                                    </div>
+                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5" style="font-size: 13px;">
+                                        <li role="button" class="p-1 me-3 like-btn" data-id="{{.ID}}"
+                                            data-tuser="{{.UserId}}" data-type="comment">
+                                            <i class="fa fa-heart {{if .Like}} text-danger {{end}}"></i> <span
+                                                class="like-count ms-1">{{.LikeCount}}</span>
+                                        </li>
+                                        <li class="me-3 reply-btn p-1">
+                                            <a href="#comment-form"
+                                               class="text-decoration-none text-secondary reply-btn"
+                                               data-name="{{.Publisher.Name}}" data-id="{{.UserId}}"
+                                               data-cid="{{.ID}}">
+                                                <i class="fa fa-mail-reply"></i> 回复
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                        {{else}}
+                        <div class="p-4 text-center">
+                            暂无评论内容
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+                <!-- 评论编辑器 --->
+                <div class="mt-2 rounded-2" id="comment-form">
+                    {{if .user}}
+                    <div class="mb-2 reply-div"></div>
+                    <form action="/comments" method="post">
+                        <input type="hidden" name="topic_id" value="{{.data.topic.ID}}">
+                        <input type="hidden" name="reply_id" value="0" class="reply_id">
+                        <input type="hidden" name="target_id" value="0" class="target_id">
+                        <input type="hidden" name="md_content" id="md_content">
+                        <input type="hidden" name="content" id="content">
+                        <div id="md-editor" class="rounded-2"></div>
+                        <div class="rounded-1 preview-input"></div>
+                        <div class="form-outline flex-fill mt-2">
+                            <button type="button" class="btn btn-dark col-2 submit-btn">提交</button>
+                        </div>
+                    </form>
+                    {{else}}
+                    <div class="bg-white p-4 rounded-2">
+                        需要 <a href="/login?back=/topics/{{.data.topic.ID}}"
+                              class="text-decoration-none text-primary">登录</a>
+                        后方可回复, 如果你还没有账号请 <a href="/register?back=/topics/{{.data.topic.ID}}"
+                                            class="text-decoration-none text-primary">注册新账号</a>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+
+            <!--      右边布局-->
+            <div class="right-content">
+                <div class="p-4 bg-white rounded-2">
+                    <div class="text-center">
+                        <a href="/user?id={{.data.topic.Publisher.ID}}">
+                            <img src="{{.data.topic.Publisher.Avatar}}" alt="avatar" class="rounded-2 img-fluid"
+                                 width="150">
+                        </a>
+                        <p class="my-3 fw-bold">{{.data.topic.Publisher.Name}}</p>
+                        {{if .user}}
+                        <div class="d-flex justify-content-center mb-2 w-100">
+                            <button class="btn {{if .data.topic.Publisher.Follow}}btn-secondary{{else}}btn-dark{{end}} col-8 follow-btn" data-id="{{.data.topic.Publisher.ID}}">{{if .data.topic.Publisher.Follow}}已关注{{else}}关注{{end}}</button>
+<!--                            <button type="button" class="btn btn-dark col-4 ms-1">私信</button>-->
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+<!--                <div class="mt-3 p-3 bg-white rounded-2" style="border-radius: 6px;">-->
+<!--                    <b>JST 社区</b>-->
+<!--                    <hr>-->
+<!--                    <p>-->
+<!--                        管理员会定期检查帖子，发现有描述不清晰，或者不知道说什么的帖子移动到「NoPoint」节点，此节点永远不会上首页，如果你发现你的帖子进入了「NoPoint」里面，请检查调整你的标题和内容。-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--                <div class="mt-3 bg-white p-2" style="border-radius: 6px;">-->
+<!--                    <img src="/u/a/b38613aafbb61e73501999370e6cc4a8.png" class="img-fluid" alt="...">-->
+<!--                    <img src="/u/a/c2c05da836c8b359c9937a668a914674.png" class="img-fluid  mt-1" alt="...">-->
+<!--                    <img src="/u/a/0d2bbafb9e3592a7397e74e076aee897.png" class="img-fluid  mt-1" alt="...">-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/a/f/js/highlight.min.js"></script>
+<script src="/a/f/js/jquery.min.js"></script>
+<script src="/a/editor/editormd.min.js"></script>
+<script>
+    $(function () {
+        const editor = editormd("md-editor", {
+            width: "100%",
+            height: 300,
+            syncScrolling: "single",
+            path: "/a/editor/lib/",
+            toolbarIcons: function () {
+                return ["link", "image", "code-block", "watch"]
+            },
+            placeholder: "请使用 Markdown 语法",
+            imageUpload: true,
+            watch: false,
+            lineNumbers: false,
+            imageFormats: ["jpg", "jpeg", "gif", "png"],
+            imageUploadURL: "/md-upload",
+            saveHTMLToTextarea: true,
+            autoFocus: false,
+        });
+        // 图片粘贴处理
+        const doc = document.getElementById(editor.id);
+        if (doc) {
+            doc.addEventListener('paste', function (event) {
+                const items = (event.clipboardData || window.clipboardData).items;
+                let file = null;
+                if (items && items.length) {
+                    // 搜索剪切板items
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf('image') !== -1) {
+                            file = items[i].getAsFile();
+                            break;
+                        }
+                    }
+                } else {
+                    console.log("当前浏览器不支持");
+                    return;
+                }
+                if (!file) {
+                    console.log("粘贴内容非图片");
+                    return;
+                }
+                uploadImg(file, editor);
+            });
+            doc.addEventListener("dragover", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+            })
+            doc.addEventListener("dragenter", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+            })
+            doc.addEventListener("drop", function (e) {
+                e.preventDefault()
+                e.stopPropagation()
+                const files = this.files || e.dataTransfer.files;
+                uploadImg(files[0], editor);
+            })
+        }
+
+
+        function uploadImg(file, Editor) {
+            const formData = new FormData();
+            const fileName = new Date().getTime() + "." + file.name.split(".").pop();
+            formData.append('editormd-image-file', file, fileName);
+            $.ajax({
+                url: Editor.settings.imageUploadURL,
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function (msg) {
+                    const success = msg['success'];
+                    if (success === 1) {
+                        const url = msg["url"];
+                        if (/\.(png|jpg|jpeg|gif)$/.test(url)) {
+                            Editor.insertValue("![图片alt](" + msg["url"] + " ''图片title'')");
+                        } else {
+                            Editor.insertValue("[下载附件](" + msg["url"] + ")");
+                        }
+                    } else {
+                        console.log(msg);
+                        alert("上传失败");
+                    }
+                }
+            });
+        }
+
+        // 代码高亮
+        $('pre code').each(function (i, b) {
+            hljs.highlightBlock(b)
+        })
+        // 取消回复
+        $('.reply-div').on('click', '.close-btn', function () {
+            $(this).parent().remove()
+            $('.reply_id').val(0)
+            $('.target_id').val(0)
+        })
+        // 提交内容
+        $('.submit-btn').on('click', function () {
+            $("#content").val(editor.getHTML())
+            $("#md_content").val(editor.getMarkdown())
+            $('form').submit()
+        })
+        // 回复某人
+        $('.reply-btn').on('click', function (e) {
+            const t = $(this)
+            e.stopPropagation()
+            $('.reply-div').html(
+                '        <div class="form-control">\n' +
+                '                            <i class="fa fa-mail-reply"></i>\n' +
+                '                            <span class="ms-2 text-decoration-none text-secondary">' + $(this).attr("data-name") + '</span>\n' +
+                '                            <i role="button" class="fa fa-close ms-1 close-btn"></i>\n' +
+                '                        </div>'
+            )
+            $('.reply_id').val(t.attr("data-id"))
+            $('.target_id').val(t.attr("data-cid"))
+        })
+        // 点赞
+        $('.like-btn,.topic-like-btn').on('click', function () {
+            var self = $(this)
+            $.ajax({
+                url: '/likes',
+                type: 'POST',
+                data: {
+                    source_id: $(this).attr("data-id"),
+                    source_type: $(this).attr("data-type"),
+                    target_user_id: $(this).attr("data-tuser")
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code === 0) {
+                        let num = parseInt(self.find('.like-count').html()) + 1
+                        self.find('.like-count').html(num)
+                        self.find('i').addClass("text-danger")
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+
+        // 点赞
+        $('.follow-btn').on('click', function () {
+            let self = $(this)
+            self.attr("disabled", true)
+            $.ajax({
+                url: '/follows',
+                type: 'POST',
+                data: {
+                    user_id: $(this).attr("data-id"),
+                },
+                dataType: 'json',
+                success: function (res) {
+                    self.attr("disabled", false)
+                    if (res.code === 0) {
+                        let followed = "btn-secondary"
+                        let unFollowed = "btn-dark"
+                        if (res.state === 1) {
+                            self.removeClass(unFollowed).addClass(followed).html("已关注")
+                        } else {
+                            self.removeClass(followed).addClass(unFollowed).html("关注")
+                        }
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+
+        // 获取 query 参数
+        function getQueryVariable(variable) {
+            const query = window.location.search.substring(1);
+            const vars = query.split("&");
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split("=");
+                if (pair[0] === variable) {
+                    return pair[1];
+                }
+            }
+            return false;
+        }
+
+        // 处理跳转锚点定位
+        let j = getQueryVariable("j")
+        if (j) {
+            let t = $("#" + j)
+            $("html,body").animate({scrollTop: t.offset().top}, 500)
+            t.addClass("bg-light")
+        }
+    })
+</script>
+{{template "frontend.layout.footer" .}}
+{{end}}

@@ -1,0 +1,65 @@
+{{ define "backend.topic.index" }}
+{{ template "backend.layout.header" .}}
+<div class="container-fluid px-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <b>用户管理</b>
+        </div>
+        <div class="card-body">
+
+            <div class="col-4">
+                <form class="form-inline mb-2" method="GET" action="/backend/topics">
+                    <div class="input-group mr-1">
+                        <input type="text" class="form-control" name="keywords" placeholder="标题检索"
+                               value="{{.data.req.Keywords}}">
+                        <input type="text" class="form-control" name="user_id" placeholder="发布人检索"
+                               value="{{.data.req.UserID}}">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark">搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <table class="table table-bordered text-center table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"># ID</th>
+                    <th scope="col">标题</th>
+                    <th scope="col">发布人</th>
+                    <th scope="col">栏目</th>
+                    <th scope="col">点赞数</th>
+                    <th scope="col">回复数</th>
+                    <th scope="col">时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                {{range .data.list}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Title}}</td>
+                    <td>
+                        <img src="{{.Publisher.Avatar}}" height="30" width="30" class="rounded-circle img-thumbnail">
+                        {{.Publisher.Name}}#{{.Publisher.ID}}
+                    </td>
+                    <td>{{.Node.Name}}#{{.Node.Alias}}</td>
+                    <td>{{.LikeCount}}</td>
+                    <td>{{.CommentCount}}</td>
+                    <td>{{.CreatedAt | FormatTime}}</td>
+                    <td>
+                        <a class="btn btn-sm btn-success" href="/topics/{{.ID}}" target="_blank">查看</a>
+                        <form method="POST" action="/backend/topics/{{.ID}}" class="d-inline">
+                            <button class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+            {{ .data.page.Render }}
+        </div>
+    </div>
+</div>
+{{ template "backend.layout.footer" .}}
+{{end}}

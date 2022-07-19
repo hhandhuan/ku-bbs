@@ -1,0 +1,100 @@
+{{define "frontend.notice.home"}}
+{{template "frontend.layout.header" .}}
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <div class="notice-nav shadow-sm">
+                <ul class="list-group">
+                    <li class='list-group-item {{if eq .data.type "remind"}}bg-light{{else}}{{end}}'>
+                        <a href="/notice?type=remind" class="text-secondary text-decoration-none d-inline-block"
+                           style="width: 100%;">
+                            <i class="fa fa-bell"> 通知 </i> <span style="font-size: 13px;" class="text-secondary">({{.data.remindUnread}})</span>
+                        </a>
+                    </li>
+<!--                    <li class='list-group-item {{if eq .data.type "letter"}}bg-light{{else}}{{end}}'>-->
+<!--                        <a href="/notice?type=letter" class="text-secondary text-decoration-none d-inline-block">-->
+<!--                            <i class="fa fa-envelope"> 私信 </i> <span style="font-size: 13px;" class="text-secondary">({{.data.letterUnread}})</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <li class='list-group-item {{if eq .data.type "system"}}bg-light{{else}}{{end}}'>
+                        <a href="/notice?type=system" class="text-secondary text-decoration-none d-inline-block">
+                            <i class="fa fa-bullhorn"> 系统 </i> <span style="font-size: 13px;" class="text-secondary">({{.data.systemUnread}})</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-white rounded-1 notice-content">
+                <div class="notice-remind p-4 shadow-sm">
+                    <!--你的提醒-->
+                    {{if eq .data.type "remind"}}
+                    <span class="text-secondary"> <i class="fa fa-bell-o fa-lg"></i> 你的提醒</span>
+                    <div class="row d-flex justify-content-center text-secondary mt-4">
+                        {{if .data.list}}
+                        {{range .data.list}}
+                        <div class="card mb-1 {{if .ReadedAt}}{{else}}bg-light{{end}}">
+                            <div class="card-body">
+                                <div class="d-flex flex-start">
+                                    <a href="/user?id={{.Sender}}"><img class="rounded-2 me-3"
+                                                                     src="{{.SenderUser.Avatar}}" alt="avatar"
+                                                                     width="40" height="40"/></a>
+                                    <div class="w-100 mt-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <p class="text-secondary mb-0 fw-bold" style="font-size: 14px;">
+                                                <a href="/user?id={{.Sender}}"
+                                                   class="text-secondary">{{.SenderUser.Name}}</a>
+                                                <span class=" ms-2" style="color: #9b9b94;">{{.Action | RemindName}}</span>
+                                                <a href="{{.SourceUrl}}" class="text-secondary ms-2">{{.SourceContent}}</a>
+                                            </p>
+                                            <p class="mb-0 text-secondary" style="font-size: 14px;">{{.CreatedAt | DiffForHumans}}</p>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center text-secondary" style="font-size: 14px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                        {{else}}
+                        暂无消息
+                        {{end}}
+                    </div>
+                    {{end}}
+                    <!--系统消息-->
+                    {{if eq .data.type "system"}}
+                    <span class="text-secondary"> <i class="fa fa-bullhorn fa-lg"></i> 系统公告</span>
+                    <div class="row d-flex justify-content-center mt-3 text-secondary">
+                        {{if .data.list}}
+                            {{range .data.list}}
+                            <div class="card mb-1 {{if .ReadedAt}}{{else}}bg-light{{end}}">
+                                <div class="card-body">
+                                    <div class="fw-bold">{{.Notice.Title}}</div>
+                                    <div class="text-secondary mb-0 mt-2" style="font-size: 14px;">
+                                        {{.Notice.Content | Html}}
+                                    </div>
+                                    <p class="mb-0 text-secondary mt-2" style="font-size: 14px;">{{.CreatedAt | DiffForHumans}}</p>
+                                </div>
+                            </div>
+                            {{end}}
+                        {{else}}
+                        暂无消息
+                        {{end}}
+                    </div>
+                    {{end}}
+                </div>
+                <div class="notice-system"></div>
+                <div class="notice-letter"></div>
+                <div class="ms-3">{{ .data.page.Render }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/a/f/js/jquery.min.js"></script>
+<script src="/a/f/js/highlight.min.js"></script>
+<script>
+    $(function () {
+        $('pre code').each(function (i, b) {
+            hljs.highlightBlock(b)
+        })
+    })
+</script>
+{{template "frontend.layout.footer" .}}
+{{end}}

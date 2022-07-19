@@ -1,0 +1,24 @@
+app:
+  version: "0.0.1"
+  env: "local"
+  name: "酷社区"
+  desc: "酷社区"
+  keywords: "酷社区"
+session:
+  name: "blog"
+  secret: "123456"
+db:
+  host: "127.0.0.1"
+  port: "3306"
+  name: "root"
+  pass: ""
+  db: "gblog"
+redis:
+  host: "127.0.0.1"
+  pass: ""
+  port: 6379
+  db: 1
+  idleTimeout: 10
+upload:
+  path: "../assets/u"
+  imageExt: [ "png", "jpg", "jpeg", "gif" ]
