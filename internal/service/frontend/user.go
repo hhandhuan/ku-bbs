@@ -8,6 +8,7 @@ import (
 	remindSub "github.com/huhaophp/hblog/internal/subject/remind"
 	"github.com/huhaophp/hblog/pkg/utils/page"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -60,6 +61,11 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 
 // genAvatar 生成用户默认头像
 func (s *sUser) genAvatar(name string) (string, error) {
+	path := fmt.Sprintf("%s/a", config.Conf.Upload.Path)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		os.Mkdir(path, os.ModePerm)
+		os.Chmod(path, os.ModePerm)
+	}
 	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
 	avatarPath := fmt.Sprintf("/a/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)

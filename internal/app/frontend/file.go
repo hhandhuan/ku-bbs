@@ -2,6 +2,7 @@ package frontend
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -41,10 +42,15 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 		return
 	}
 
-	path := config.Conf.Upload.Path
+	path := fmt.Sprintf("%s/t", config.Conf.Upload.Path)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		os.Mkdir(path, os.ModePerm)
+		os.Chmod(path, os.ModePerm)
+	}
+
 	name := encrypt.Md5(time.Now().String()+file.Filename) + "." + ext
 
-	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/t/%s", path, name)); err != nil {
+	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name)); err != nil {
 		s.MDFileJson(0, err.Error(), "")
 	} else {
 		s.MDFileJson(1, "ok", fmt.Sprintf("/u/t/%s", name))
