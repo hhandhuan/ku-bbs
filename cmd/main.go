@@ -1,7 +1,7 @@
 package main
 
 import (
-	s "github.com/huhaophp/hblog/cmd/webserver"
+	s "github.com/hhandhuan/ku-bbs/cmd/webserver"
 )
 
 func main() {

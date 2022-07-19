@@ -8,9 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/text/gstr"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/pkg/config"
-	"github.com/huhaophp/hblog/pkg/utils/encrypt"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
 )
 
 var File = cFile{}

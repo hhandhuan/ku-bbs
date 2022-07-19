@@ -2,8 +2,8 @@ package frontend
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Checkin = cCheckin{}

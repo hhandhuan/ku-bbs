@@ -2,7 +2,7 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	srv "github.com/huhaophp/hblog/internal/service"
+	srv "github.com/hhandhuan/ku-bbs/internal/service"
 )
 
 func isAdmin(ctx *gin.Context) {

@@ -3,10 +3,10 @@ package frontend
 import (
 	"errors"
 	"fmt"
-	"github.com/huhaophp/hblog/internal/consts"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	remindSub "github.com/huhaophp/hblog/internal/subject/remind"
-	"github.com/huhaophp/hblog/pkg/utils/page"
+	"github.com/hhandhuan/ku-bbs/internal/consts"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	"log"
 	"os"
 	"time"
@@ -16,10 +16,10 @@ import (
 	"github.com/o1egl/govatar"
 	"gorm.io/gorm"
 
-	"github.com/huhaophp/hblog/internal/model"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/pkg/config"
-	"github.com/huhaophp/hblog/pkg/utils/encrypt"
+	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
 )
 
 func UserService(ctx *gin.Context) *sUser {

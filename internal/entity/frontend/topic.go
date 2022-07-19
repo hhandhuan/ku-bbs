@@ -1,6 +1,6 @@
 package frontend
 
-import "github.com/huhaophp/hblog/internal/model"
+import "github.com/hhandhuan/ku-bbs/internal/model"
 
 type GetTopicListReq struct {
 	Page int    `form:"page"`

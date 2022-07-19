@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
-	eb "github.com/huhaophp/hblog/internal/entity/backend"
-	"github.com/huhaophp/hblog/internal/model"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/pkg/utils/page"
+	eb "github.com/hhandhuan/ku-bbs/internal/entity/backend"
+	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	"log"
 )
 

@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Topic = cTopic{}

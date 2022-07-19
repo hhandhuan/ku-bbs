@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	v8Redis "github.com/go-redis/redis/v8"
-	"github.com/huhaophp/hblog/pkg/redis"
+	"github.com/hhandhuan/ku-bbs/pkg/redis"
 	"time"
 )
 

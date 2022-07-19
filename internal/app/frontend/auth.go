@@ -2,13 +2,13 @@ package frontend
 
 import (
 	"context"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/frame/g"
 
-	"github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	"github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Auth = auth{}

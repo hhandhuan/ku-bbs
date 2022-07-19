@@ -1,6 +1,6 @@
 package frontend
 
-import "github.com/huhaophp/hblog/internal/model"
+import "github.com/hhandhuan/ku-bbs/internal/model"
 
 // SubmitCommentReq  评论话题
 type SubmitCommentReq struct {

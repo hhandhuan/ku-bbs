@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/huhaophp/hblog/pkg/config"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"net/http"
 
-	"github.com/huhaophp/hblog/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/model"
 )
 
 const (

@@ -3,9 +3,9 @@ package backend
 import (
 	"github.com/gin-gonic/gin"
 
-	be "github.com/huhaophp/hblog/internal/entity/backend"
-	sv "github.com/huhaophp/hblog/internal/service"
-	bs "github.com/huhaophp/hblog/internal/service/backend"
+	be "github.com/hhandhuan/ku-bbs/internal/entity/backend"
+	sv "github.com/hhandhuan/ku-bbs/internal/service"
+	bs "github.com/hhandhuan/ku-bbs/internal/service/backend"
 )
 
 var User = cUser{}

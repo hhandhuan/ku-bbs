@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"github.com/huhaophp/hblog/pkg/config"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"log"
 	"time"
 

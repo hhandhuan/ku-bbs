@@ -16,9 +16,9 @@ db:
 redis:
   host: "127.0.0.1"
   pass: ""
-  port: 6379
-  db: 1
-  idleTimeout: 10
+  port: "6379"
+  db: "1"
+  idleTimeout: "10"
 upload:
   path: "../assets/u"
   imageExt: [ "png", "jpg", "jpeg", "gif" ]

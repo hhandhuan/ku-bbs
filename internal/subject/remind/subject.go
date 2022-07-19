@@ -1,6 +1,6 @@
 package remind
 
-import "github.com/huhaophp/hblog/internal/subject"
+import "github.com/hhandhuan/ku-bbs/internal/subject"
 
 func New() *remindSubject {
 	return &remindSubject{

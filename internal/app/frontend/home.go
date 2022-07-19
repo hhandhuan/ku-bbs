@@ -2,9 +2,9 @@ package frontend
 
 import (
 	"github.com/gin-gonic/gin"
-	fe "github.com/huhaophp/hblog/internal/entity/frontend"
-	sv "github.com/huhaophp/hblog/internal/service"
-	"github.com/huhaophp/hblog/internal/service/frontend"
+	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
+	sv "github.com/hhandhuan/ku-bbs/internal/service"
+	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
 )
 
 var Home = home{}

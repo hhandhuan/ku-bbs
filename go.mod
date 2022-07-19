@@ -1,4 +1,4 @@
-module github.com/huhaophp/hblog
+module github.com/hhandhuan/ku-bbs
 
 go 1.17
 
