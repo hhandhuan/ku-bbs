@@ -5,7 +5,7 @@ app:
   desc: "酷社区"
   keywords: "酷社区"
 session:
-  name: "blog"
+  name: "ku-bbs"
   secret: "123456"
 db:
   host: "127.0.0.1"
