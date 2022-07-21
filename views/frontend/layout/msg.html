@@ -1,0 +1,16 @@
+{{define "frontend.layout.msg"}}
+<div class="container-fluid">
+    <div class="m-auto box mt-4">
+        {{if .err}}
+        <div class="alert alert-danger mt-1">
+            {{.err}}
+        </div>
+        {{end}}
+        {{if .msg}}
+        <div class="alert alert-success">
+            {{.msg}}
+        </div>
+        {{end}}
+    </div>
+</div>
+{{end}}

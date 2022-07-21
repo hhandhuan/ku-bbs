@@ -1,0 +1,52 @@
+{{define "frontend.layout.nav"}}
+<header class="p-2 border-bottom header">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                <img src="/a/f/images/logo.png" class="rounded-2" width="38" height="38">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-dark fw-bold">酷社区</a></li>
+            </ul>
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control" placeholder="社区搜索" aria-label="Search">
+            </form>
+            {{if .user}}
+            <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <button class="btn btn-dark btn-sm position-relative">
+                    <a href="/notice" class="text-white h-100 w-100 d-inline-block"><i
+                            class="fa fa-bell-o"></i></a></a>
+                    {{if .unread}}
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden"></span>
+                        </span>
+                    {{end}}
+                </button>
+            </div>
+            {{end}}
+            <div class="dropdown text-end ms-1">
+                {{if .user}}
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{.user.Avatar}}" alt="mdo" width="32" height="32" class="rounded-2">
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="/user?id={{.user.ID}}">个人主页</a></li>
+                    <li><a class="dropdown-item" href="/user/edit">账户设置</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="/logout">退出登录</a></li>
+                </ul>
+                {{else}}
+                <a class="btn btn-dark" href="/register">注册</a>
+                <a class="btn btn-dark" href="/login">登录</a>
+                {{end}}
+            </div>
+
+        </div>
+    </div>
+</header>
+{{end}}
