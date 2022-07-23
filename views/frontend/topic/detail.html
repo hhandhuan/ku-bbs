@@ -35,21 +35,21 @@
                     {{.data.topic.Content | Html}}
                 </div>
                 <div class="topic-operation bg-white pe-4 ps-4 pb-2">
-                    <span class="text-secondary like-btn p-1" type="button" data-id="{{.data.topic.ID}}"
+                    <span class="text-secondary like-btn p-1 d-inline-block" data-id="{{.data.topic.ID}}"
                           data-tuser="{{.data.topic.UserId}}" data-type="topic">
                         <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
                         <span class="like-count ms-1">{{.data.topic.LikeCount}}</span> 个赞
                     </span>
                     <span class="text-secondary topic-tag pull-right">
                         {{range .data.topic.Tags}}
-                        <span class="bg-light p-1 rounded-1">{{.}}</span>
+                        <span class="bg-light p-1 rounded-1"># {{.}}</span>
                         {{end}}
                     </span>
                 </div>
+                {{if .data.comments}}
                 <!-- 话题评论 --->
                 <div class="topic-comments text-secondary pe-4 ps-4 pt-2 bg-white mt-2 rounded-2 shadow-sm">
                     <div class="comment-list pb-4">
-                        {{if .data.comments}}
                         {{range .data.comments}}
                         <div class="d-flex p-3" id="comment{{.ID}}">
                             <a href="/user?id={{.Publisher.ID}}">
@@ -91,13 +91,10 @@
                             </div>
                         </div>
                         {{end}}
-                        {{else}}
-                        <div class="p-4 text-center">
-                            暂无评论内容
-                        </div>
-                        {{end}}
+
                     </div>
                 </div>
+                {{end}}
                 <!-- 评论编辑器 --->
                 <div class="mt-2 rounded-2" id="comment-form">
                     {{if .user}}
