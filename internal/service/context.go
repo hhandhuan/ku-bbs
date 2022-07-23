@@ -133,17 +133,21 @@ func (c *BaseContext) unread() bool {
 		remind *model.Reminds
 		notice *model.SystemUserNotices
 	)
-	user := c.Auth()
+
+	UID := c.Auth().ID
+
 	// 提醒消息
-	r := model.Remind().M.Where("receiver", user.ID).Where("readed_at is null").Find(&remind)
+	r := model.Remind().M.Where("receiver", UID).Where("readed_at is null").Find(&remind)
 	if r.Error == nil && r.RowsAffected > 0 {
 		return true
 	}
+
 	// 未读系统消息
-	s := model.SystemUserNotice().M.Where("user_id", user.ID).Where("readed_at is null").Find(&notice)
+	s := model.SystemUserNotice().M.Where("user_id", UID).Where("readed_at is null").Find(&notice)
 	if s.Error == nil && s.RowsAffected > 0 {
 		return true
 	}
+	
 	return false
 }
 

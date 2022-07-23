@@ -18,15 +18,16 @@
                             <option value="{{.ID}}">{{.Name}}</option>
                             {{end}}
                         </select>
-                        <input type="text" class="form-control" name="title" placeholder="标题">
+                        <input type="text" class="form-control" name="title" placeholder="话题标题">
                     </div>
                 </div>
                 <div class="mb-3">
                     <div id="md-editor"></div>
                 </div>
-                <div class="mb-3 error-box">
-
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="标签（请用半角逗号分隔每个标签，最多3个，每个最长15字符）非必填 " name="tags">
                 </div>
+                <div class="mb-3 error-box"></div>
                 <div class="mb-3">
                     <input type="hidden" name="md_content" id="md_content">
                     <input type="hidden" name="content" id="content">
