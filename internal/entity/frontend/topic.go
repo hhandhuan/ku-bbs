@@ -8,9 +8,11 @@ type GetTopicListReq struct {
 }
 
 type PublishTopicReq struct {
-	Title   string `v:"required#请输入话题标题" form:"title"`
-	NodeId  int64  `v:"required|integer#请选择话题分类|话题分类格式错误" form:"node_id"`
-	Content string `v:"required#请输入话题内容" form:"content"`
+	Title     string `v:"required#请输入话题标题" form:"title"`
+	NodeId    int64  `v:"required|integer#请选择话题分类|话题分类格式错误" form:"node_id"`
+	Content   string `v:"required#请输入话题内容" form:"content"`
+	MDContent string `v:"required#请输入话题内容" form:"md_content"`
+	Tags      string `form:"tags"`
 }
 
 type Topic struct {

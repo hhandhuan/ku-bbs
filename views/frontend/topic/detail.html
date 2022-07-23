@@ -26,19 +26,24 @@
                         <span class="me-2">
                             <i class="fa fa-clock-o"></i> {{.data.topic.CreatedAt | DiffForHumans}}
                         </span> &nbsp;
+
                     </div>
                     <hr>
                 </div>
                 <!-- 话题内容 --->
-                <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white rounded-bottom lh-lg"
-                     style="font-size: 16px;">
+                <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white rounded-bottom lh-lg">
                     {{.data.topic.Content | Html}}
                 </div>
-                <div class="topic-operation bg-white pe-4 ps-4 pb-4">
+                <div class="topic-operation bg-white pe-4 ps-4 pb-2">
                     <span class="text-secondary like-btn p-1" type="button" data-id="{{.data.topic.ID}}"
                           data-tuser="{{.data.topic.UserId}}" data-type="topic">
                         <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
                         <span class="like-count ms-1">{{.data.topic.LikeCount}}</span> 个赞
+                    </span>
+                    <span class="text-secondary topic-tag pull-right">
+                        {{range .data.topic.Tags}}
+                        <span class="bg-light p-1 rounded-1">{{.}}</span>
+                        {{end}}
                     </span>
                 </div>
                 <!-- 话题评论 --->
@@ -131,24 +136,14 @@
                         <p class="my-3 fw-bold">{{.data.topic.Publisher.Name}}</p>
                         {{if .user}}
                         <div class="d-flex justify-content-center mb-2 w-100">
-                            <button class="btn {{if .data.topic.Publisher.Follow}}btn-secondary{{else}}btn-dark{{end}} col-8 follow-btn" data-id="{{.data.topic.Publisher.ID}}">{{if .data.topic.Publisher.Follow}}已关注{{else}}关注{{end}}</button>
-<!--                            <button type="button" class="btn btn-dark col-4 ms-1">私信</button>-->
+                            <button class="btn {{if .data.topic.Publisher.Follow}}btn-secondary{{else}}btn-dark{{end}} col-8 follow-btn"
+                                    data-id="{{.data.topic.Publisher.ID}}">{{if
+                                .data.topic.Publisher.Follow}}已关注{{else}}关注{{end}}
+                            </button>
                         </div>
                         {{end}}
                     </div>
                 </div>
-<!--                <div class="mt-3 p-3 bg-white rounded-2" style="border-radius: 6px;">-->
-<!--                    <b>JST 社区</b>-->
-<!--                    <hr>-->
-<!--                    <p>-->
-<!--                        管理员会定期检查帖子，发现有描述不清晰，或者不知道说什么的帖子移动到「NoPoint」节点，此节点永远不会上首页，如果你发现你的帖子进入了「NoPoint」里面，请检查调整你的标题和内容。-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--                <div class="mt-3 bg-white p-2" style="border-radius: 6px;">-->
-<!--                    <img src="/u/a/b38613aafbb61e73501999370e6cc4a8.png" class="img-fluid" alt="...">-->
-<!--                    <img src="/u/a/c2c05da836c8b359c9937a668a914674.png" class="img-fluid  mt-1" alt="...">-->
-<!--                    <img src="/u/a/0d2bbafb9e3592a7397e74e076aee897.png" class="img-fluid  mt-1" alt="...">-->
-<!--                </div>-->
             </div>
         </div>
     </div>

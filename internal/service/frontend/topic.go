@@ -10,6 +10,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	"gorm.io/gorm"
+	"strings"
 )
 
 func TopicService(ctx *gin.Context) *sTopic {
@@ -23,11 +24,17 @@ type sTopic struct {
 // Publish 发布话题
 func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 	topic := &model.Topics{
-		Title:   req.Title,
-		Content: req.Content,
-		NodeId:  req.NodeId,
-		UserId:  s.ctx.Auth().ID,
+		Title:     req.Title,
+		Content:   req.Content,
+		NodeId:    req.NodeId,
+		UserId:    s.ctx.Auth().ID,
+		MDContent: req.MDContent,
 	}
+
+	if len(req.Tags) > 0 {
+		topic.Tags = strings.Split(req.Tags, ",")
+	}
+
 	if r := model.Topic().M.Create(topic); r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("发布话题失败，请稍后再试")
 	} else {
