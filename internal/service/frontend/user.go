@@ -61,19 +61,22 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 
 // genAvatar 生成用户默认头像
 func (s *sUser) genAvatar(name string) (string, error) {
-	path := fmt.Sprintf("%s/a", config.Conf.Upload.Path)
+	path := fmt.Sprintf("%s/users/", config.Conf.Upload.Path)
+
+	// 检查目录是否存在
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.Mkdir(path, os.ModePerm)
-		os.Chmod(path, os.ModePerm)
+		_ = os.Mkdir(path, os.ModePerm)
+		_ = os.Chmod(path, os.ModePerm)
 	}
+
 	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
-	avatarPath := fmt.Sprintf("/a/%s.png", avatarName)
+	avatarPath := fmt.Sprintf("/users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
-	err := govatar.GenerateFileForUsername(govatar.MALE, name, uploadPath)
-	if err != nil {
+
+	if err := govatar.GenerateFileForUsername(govatar.MALE, name, uploadPath); err != nil {
 		return "", err
 	} else {
-		return "/u" + avatarPath, nil
+		return "/upload" + avatarPath, nil
 	}
 }
 

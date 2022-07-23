@@ -15,6 +15,5 @@
 # vendor/
 /.idea
 .DS_Store
-assets/u/a/*
-assets/u/t/*
+assets/upload/*
 

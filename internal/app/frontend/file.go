@@ -42,7 +42,7 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 		return
 	}
 
-	path := fmt.Sprintf("%s/t", config.Conf.Upload.Path)
+	path := fmt.Sprintf("%s/topic", config.Conf.Upload.Path)
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		os.Mkdir(path, os.ModePerm)
 		os.Chmod(path, os.ModePerm)
@@ -53,6 +53,6 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name)); err != nil {
 		s.MDFileJson(0, err.Error(), "")
 	} else {
-		s.MDFileJson(1, "ok", fmt.Sprintf("/u/t/%s", name))
+		s.MDFileJson(1, "ok", fmt.Sprintf("/upload/topic/%s", name))
 	}
 }

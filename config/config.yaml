@@ -20,5 +20,5 @@ redis:
   db: "1"
   idleTimeout: "10"
 upload:
-  path: "../assets/u"
+  path: "../assets/upload"
   imageExt: [ "png", "jpg", "jpeg", "gif" ]
