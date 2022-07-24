@@ -10,7 +10,7 @@ var Checkin = cCheckin{}
 
 type cCheckin struct{}
 
-// StoreSubmit 提交评论
+// StoreSubmit 提交签到
 func (c *cCheckin) StoreSubmit(ctx *gin.Context) {
 	s := service.Context(ctx)
 
