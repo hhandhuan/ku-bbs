@@ -303,10 +303,11 @@
                         h += '<img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
                         h += '</a>'
 
-                        ln.html(parseInt(ln.html()) + 1)
                         if (parseInt(ln.html()) > 0) {
+                            ln.html(parseInt(ln.html()) + 1)
                             lu.find("a").before(h)
                         } else {
+                            ln.html(parseInt(ln.html()) + 1)
                             lu.html(h)
                         }
 
