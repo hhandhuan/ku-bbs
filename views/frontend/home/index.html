@@ -68,12 +68,14 @@
             </div>
             <div class="right-content">
                 <div class="p-4 bg-white rounded-1 shadow-sm">
-                    <a class="btn btn-dark col-12" href="/publish">发布话题</a>
-                    {{if .user}}
-                    <button class="btn {{if .data.checked}} btn-secondary {{else}} btn-dark {{end}} col-12 mt-1 checkin-btn">
-                        {{if .data.checked}}已签到{{else}}签到{{end}}
-                    </button>
-                    {{end}}
+                    <div class="btn-group col-12">
+                        <a class="btn btn-dark col-12 rounded-1" href="/publish"><i class="fa fa-plus-circle"> 发布</i></a>
+                        {{if .user}}
+                        <button class="btn {{if .data.checked}} btn-secondary disabled {{else}} btn-dark {{end}} col-12 checkin-btn ms-1 rounded-1">
+                            <i class="fa fa-calendar"> 签到</i>
+                        </button>
+                        {{end}}
+                    </div>
                 </div>
                 <div class="mt-3 p-3 bg-white rounded-1 shadow-sm rounded-2">
                     <b>社区介绍</b>
@@ -104,7 +106,7 @@
                 success: function (res) {
                     self.attr("disabled", false)
                     if (res.code === 0) {
-                        self.removeClass("btn-dark").addClass("btn-secondary").html("已签到")
+                        self.removeClass("btn-dark").addClass("btn-secondary disabled")
                     }
                 },
                 error: function (res) {
