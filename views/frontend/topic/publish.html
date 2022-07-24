@@ -37,15 +37,15 @@
         </div>
     </div>
 </div>
-<script src="/assets/frontend/js/jquery.min.js"></script>
-<script src="/assets/editor/editormd.min.js"></script>
+<script src="/assets/static/frontend/js/jquery.min.js"></script>
+<script src="/assets/static/editor/editormd.min.js"></script>
 <script>
     $(function () {
         const editor = editormd("md-editor", {
             width: "100%",
             height: 600,
             syncScrolling: "single",
-            path: "/assets/editor/lib/",
+            path: "/assets/static/editor/lib/",
             toolbarIcons: function () {
                 return ["h2", "h3", "quote", "list-ol", "list-ul", "link", "image", "code-block", "table", "watch", "fullscreen"]
             },

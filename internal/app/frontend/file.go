@@ -53,6 +53,6 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name)); err != nil {
 		s.MDFileJson(0, err.Error(), "")
 	} else {
-		s.MDFileJson(1, "ok", fmt.Sprintf("/upload/topic/%s", name))
+		s.MDFileJson(1, "ok", fmt.Sprintf("/assets/upload/topic/%s", name))
 	}
 }

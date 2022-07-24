@@ -20,8 +20,7 @@ func Run() {
 
 	engine.SetFuncMap(utils.GetTemplateFuncMap())
 
-	engine.Static("/assets", "../assets/static")
-	engine.Static("/upload", "../assets/upload")
+	engine.Static("/assets", "../assets")
 	engine.LoadHTMLGlob("../views/**/**/*")
 
 	store := cookie.NewStore([]byte(config.Conf.Session.Secret))
