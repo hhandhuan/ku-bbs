@@ -291,7 +291,7 @@
                 },
                 dataType: 'json',
                 success: function (res) {
-                    // if (res.code === 0) {
+                    if (res.code === 0) {
                         let ln = $('.like-num')
                         let lu = $('.like-users')
                         let nu = parseInt(self.find('.like-count').html()) + 1
@@ -310,8 +310,7 @@
                             ln.html(parseInt(ln.html()) + 1)
                             lu.html(h)
                         }
-
-                    // }
+                    }
                 },
                 error: function (res) {
                     console.log(res)
