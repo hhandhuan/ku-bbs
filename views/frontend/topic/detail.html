@@ -44,16 +44,18 @@
                         {{end}}
                     </span>
                 </div>
-                {{if .data.topic.Likes}}
+
                 <div class="topic-likes bg-white mt-2 p-3 rounded-2">
-                    <span style="font-size: 12px;" class="text-secondary"> {{.data.topic.LikeCount}} 个人赞</span>
-                    {{range .data.topic.Likes}}
-                    <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
-                        <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>
-                    </a>
-                    {{end}}
+                    <div class="d-inline-block text-secondary">
+                        <span style="font-size: 12px;"> <span
+                                class="like-num">{{.data.topic.LikeCount}}</span> 个人赞</span>
+                    </div>
+                    <div class="d-inline-block like-users">
+                        {{range .data.topic.Likes}}
+                        <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1"><img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
+                        {{end}}
+                    </div>
                 </div>
-                {{end}}
                 {{if .data.comments}}
                 <!-- 话题评论 --->
                 <div class="topic-comments text-secondary pe-4 ps-4 pt-2 bg-white mt-2 rounded-2 shadow-sm">
@@ -129,7 +131,6 @@
                     {{end}}
                 </div>
             </div>
-
             <!--      右边布局-->
             <div class="right-content">
                 <div class="p-4 bg-white rounded-2">
@@ -162,7 +163,7 @@
             width: "100%",
             height: 300,
             syncScrolling: "single",
-            path: "/a/editor/lib/",
+            path: "/assets/editor/lib/",
             toolbarIcons: function () {
                 return ["link", "image", "code-block", "watch"]
             },
@@ -274,9 +275,10 @@
             $('.reply_id').val(t.attr("data-id"))
             $('.target_id').val(t.attr("data-cid"))
         })
+
         // 点赞
         $('.like-btn,.topic-like-btn').on('click', function () {
-            var self = $(this)
+            let self = $(this)
             $.ajax({
                 url: '/likes',
                 type: 'POST',
@@ -288,9 +290,15 @@
                 dataType: 'json',
                 success: function (res) {
                     if (res.code === 0) {
-                        let num = parseInt(self.find('.like-count').html()) + 1
-                        self.find('.like-count').html(num)
+                        let ln = $('.like-num')
+                        let lu = $('.like-users')
+                        let nu = parseInt(self.find('.like-count').html()) + 1
+
+                        self.find('.like-count').html(nu)
                         self.find('i').addClass("text-danger")
+                        ln.html(parseInt(ln.html()) + 1)
+                        lu.find("a").before('<a href="/user?id={{.user.ID}}" class="text-decoration-none d-inline-block ms-1"><img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>')
+
                     }
                 },
                 error: function (res) {
