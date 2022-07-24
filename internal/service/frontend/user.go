@@ -76,7 +76,7 @@ func (s *sUser) genAvatar(name string) (string, error) {
 	if err := govatar.GenerateFileForUsername(govatar.MALE, name, uploadPath); err != nil {
 		return "", err
 	} else {
-		return "/upload" + avatarPath, nil
+		return "/assets/upload" + avatarPath, nil
 	}
 }
 
