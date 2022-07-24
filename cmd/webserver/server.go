@@ -20,7 +20,7 @@ func Run() {
 
 	engine.SetFuncMap(utils.GetTemplateFuncMap())
 
-	engine.Static("/a", "../assets/a")
+	engine.Static("/assets", "../assets/static")
 	engine.Static("/upload", "../assets/upload")
 	engine.LoadHTMLGlob("../views/**/**/*")
 
