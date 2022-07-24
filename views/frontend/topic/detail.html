@@ -52,7 +52,9 @@
                     </div>
                     <div class="d-inline-block like-users">
                         {{range .data.topic.Likes}}
-                        <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1"><img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
+                        <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1"><img
+                                src="{{.User.Avatar}}" class="rounded-circle img-thumbnail"
+                                style="height: 38px;width: 38px;"/></a>
                         {{end}}
                     </div>
                 </div>
@@ -296,8 +298,17 @@
 
                         self.find('.like-count').html(nu)
                         self.find('i').addClass("text-danger")
+
+                        let h = '<a href="/user?id={{.user.ID}}" class="text-decoration-none d-inline-block ms-1">'
+                        h += '<img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
+                        h += '</a>'
+
                         ln.html(parseInt(ln.html()) + 1)
-                        lu.find("a").before('<a href="/user?id={{.user.ID}}" class="text-decoration-none d-inline-block ms-1"><img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>')
+                        if (parseInt(ln.html()) > 0) {
+                            lu.find("a").before(h)
+                        } else {
+                            lu.html(h)
+                        }
 
                     }
                 },
