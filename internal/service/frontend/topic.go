@@ -68,7 +68,7 @@ func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 			return db.Where("follows.state = ? AND follows.user_id = ?", consts.FollowedState, uid)
 		}).
 		Preload("Likes", func(db *gorm.DB) *gorm.DB {
-			return db.Preload("User").Where("source_type = ? AND state = ?", consts.TopicSource, consts.Liked).Limit(12)
+			return db.Preload("User").Where("source_type = ? AND state = ?", consts.TopicSource, consts.Liked).Order("id DESC").Limit(12)
 		}).
 		Preload("Responder").
 		Preload("Node").
