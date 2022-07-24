@@ -46,24 +46,33 @@ func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 	var topic *fe.Topic
 
-	builder := model.Topic().M
+	var uid uint64
 	if s.ctx.Check() {
-		builder = builder.
-			Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.TopicSource)
+		uid = s.ctx.Auth().ID
 	}
 
-	var UID uint64
-	if s.ctx.Check() {
-		UID = s.ctx.Auth().ID
+	query := model.Topic().M
+	if uid > 0 {
+		query = query.Preload(
+			"Like",
+			"user_id = ? AND source_type = ? AND state = ?",
+			uid,
+			consts.TopicSource,
+			consts.Liked,
+		)
 	}
 
-	r := builder.
+	r := query.
+		Where("id", topicId).
 		Preload("Publisher.Follow", func(db *gorm.DB) *gorm.DB {
-			return db.Where("follows.state = ? AND follows.user_id = ?", consts.FollowedState, UID)
+			return db.Where("follows.state = ? AND follows.user_id = ?", consts.FollowedState, uid)
 		}).
-		Preload("Node").
+		Preload("Likes", func(db *gorm.DB) *gorm.DB {
+			return db.Preload("User").Where("source_type = ? AND state = ?", consts.TopicSource, consts.Liked).Limit(12)
+		}).
 		Preload("Responder").
-		Find(&topic, "id = ?", topicId)
+		Preload("Node").
+		Find(&topic)
 	if r.Error != nil {
 		return nil, r.Error
 	}

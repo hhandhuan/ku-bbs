@@ -17,8 +17,9 @@ type PublishTopicReq struct {
 
 type Topic struct {
 	model.Topics
-	Publisher User         `gorm:"foreignKey:user_id"`
-	Responder model.Users  `gorm:"foreignKey:reply_id"`
-	Node      model.Nodes  `gorm:"foreignKey:node_id"`
-	Like      *model.Likes `gorm:"foreignKey:source_id"`
+	Publisher User        `gorm:"foreignKey:user_id"`
+	Responder model.Users `gorm:"foreignKey:reply_id"`
+	Node      model.Nodes `gorm:"foreignKey:node_id"`
+	Like      *Like       `gorm:"foreignKey:source_id"`
+	Likes     []*Like     `gorm:"foreignKey:source_id"`
 }
