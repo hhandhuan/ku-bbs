@@ -20,8 +20,6 @@
                             <a href="/user?id={{.data.topic.Publisher.ID}}" class="text-decoration-none text-secondary"> {{.data.topic.Publisher.Name}} </a>
                         </span>
                         <span class="me-2"><i class="fa fa-commenting-o"></i> {{.data.topic.CommentCount}} </span>
-                        <span class="me-2"><i class="fa fa-heart {{if .data.topic.Like}} text-danger {{end}}"></i> {{.data.topic.LikeCount}} </span>
-                        &nbsp;
                         <span class="me-2"><i class="fa fa-eye"></i> {{.data.topic.ViewCount}} </span> &nbsp;
                         <span class="me-2">
                             <i class="fa fa-clock-o"></i> {{.data.topic.CreatedAt | DiffForHumans}}
@@ -34,7 +32,7 @@
                 <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white rounded-bottom lh-lg">
                     {{.data.topic.Content | Html}}
                 </div>
-                <div class="topic-operation bg-white pe-4 ps-4 pb-2">
+                <div class="topic-operation bg-white pe-4 ps-4 pb-2 rounded-2">
                     <span class="text-secondary like-btn p-1 d-inline-block" data-id="{{.data.topic.ID}}"
                           data-tuser="{{.data.topic.UserId}}" data-type="topic">
                         <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
@@ -46,6 +44,16 @@
                         {{end}}
                     </span>
                 </div>
+                {{if .data.topic.Likes}}
+                <div class="topic-likes bg-white mt-2 p-3 rounded-2">
+                    <span style="font-size: 12px;" class="text-secondary"> {{.data.topic.LikeCount}} 个人赞</span>
+                    {{range .data.topic.Likes}}
+                    <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
+                        <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>
+                    </a>
+                    {{end}}
+                </div>
+                {{end}}
                 {{if .data.comments}}
                 <!-- 话题评论 --->
                 <div class="topic-comments text-secondary pe-4 ps-4 pt-2 bg-white mt-2 rounded-2 shadow-sm">

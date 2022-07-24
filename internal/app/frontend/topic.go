@@ -9,7 +9,6 @@ import (
 	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/internal/service/frontend"
-	"log"
 )
 
 var Topic = cTopic{}
@@ -66,12 +65,11 @@ func (c *cTopic) DetailPage(ctx *gin.Context) {
 		return
 	}
 
-	log.Println(topic)
-	items, err := frontend.CommentService(ctx).GetList(id)
+	list, err := frontend.CommentService(ctx).GetList(id)
 	if err != nil {
 		s.To("/").WithError(err).Redirect()
 		return
 	}
 
-	s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": items})
+	s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list})
 }
