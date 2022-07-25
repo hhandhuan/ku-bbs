@@ -92,6 +92,19 @@ func (s *sUser) Login(req *fe.LoginReq) error {
 		return errors.New("用户名或密码错误")
 	}
 
+	data := map[string]interface{}{
+		"last_login_at": time.Now(),
+		"last_login_ip": s.ctx.Ctx.ClientIP(),
+	}
+
+	u := model.User().M.Where("id", user.ID).Updates(data)
+	if u.Error != nil {
+		return fmt.Errorf("登录失败，服务内部错误: %v", u.Error)
+	}
+	if u.RowsAffected <= 0 {
+		return errors.New("登录失败，服务内部错误")
+	}
+
 	s.ctx.SetAuth(user)
 
 	return nil
