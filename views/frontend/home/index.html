@@ -67,9 +67,10 @@
                 </div>
             </div>
             <div class="right-content">
-                <div class="p-4 bg-white rounded-1 shadow-sm">
+                <div class="p-3 bg-white rounded-1 shadow-sm">
                     <div class="btn-group col-12">
-                        <a class="btn btn-dark col-12 rounded-1" href="/publish"><i class="fa fa-plus-circle"> 发布</i></a>
+                        <a class="btn btn-dark col-12 rounded-1" href="/publish"><i class="fa fa-plus-circle">
+                            发布</i></a>
                         {{if .user}}
                         <button class="btn {{if .data.checked}} btn-secondary disabled {{else}} btn-dark {{end}} col-12 checkin-btn ms-1 rounded-1">
                             <i class="fa fa-calendar"> 签到</i>
@@ -77,22 +78,22 @@
                         {{end}}
                     </div>
                 </div>
-                <div class="mt-3 p-3 bg-white rounded-1 shadow-sm rounded-2">
-                    <b>社区介绍</b>
+                <div class="mt-2 p-3 bg-white rounded-1 shadow-sm rounded-2">
+                    <i class="fa fa-home fw-bold"> 社区介绍</i>
                     <hr>
                     <p class="small">
                         酷社区是一个使用 Go Gin 框架搭建的社区，主要功能包含用户登录、注册、签到、关注、提醒/系统消息、内容点赞、话题发布、回复评论等基础功能，目前功能还在完善中。
-                        欢迎各位小伙伴在反馈区提出问题，让我更好的区完善它。
+                        欢迎各位小伙伴在反馈区提出问题。
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 <script src="/assets/static/frontend/js/jquery.min.js"></script>
 <script>
     $(function () {
-        // 点赞
         $('.checkin-btn').on('click', function () {
             let self = $(this)
             self.attr("disabled", true)

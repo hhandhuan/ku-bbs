@@ -176,7 +176,7 @@ func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 		return nil, r.Error
 	}
 	if user.ID <= 0 {
-		return nil, errors.New("用户不窜爱")
+		return nil, errors.New("用户不存在")
 	}
 
 	if req.Tab == consts.UserTopicTab {
