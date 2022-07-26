@@ -2,9 +2,12 @@ package frontend
 
 import (
 	"errors"
+	"fmt"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
+	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"log"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -97,4 +100,38 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 	}
 
 	return list, nil
+}
+
+// Delete 删除评论
+func (s *sComment) Delete(id uint64) error {
+	if !s.ctx.Check() {
+		return errors.New("权限不足")
+	}
+
+	var comment *model.Comments
+	f := model.Comment().M.Where("id", id).Find(&comment)
+	if f.Error != nil || comment == nil {
+		log.Println(f.Error)
+		return errors.New("删除失败")
+	}
+
+	if comment.UserId != s.ctx.Auth().ID {
+		return errors.New("权限不足")
+	}
+
+	err := db.DB.Transaction(func(tx *gorm.DB) error {
+		d := tx.Delete(&model.Comments{}, id)
+		if d.Error != nil || d.RowsAffected <= 0 {
+			return fmt.Errorf("delete comment error: %v", d.Error)
+		}
+		u := tx.Model(&model.Topics{}).Where("id", comment.TopicId).Updates(map[string]interface{}{
+			"comment_count": gorm.Expr("comment_count - 1"),
+		})
+		if u.Error != nil || u.RowsAffected <= 0 {
+			return fmt.Errorf("delete comment error: %v", d.Error)
+		}
+		return nil
+	})
+
+	return err
 }
