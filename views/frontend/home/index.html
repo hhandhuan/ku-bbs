@@ -12,12 +12,12 @@
             <div class="left-content bg-white rounded-top shadow-sm">
                 <div class="p-2 bg-white font-monospace border-bottom rounded-top">
                     <a href="/?type=reply"
-                       class='ms-2 {{if eq .data.type "reply"}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>活跃</a>
+                       class='ms-2 {{if eq .data.type "reply"}}btn btn-sm btn-dark text-white{{else}}text-secondary{{end}} text-decoration-none'>活跃</a>
                     <a href="/?type=latest"
-                       class='ms-2 {{if eq .data.type "latest"}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>最新</a>
+                       class='ms-2 {{if eq .data.type "latest"}}btn btn-sm btn-dark text-white{{else}}text-secondary{{end}} text-decoration-none'>最新</a>
                     {{range .data.nodes}}
                     <a href="/?type={{.Alias}}"
-                       class='ms-2 {{if eq $.data.type .Alias}}text-dark{{else}}text-secondary{{end}} text-decoration-none'>{{.Name}}</a>
+                       class='ms-2 {{if eq $.data.type .Alias}}btn btn-sm btn-dark text-white{{else}}text-secondary{{end}} text-decoration-none'>{{.Name}}</a>
                     {{end}}
                 </div>
                 <div class="list p-3  bg-white">
@@ -31,11 +31,10 @@
                         </div>
                         <div style="width: 700px;" class="ms-2 text-secondary d-inline-block align-top">
                             <p class="mb-0 mb-1">
-                                <a href="/topics/{{.ID}}"
-                                   class="text-decoration-none table-hover text-dark">{{.Title}}</a>
+                                <a href="/topics/{{.ID}}" class="text-decoration-none table-hover text-dark">{{.Title}}</a>
                             </p>
                             <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">
-                                <span class="badge text-bg-secondary me-2" style="color: #adaaa8;">{{.Node.Name}}</span>
+                                <span class="badge text-bg-secondary me-2">{{.Node.Name}}</span>
                                 <span class="me-1">
                                     <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
                                        style="color: #adaaa8;">
@@ -67,7 +66,7 @@
                 </div>
             </div>
             <div class="right-content">
-                <div class="p-3 bg-white rounded-1 shadow-sm">
+                <div class="p-3 bg-white rounded-2 shadow-sm">
                     <div class="btn-group col-12">
                         <a class="btn btn-dark col-12 rounded-1" href="/publish"><i class="fa fa-plus-circle">
                             发布</i></a>
@@ -78,7 +77,7 @@
                         {{end}}
                     </div>
                 </div>
-                <div class="mt-2 p-3 bg-white rounded-1 shadow-sm rounded-2">
+                <div class="mt-2 p-3 bg-white rounded-2 shadow-sm rounded-2">
                     <i class="fa fa-home fw-bold"> 社区介绍</i>
                     <hr>
                     <p class="small">

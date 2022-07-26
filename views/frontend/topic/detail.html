@@ -6,7 +6,7 @@
 
 {{template "frontend.layout.msg" .}}
 
-<div class="container-fluid">
+<div class="container-fluid ">
     <div class="m-auto box">
         <div class="content">
             <!--左边布局-->
@@ -29,10 +29,10 @@
                     <hr>
                 </div>
                 <!-- 话题内容 --->
-                <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white rounded-bottom lh-lg">
+                <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white lh-lg">
                     {{.data.topic.Content | Html}}
                 </div>
-                <div class="topic-operation bg-white pe-4 ps-4 pb-2 rounded-2">
+                <div class="topic-operation bg-white pe-4 ps-4 pb-2 rounded-bottom  shadow-sm">
                     <span class="text-secondary like-btn p-1 d-inline-block" data-id="{{.data.topic.ID}}"
                           data-tuser="{{.data.topic.UserId}}" data-type="topic">
                         <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
@@ -45,7 +45,7 @@
                     </span>
                 </div>
 
-                <div class="topic-likes bg-white mt-2 p-3 rounded-2">
+                <div class="topic-likes bg-white mt-2 p-3 rounded-2  shadow-sm">
                     <div class="d-inline-block text-secondary">
                         <span style="font-size: 12px;"> <span
                                 class="like-num">{{.data.topic.LikeCount}}</span> 个人赞</span>
@@ -63,7 +63,7 @@
                 <div class="topic-comments text-secondary pe-4 ps-4 pt-2 bg-white mt-2 rounded-2 shadow-sm">
                     <div class="comment-list pb-4">
                         {{range .data.comments}}
-                        <div class="d-flex p-3" id="comment{{.ID}}">
+                        <div class="d-flex p-3 comment-item" id="comment{{.ID}}">
                             <a href="/user?id={{.Publisher.ID}}">
                                 <img src="{{.Publisher.Avatar}}" class="rounded-2"
                                      height="48" alt="Avatar" loading="lazy"/>
@@ -80,17 +80,18 @@
                                         {{end}}
                                         <span class="small text-muted font-weight-normal"> • </span>
                                         <span class="small text-muted font-weight-normal">{{.CreatedAt | DiffForHumans}}</span>
+                                        <span class="small text-secondary text-success" style="font-size: 12px;">#{{.ID}}</span>
                                     </p>
                                     <div class="comment-content lh-lg p-1 text-secondary">
                                         {{.Content | Html}}
                                     </div>
                                     <ul class="list-unstyled d-flex mb-0 pe-xl-5" style="font-size: 13px;">
-                                        <li role="button" class="p-1 me-3 like-btn" data-id="{{.ID}}"
+                                        <li role="button" class="p-1 me-2 like-btn" data-id="{{.ID}}"
                                             data-tuser="{{.UserId}}" data-type="comment">
                                             <i class="fa fa-heart {{if .Like}} text-danger {{end}}"></i> <span
                                                 class="like-count ms-1">{{.LikeCount}}</span>
                                         </li>
-                                        <li class="me-3 reply-btn p-1">
+                                        <li class="me-2 reply-btn p-1">
                                             <a href="#comment-form"
                                                class="text-decoration-none text-secondary reply-btn"
                                                data-name="{{.Publisher.Name}}" data-id="{{.UserId}}"
@@ -98,6 +99,16 @@
                                                 <i class="fa fa-mail-reply"></i> 回复
                                             </a>
                                         </li>
+                                        {{if $.user}}
+                                        {{if eq $.user.ID .Publisher.ID}}
+                                        <li class="me-2 p-1">
+                                            <a class="text-decoration-none text-secondary del-btn"
+                                               data-id="{{.ID}}" data-tid="{{.TopicId}}" href="javascript:;">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </li>
+                                        {{end}}
+                                        {{end}}
                                     </ul>
                                 </div>
                             </div>
@@ -135,7 +146,7 @@
             </div>
             <!--      右边布局-->
             <div class="right-content">
-                <div class="p-4 bg-white rounded-2">
+                <div class="p-4 bg-white rounded-2 shadow-sm">
                     <div class="text-center">
                         <a href="/user?id={{.data.topic.Publisher.ID}}">
                             <img src="{{.data.topic.Publisher.Avatar}}" alt="avatar" class="rounded-2 img-fluid"
@@ -347,6 +358,35 @@
             })
         })
 
+        $('.del-btn').on('click', function () {
+            let self = $(this)
+            $.ajax({
+                url: '/comments/delete',
+                type: 'POST',
+                data: {
+                    id: self.attr("data-id"),
+                },
+                dataType: 'json',
+                success: function (res) {
+                    let item = $('.comment-item')
+                    let comment =  $('#comment'+self.attr("data-id"))
+                    if (res.code === 0) {
+                        comment.hide(1500, function () {
+                            comment.remove()
+                            if (item.length <= 1) {
+                                $('.topic-comments').remove()
+                            }
+                        })
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+
         // 获取 query 参数
         function getQueryVariable(variable) {
             const query = window.location.search.substring(1);
@@ -364,8 +404,10 @@
         let j = getQueryVariable("j")
         if (j) {
             let t = $("#" + j)
-            $("html,body").animate({scrollTop: t.offset().top}, 500)
-            t.addClass("bg-light")
+            if (t.length > 0) {
+                $("html,body").animate({scrollTop: t.offset().top}, 500)
+                t.addClass("bg-light")
+            }
         }
     })
 </script>

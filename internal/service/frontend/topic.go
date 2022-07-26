@@ -78,7 +78,7 @@ func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 	}
 
 	if topic.ID <= 0 {
-		return nil, errors.New("内容未找到")
+		return nil, errors.New("资源未找到")
 	}
 
 	data := map[string]interface{}{

@@ -41,7 +41,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 		return errors.New("用户名已被注册，请更换用户名继续尝试")
 	}
 
-	avatar, err := s.genAvatar(req.Name)
+	avatar, err := s.genAvatar(req.Name, req.Gender)
 	if err != nil {
 		return errors.New("用户默认头像生成失败")
 	}
@@ -50,7 +50,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 		Name:     req.Name,
 		Avatar:   avatar,
 		Password: encrypt.GenerateFromPassword(req.Password),
-		Gender:   consts.Male,
+		Gender:   uint8(req.Gender),
 	})
 	if res.Error != nil || res.RowsAffected <= 0 {
 		return errors.New("用户注册失败，请稍后在试")
@@ -60,7 +60,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 }
 
 // genAvatar 生成用户默认头像
-func (s *sUser) genAvatar(name string) (string, error) {
+func (s *sUser) genAvatar(name string, gender uint) (string, error) {
 	path := fmt.Sprintf("%s/users/", config.Conf.Upload.Path)
 
 	// 检查目录是否存在
@@ -73,7 +73,7 @@ func (s *sUser) genAvatar(name string) (string, error) {
 	avatarPath := fmt.Sprintf("/users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
 
-	if err := govatar.GenerateFileForUsername(govatar.MALE, name, uploadPath); err != nil {
+	if err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath); err != nil {
 		return "", err
 	} else {
 		return "/assets/upload" + avatarPath, nil
@@ -98,11 +98,8 @@ func (s *sUser) Login(req *fe.LoginReq) error {
 	}
 
 	u := model.User().M.Where("id", user.ID).Updates(data)
-	if u.Error != nil {
+	if u.Error != nil || u.RowsAffected <= 0 {
 		return fmt.Errorf("登录失败，服务内部错误: %v", u.Error)
-	}
-	if u.RowsAffected <= 0 {
-		return errors.New("登录失败，服务内部错误")
 	}
 
 	s.ctx.SetAuth(user)

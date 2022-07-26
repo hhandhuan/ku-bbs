@@ -11,6 +11,11 @@ type SubmitCommentReq struct {
 	MDContent string `v:"required#请输入评论内容" form:"md_content"`
 }
 
+// DeleteCommentReq  删除评论
+type DeleteCommentReq struct {
+	ID uint64 `v:"required#参数错误" form:"id"`
+}
+
 // Comment 评论
 type Comment struct {
 	model.Comments
