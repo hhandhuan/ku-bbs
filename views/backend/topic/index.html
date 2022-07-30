@@ -46,7 +46,7 @@
                     <td>{{.Node.Name}}#{{.Node.Alias}}</td>
                     <td>{{.LikeCount}}</td>
                     <td>{{.CommentCount}}</td>
-                    <td>{{.CreatedAt | FormatTime}}</td>
+                    <td>{{.CreatedAt | ToDateTimeString}}</td>
                     <td>
                         <a class="btn btn-sm btn-success" href="/topics/{{.ID}}" target="_blank">查看</a>
                         <form method="POST" action="/backend/topics/{{.ID}}" class="d-inline">

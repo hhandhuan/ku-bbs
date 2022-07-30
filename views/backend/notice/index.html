@@ -43,7 +43,7 @@
                         全员
                         {{end}}
                     </td>
-                  <td>{{.CreatedAt | FormatTime}}</td>
+                  <td>{{.CreatedAt | ToDateTimeString}}</td>
                     <td>
                         <a href="/backend/notices/{{.ID}}/edit" class="btn btn-success">编辑</a>
                     </td>

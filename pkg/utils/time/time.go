@@ -41,6 +41,6 @@ func DiffForHumans(gt *time.Time) string {
 	return rs
 }
 
-func FormatTime(t time.Time) string {
+func ToDateTimeString(t time.Time) string {
 	return t.Format("2006-01-02 15:01:05")
 }
