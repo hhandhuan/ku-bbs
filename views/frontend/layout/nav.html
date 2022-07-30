@@ -16,8 +16,9 @@
             {{if .user}}
             <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                 <button class="btn btn-dark btn-sm position-relative">
-                    <a href="/notice" class="text-white h-100 w-100 d-inline-block"><i
-                            class="fa fa-bell-o"></i></a></a>
+                    <a href="/notice" class="text-white h-100 w-100 d-inline-block">
+                        <i class="fa fa-bell-o"></i></a>
+                    </a>
                     {{if .unread}}
                     <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                             <span class="visually-hidden"></span>
@@ -30,7 +31,7 @@
                 {{if .user}}
                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{.user.Avatar}}" alt="mdo" width="32" height="32" class="rounded-circle">
+                    <img src="{{.user.Avatar}}" alt="mdo" width="32" height="32" class="rounded-2">
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                     <li><a class="dropdown-item" href="/user?id={{.user.ID}}">个人主页</a></li>

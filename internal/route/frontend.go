@@ -52,4 +52,7 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.POST("/follows", frontend.Follow.FollowSubmit)
 	// 用户签到
 	group.POST("/checkins", frontend.Checkin.StoreSubmit)
+
+	// 举报资源
+	group.POST("/reports", frontend.Report.ReportSubmit)
 }

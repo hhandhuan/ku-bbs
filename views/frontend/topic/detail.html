@@ -33,21 +33,23 @@
                     {{.data.topic.Content | Html}}
                 </div>
                 <div class="topic-operation bg-white pe-4 ps-4 pb-2 rounded-bottom  shadow-sm">
-                    <span class="text-secondary like-btn p-1 d-inline-block" data-id="{{.data.topic.ID}}"
+                    <span class="text-secondary like-btn topic-like p-1 d-inline-block small"
+                          data-id="{{.data.topic.ID}}"
                           data-tuser="{{.data.topic.UserId}}" data-type="topic">
                         <i class="fa fa-heart fa-1x {{if .data.topic.Like}} text-danger {{end}}"></i>
                         <span class="like-count ms-1">{{.data.topic.LikeCount}}</span> 个赞
                     </span>
-                    <span class="text-secondary topic-tag pull-right">
+                    <span class="text-secondary topic-tag pull-right small">
                         {{range .data.topic.Tags}}
-                        <a class="bg-light p-1 rounded-1 text-decoration-none text-secondary" href=""># {{.}}</a>
+                        <a class="p-1 rounded-1 text-decoration-none text-secondary" style="background: #eee;"
+                           href="javascript:;"># {{.}}</a>
                         {{end}}
                     </span>
                 </div>
 
                 <div class="topic-likes bg-white mt-2 p-3 rounded-2  shadow-sm">
                     <div class="d-inline-block text-secondary">
-                        <span style="font-size: 12px;"> <span
+                        <span class="small"> <span
                                 class="like-num">{{.data.topic.LikeCount}}</span> 个人赞</span>
                     </div>
                     <div class="d-inline-block like-users">
@@ -71,18 +73,21 @@
                             <div class="w-100 ps-3">
                                 <div>
                                     <p class="text-dark">
-                                        <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
-                                            {{.Publisher.Name}}</a>
-                                        {{if .Responder}}
-                                        <a href="/user?id={{.Responder.ID}}" class="text-decoration-none text-dark">
-                                            <span class="small text-muted font-weight-normal">@{{.Responder.Name}}</span>
-                                        </a>
-                                        {{end}}
-                                        <span class="small text-muted font-weight-normal"> • </span>
+                                        <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">{{.Publisher.Name}}</a>
+                                        <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{.CreatedAt | DiffForHumans}}</span>
-                                        <span class="small text-secondary text-success" style="font-size: 12px;">#{{.ID}}</span>
+                                        <span class="small text-secondary text-success">#{{.ID}}</span>
                                     </p>
                                     <div class="comment-content lh-lg p-1 text-secondary">
+                                        {{if .Responder}}
+                                        <p class="p-2 rounded-1 small" style="background: #eee;">对
+                                            <a href="/user?id={{.Responder.ID}}" class="text-decoration-none">
+                                                <img src="{{.Responder.Avatar}}" style="height: 16px;width: 16px;"
+                                                     class="rounded-circle">
+                                                {{.Responder.Name}}
+                                            </a>
+                                            <span class="text-success">#{{.TargetId}}</span> 回复</p>
+                                        {{end}}
                                         {{.Content | Html}}
                                     </div>
                                     <ul class="list-unstyled d-flex mb-0 pe-xl-5" style="font-size: 13px;">
@@ -109,12 +114,21 @@
                                         </li>
                                         {{end}}
                                         {{end}}
+                                        {{if $.user}}
+                                        <li class="me-2 p-1">
+                                            <a class="text-decoration-none text-secondary report-btn"
+                                               href="javascript:;"
+                                               data-bs-toggle="modal" data-bs-target="#reportModal" data-id="{{.ID}}"
+                                               data-uid="{{.Publisher.ID}}">
+                                                <i class="fa fa-flag-o"></i> 举报
+                                            </a>
+                                        </li>
+                                        {{end}}
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         {{end}}
-
                     </div>
                 </div>
                 {{end}}
@@ -135,7 +149,7 @@
                         </div>
                     </form>
                     {{else}}
-                    <div class="bg-white p-4 rounded-2">
+                    <div class="bg-white p-4 rounded-2 shadow-sm">
                         需要 <a href="/login?back=/topics/{{.data.topic.ID}}"
                               class="text-decoration-none text-primary">登录</a>
                         后方可回复, 如果你还没有账号请 <a href="/register?back=/topics/{{.data.topic.ID}}"
@@ -162,6 +176,29 @@
                         </div>
                         {{end}}
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">举报评论</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" class="report-id">
+                        <input type="hidden" class="report-uid">
+                        <textarea class="form-control report-content" rows="4" placeholder="请填写举报理由 150 字之内"
+                                  required></textarea>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary report-ok">确定</button>
                 </div>
             </div>
         </div>
@@ -272,7 +309,7 @@
         $('.submit-btn').on('click', function () {
             $("#content").val(editor.getHTML())
             $("#md_content").val(editor.getMarkdown())
-            $('form').submit()
+            $('#comment-form form').submit()
         })
         // 回复某人
         $('.reply-btn').on('click', function (e) {
@@ -290,7 +327,7 @@
         })
 
         // 点赞
-        $('.like-btn,.topic-like-btn').on('click', function () {
+        $('.like-btn').on('click', function () {
             let self = $(this)
             $.ajax({
                 url: '/likes',
@@ -309,6 +346,10 @@
 
                         self.find('.like-count').html(nu)
                         self.find('i').addClass("text-danger")
+
+                        if (!self.hasClass("topic-like")) {
+                            return
+                        }
 
                         let h = '<a href="/user?id={{.user.ID}}" class="text-decoration-none d-inline-block ms-1">'
                         h += '<img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
@@ -369,7 +410,7 @@
                 dataType: 'json',
                 success: function (res) {
                     let item = $('.comment-item')
-                    let comment =  $('#comment'+self.attr("data-id"))
+                    let comment = $('#comment' + self.attr("data-id"))
                     if (res.code === 0) {
                         comment.hide(1500, function () {
                             comment.remove()
@@ -379,6 +420,40 @@
                         })
                     } else {
                         alert(res.msg)
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+
+        $('.report-btn').on("click", function () {
+            $('.report-id').val($(this).attr('data-id'))
+            $('.report-uid').val($(this).attr('data-uid'))
+        })
+
+        $('.report-ok').on('click', function () {
+            let remark = $('.report-content').val()
+            if (!remark) {
+                alert('请填写举报内容')
+                return
+            }
+
+            $.ajax({
+                url: '/reports',
+                type: 'POST',
+                data: {
+                    target_id: $('.report-uid').val(),
+                    source_id: $('.report-id').val(),
+                    source_type: "comment",
+                    remark: remark,
+                },
+                dataType: 'json',
+                success: function (res) {
+                    alert(res.msg)
+                    if (res.code === 0) {
+                        $('#reportModal').modal('hide')
                     }
                 },
                 error: function (res) {

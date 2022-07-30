@@ -12,7 +12,7 @@ db:
   port: "3306"
   name: "root"
   pass: ""
-  db: "gblog"
+  db: "ku-bbs"
 redis:
   host: "127.0.0.1"
   pass: ""

@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 )
 
-type SArr []string
+// SA string array type
+type SA []string
 
-func (c SArr) Value() (driver.Value, error) {
+func (c SA) Value() (driver.Value, error) {
 	return json.Marshal(c)
 }
 
-func (c *SArr) Scan(data interface{}) error {
+func (c *SA) Scan(data interface{}) error {
 	return json.Unmarshal(data.([]byte), &c)
 }

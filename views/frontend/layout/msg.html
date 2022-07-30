@@ -2,13 +2,15 @@
 <div class="container-fluid">
     <div class="m-auto box mt-4">
         {{if .err}}
-        <div class="alert alert-danger mt-1">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{.err}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{end}}
         {{if .msg}}
-        <div class="alert alert-success">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{.msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {{end}}
     </div>

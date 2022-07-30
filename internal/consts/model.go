@@ -32,3 +32,8 @@ const Female = 2
 const UserTopicTab = "topic"
 const UserFollowTab = "follow"
 const UserFansTab = "fans"
+
+const ReportCommentSource = "comment"
+const ReportTopicSource = "topic"
+const ReportAwaitingState = 0
+const ReportCompletedState = 1
