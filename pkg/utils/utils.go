@@ -9,9 +9,9 @@ import (
 // GetTemplateFuncMap 获取模版函数
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{
-		"DiffForHumans": time.DiffForHumans,
-		"FormatTime":    time.FormatTime,
-		"Html":          view.Html,
-		"RemindName":    view.RemindName,
+		"DiffForHumans":    time.DiffForHumans,
+		"ToDateTimeString": time.ToDateTimeString,
+		"Html":             view.Html,
+		"RemindName":       view.RemindName,
 	}
 }
