@@ -51,7 +51,7 @@ type conf struct {
 }
 
 func init() {
-	b, err := os.ReadFile("./config/config.yaml")
+	b, err := os.ReadFile("../config/config.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}

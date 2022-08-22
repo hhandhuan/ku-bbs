@@ -70,14 +70,14 @@ func (s *sUser) genAvatar(name string, gender uint) (string, error) {
 	}
 
 	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
-	avatarPath := fmt.Sprintf("/users/%s.png", avatarName)
+	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
 
 	if err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath); err != nil {
 		log.Println(err)
 		return "", err
 	} else {
-		return "/assets/upload" + avatarPath, nil
+		return "/assets/upload/" + avatarPath, nil
 	}
 }
 
