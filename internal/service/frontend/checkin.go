@@ -7,6 +7,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/db"
+	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 	"log"
 	"time"
@@ -101,7 +102,7 @@ func (s *sCheckin) IsCheckin() (bool, error) {
 		return false, nil
 	}
 
-	date := time.Now().Format("2006-01-02")
+	date := time2.ToDateString(time.Now())
 
 	startAt := date + " 00:00:00"
 	endedAt := date + " 23:59:59"
