@@ -58,6 +58,5 @@ func (c *cNotice) PublishSubmit(ctx *gin.Context) {
 		s.Back().WithError(err).Redirect()
 	} else {
 		s.To("/backend/notices").WithMsg("发布成功").Redirect()
-		return
 	}
 }

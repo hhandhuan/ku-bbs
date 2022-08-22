@@ -68,8 +68,7 @@ func (c *cTopic) DetailPage(ctx *gin.Context) {
 	list, err := frontend.CommentService(ctx).GetList(id)
 	if err != nil {
 		s.To("/").WithError(err).Redirect()
-		return
+	} else {
+		s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list})
 	}
-
-	s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list})
 }
