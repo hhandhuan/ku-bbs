@@ -74,6 +74,7 @@ func (s *sUser) genAvatar(name string, gender uint) (string, error) {
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
 
 	if err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath); err != nil {
+		log.Println(err)
 		return "", err
 	} else {
 		return "/assets/upload" + avatarPath, nil
