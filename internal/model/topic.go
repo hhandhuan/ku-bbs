@@ -30,8 +30,5 @@ type topic struct {
 }
 
 func Topic() *topic {
-	return &topic{
-		M:     db.DB.Model(&Topics{}),
-		Table: "topics",
-	}
+	return &topic{M: db.DB.Model(&Topics{}), Table: "topics"}
 }
