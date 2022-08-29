@@ -1,6 +1,6 @@
 # 酷社区
 
-**ku-bbs** 是一个简洁的微社区 [测试地址](http://47.109.52.187/)
+**ku-bbs** 是一个简洁的微社区
 
 ## 社区预览
 
@@ -11,14 +11,6 @@
 话题详情
 
 ![image](https://user-images.githubusercontent.com/95403191/180780015-48a5e2c0-a3df-46a1-8f24-a2550daf9c91.png)
-
-用户主页
-
-![image](https://user-images.githubusercontent.com/95403191/180780417-329c937c-2b8b-4c2d-b118-c209716520ac.png)
-
-消息中心
-
-![image](https://user-images.githubusercontent.com/95403191/180780473-cb63f814-f283-4f1a-b76f-6d07ac06892c.png)
 
 # 技术栈
 
