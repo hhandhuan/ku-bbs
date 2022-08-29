@@ -1,9 +1,9 @@
 package main
 
 import (
-	s "github.com/hhandhuan/ku-bbs/cmd/webserver"
+	web "github.com/hhandhuan/ku-bbs/cmd/webserver"
 )
 
 func main() {
-	s.Run()
+	web.Run()
 }
