@@ -4,7 +4,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                <img src="/assets/static/frontend/img/logo.png" style="width: 30px;">
+                <img src="/assets/static/frontend/img/logo.png" class="w-75">
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -39,6 +39,9 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
+                    {{if eq .user.IsAdmin 1}}
+                    <li><a class="dropdown-item" href="/backend">后台面板</a></li>
+                    {{end}}
                     <li><a class="dropdown-item" href="/logout">退出登录</a></li>
                 </ul>
                 {{else}}
