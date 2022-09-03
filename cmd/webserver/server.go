@@ -9,9 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/hhandhuan/ku-bbs/internal/route"
-	_ "github.com/hhandhuan/ku-bbs/pkg/config"
-	_ "github.com/hhandhuan/ku-bbs/pkg/db"
-	_ "github.com/hhandhuan/ku-bbs/pkg/redis"
 	"github.com/hhandhuan/ku-bbs/pkg/utils"
 )
 
