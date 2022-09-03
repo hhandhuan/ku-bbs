@@ -285,16 +285,17 @@ func (s *sUser) Follow(req *fe.FollowUserReq) (int, error) {
 		if c := model.Follow().M.Create(data); c.Error != nil || c.RowsAffected <= 0 {
 			log.Println(c.Error)
 			return 0, errors.New("关注失败")
-		} else {
-			sub := remindSub.New()
-			sub.Attach(&remindSub.FollowObs{Sender: s.ctx.Auth().ID, Receiver: req.UserID})
-			sub.Notify()
-			return 1, nil
 		}
+
+		sub := remindSub.New()
+		sub.Attach(&remindSub.FollowObs{Sender: s.ctx.Auth().ID, Receiver: req.UserID})
+		sub.Notify()
+
+		return 1, nil
 	}
 
 	state := consts.UnFollowedState
-	if follow.State == 0 {
+	if follow.State == consts.UnFollowedState {
 		state = consts.FollowedState
 	}
 
