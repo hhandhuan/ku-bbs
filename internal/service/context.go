@@ -11,12 +11,12 @@ import (
 )
 
 const (
-	versionKey = "version"
 	errKey     = "err"
 	msgKey     = "msg"
 	dataKey    = "data"
 	userKey    = "user"
 	unreadKey  = "unread"
+	versionKey = "version"
 )
 
 func Context(ctx *gin.Context) *BaseContext {
@@ -147,7 +147,7 @@ func (c *BaseContext) unread() bool {
 	if s.Error == nil && s.RowsAffected > 0 {
 		return true
 	}
-	
+
 	return false
 }
 

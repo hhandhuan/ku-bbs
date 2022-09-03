@@ -1,7 +1,5 @@
 package consts
 
-const CommentAction = "comment"
-
 const EnableState = 1  // 开启状态
 const DisableState = 0 // 禁用状态
 
@@ -37,3 +35,5 @@ const ReportCommentSource = "comment"
 const ReportTopicSource = "topic"
 const ReportAwaitingState = 0
 const ReportCompletedState = 1
+
+const CHECKINReward = 1
