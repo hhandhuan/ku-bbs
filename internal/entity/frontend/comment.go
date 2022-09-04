@@ -19,7 +19,6 @@ type DeleteCommentReq struct {
 // Comment 评论
 type Comment struct {
 	model.Comments
-	Index     int          `gorm:"-"`                    // 楼层
 	Publisher model.Users  `gorm:"foreignKey:user_id"`   // 评论人
 	Responder *model.Users `gorm:"foreignKey:reply_id"`  // 回复人
 	Topic     model.Topics `gorm:"foreignKey:topic_id"`  // 话题
