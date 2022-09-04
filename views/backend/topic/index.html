@@ -12,7 +12,7 @@
                     <div class="input-group mr-1">
                         <input type="text" class="form-control" name="keywords" placeholder="标题检索"
                                value="{{.data.req.Keywords}}">
-                        <input type="text" class="form-control" name="user_id" placeholder="发布人检索"
+                        <input type="text" class="form-control" name="user_id" placeholder="发布人ID检索"
                                value="{{.data.req.UserID}}">
                         <div class="input-group-append">
                             <button class="btn btn-dark">搜索</button>
@@ -21,15 +21,15 @@
                 </form>
             </div>
 
-            <table class="table table-bordered text-center table-hover">
+            <table class="table table-bordered text-center table-borderless">
                 <thead>
                 <tr>
                     <th scope="col"># ID</th>
                     <th scope="col">标题</th>
                     <th scope="col">发布人</th>
                     <th scope="col">栏目</th>
-                    <th scope="col">点赞数</th>
-                    <th scope="col">回复数</th>
+                    <th scope="col">点赞</th>
+                    <th scope="col">回复</th>
                     <th scope="col">时间</th>
                     <th scope="col">操作</th>
                 </tr>
@@ -38,7 +38,11 @@
                 {{range .data.list}}
                 <tr>
                     <td>{{.ID}}</td>
-                    <td>{{.Title}}</td>
+                    <td>
+                        <a href="/topics/{{.ID}}" target="_blank" class="btn btn-link text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="{{.Title}}">
+                            {{StrLimit .Title  0 10 "..."}}
+                        </a>
+                    </td>
                     <td>
                         <img src="{{.Publisher.Avatar}}" height="30" width="30" class="rounded-circle img-thumbnail">
                         {{.Publisher.Name}}#{{.Publisher.ID}}
@@ -46,7 +50,7 @@
                     <td>{{.Node.Name}}#{{.Node.Alias}}</td>
                     <td>{{.LikeCount}}</td>
                     <td>{{.CommentCount}}</td>
-                    <td>{{.CreatedAt | ToDateTimeString}}</td>
+                    <td>{{ToDateTimeString .CreatedAt}}</td>
                     <td>
                         <a class="btn btn-sm btn-success" href="/topics/{{.ID}}" target="_blank">查看</a>
                         <form method="POST" action="/backend/topics/{{.ID}}" class="d-inline">
