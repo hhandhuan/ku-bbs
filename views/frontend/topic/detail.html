@@ -76,7 +76,7 @@
                                         <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">{{.Publisher.Name}}</a>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{.CreatedAt | DiffForHumans}}</span>
-                                        <span class="small text-secondary text-success">#{{.ID}}</span>
+                                        <span class="small text-secondary text-success">#{{.Index}}</span>
                                     </p>
                                     <div class="comment-content lh-lg p-1 text-secondary">
                                         {{if .Responder}}

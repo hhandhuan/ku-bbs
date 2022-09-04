@@ -99,6 +99,10 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		return nil, r.Error
 	}
 
+	for i := range list {
+		list[i].Index = i + 1
+	}
+
 	return list, nil
 }
 
