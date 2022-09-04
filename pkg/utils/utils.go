@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/hhandhuan/ku-bbs/pkg/utils/str"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/view"
 	"html/template"
@@ -13,5 +14,6 @@ func GetTemplateFuncMap() template.FuncMap {
 		"ToDateTimeString": time.ToDateTimeString,
 		"Html":             view.Html,
 		"RemindName":       view.RemindName,
+		"StrLimit":         str.Limit,
 	}
 }
