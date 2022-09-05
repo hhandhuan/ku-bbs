@@ -99,6 +99,19 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		return nil, r.Error
 	}
 
+	floorMap := make(map[uint64]int, len(list))
+	for index, item := range list {
+		floorMap[item.ID] = index + 1
+		list[index].Floor = floorMap[item.ID]
+		if item.TargetId > 0 {
+			if v, ok := floorMap[item.TargetId]; ok {
+				list[index].ReplyFloor = v
+			} else {
+				list[index].ReplyFloor = -1 // 标记楼层已被删除
+			}
+		}
+	}
+
 	return list, nil
 }
 
