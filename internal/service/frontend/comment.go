@@ -88,7 +88,7 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		query = query.Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.CommentSource)
 	}
 
-	r := query.
+	r := query.Unscoped().
 		Where("topic_id = ?", topicId).
 		Order("id ASC").
 		Preload("Publisher").
@@ -104,13 +104,10 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		floorMap[item.ID] = index + 1
 		list[index].Floor = floorMap[item.ID]
 		if item.TargetId > 0 {
-			if v, ok := floorMap[item.TargetId]; ok {
-				list[index].ReplyFloor = v
-			} else {
-				list[index].ReplyFloor = -1 // 标记楼层已被删除
-			}
+			list[index].ReplyFloor = floorMap[item.TargetId]
 		}
 	}
+	log.Println(list[0].DeletedAt)
 
 	return list, nil
 }

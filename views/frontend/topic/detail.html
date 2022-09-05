@@ -83,20 +83,17 @@
                                         {{if .Responder}}
                                         <p class="p-2 rounded-1 small" style="background: #eee;">对
                                             <a href="/user?id={{.Responder.ID}}" class="text-decoration-none">
-                                                <img src="{{.Responder.Avatar}}" style="height: 16px;width: 16px;"
+                                                <img src="{{.Responder.Avatar}}" style="max-height: 20px;"
                                                      class="rounded-circle">
                                                 {{.Responder.Name}}
                                             </a>
-                                            {{if eq .ReplyFloor -1}}
-                                            回复
-                                            {{else}}
                                             <span class="text-success">#{{.ReplyFloor}}</span> 回复
-                                            {{end}}
                                         </p>
                                         {{end}}
-                                        {{Html .Content}}
+                                        {{if .DeletedAt}} <span class="text-secondary p-2 bg-light small">内容已删除</span> {{else}} {{Html .Content}}  {{end}}
                                     </div>
-                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5" style="font-size: 13px;">
+
+                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5 small" style="display:{{if .DeletedAt}}none !important{{else}}show{{end}};">
                                         <li role="button" class="p-1 me-2 like-btn" data-id="{{.ID}}"
                                             data-tuser="{{.UserId}}" data-type="comment">
                                             <i class="fa fa-heart {{if .Like}} text-danger {{end}}"></i> <span
