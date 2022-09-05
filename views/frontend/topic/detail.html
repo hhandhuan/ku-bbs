@@ -54,9 +54,8 @@
                     </div>
                     <div class="d-inline-block like-users">
                         {{range .data.topic.Likes}}
-                        <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1"><img
-                                src="{{.User.Avatar}}" class="rounded-circle img-thumbnail"
-                                style="height: 38px;width: 38px;"/></a>
+                        <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
+                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
                         {{end}}
                     </div>
                 </div>
@@ -73,7 +72,9 @@
                             <div class="w-100 ps-3">
                                 <div>
                                     <p class="text-dark">
-                                        <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">{{.Publisher.Name}}</a>
+                                        <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
+                                            {{.Publisher.Name}} {{if eq .Publisher.ID $.data.topic.UserId}} <span class="text-danger fw-bold small">(楼主)</span> {{end}}
+                                        </a>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{DiffForHumans .CreatedAt}}</span>
                                         <span class="small text-secondary text-success">#{{.ID}}</span>
