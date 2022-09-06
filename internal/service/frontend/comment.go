@@ -107,8 +107,7 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 			list[index].ReplyFloor = floorMap[item.TargetId]
 		}
 	}
-	log.Println(list[0].DeletedAt)
-
+	
 	return list, nil
 }
 
