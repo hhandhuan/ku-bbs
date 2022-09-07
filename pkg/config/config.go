@@ -17,11 +17,12 @@ type db struct {
 }
 
 type app struct {
-	Version  string `yaml:"version"`
-	Env      string `yaml:"env"`
-	Name     string `yaml:"name"`
-	Desc     string `yaml:"desc"`
-	Keywords string `yaml:"keywords"`
+	Version   string `yaml:"version"`
+	Env       string `yaml:"env"`
+	Name      string `yaml:"name"`
+	Desc      string `yaml:"desc"`
+	Keywords  string `yaml:"keywords"`
+	VisitMode string `yaml:"visitMode"`
 }
 
 type session struct {

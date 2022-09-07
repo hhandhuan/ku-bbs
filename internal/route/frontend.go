@@ -18,7 +18,7 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	// 登录提交
 	group.POST("/login", frontend.Auth.LoginSubmit)
 
-	//group.Use(IsAuth)
+	group.Use(visitor)
 
 	// 社区首页
 	group.GET("/", frontend.Home.HomePage)
