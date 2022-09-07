@@ -332,7 +332,6 @@
             $('.target_id').val(t.attr("data-cid"))
         })
 
-        {{if .user}}
         // 点赞
         $('.like-btn').on('click', function () {
             let self = $(this)
@@ -358,8 +357,8 @@
                             return
                         }
 
-                        let h = '<a href="/user?id={{.user.ID}}" class="text-decoration-none d-inline-block ms-1">'
-                        h += '<img src="{{.user.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
+                        let h = '<a href="/user?id={{if .user}} {{.user.ID}} {{end}}" class="text-decoration-none d-inline-block ms-1">'
+                        h += '<img src="{{if .user}} {{.user.Avatar}} {{end}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
                         h += '</a>'
 
                         if (parseInt(ln.html()) > 0) {
@@ -376,7 +375,6 @@
                 }
             })
         })
-        {{end}}
 
         // 点赞
         $('.follow-btn').on('click', function () {
