@@ -9,6 +9,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
+	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 	"strings"
 )
@@ -92,6 +93,8 @@ func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 	if r.RowsAffected <= 0 {
 		return nil, errors.New("提交失败，请稍后在试")
 	}
+
+	topic.PostDays = time2.DiffDays(topic.CreatedAt)
 
 	return topic, nil
 }

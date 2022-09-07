@@ -2,17 +2,18 @@ package time
 
 import (
 	"fmt"
+	"math"
 	"time"
 )
 
 // DiffForHumans 格式化时间
-func DiffForHumans(gt *time.Time) string {
-	if gt == nil {
+func DiffForHumans(t *time.Time) string {
+	if t == nil {
 		return ""
 	}
 
 	n := time.Now().Unix()
-	t := gt.Unix()
+	a := t.Unix()
 
 	var ys int64 = 31536000
 	var ds int64 = 86400
@@ -22,7 +23,7 @@ func DiffForHumans(gt *time.Time) string {
 
 	var rs string
 
-	d := n - t
+	d := n - a
 	switch {
 	case d > ys:
 		rs = fmt.Sprintf("%d 年前", int(d/ys))
@@ -47,4 +48,8 @@ func ToDateTimeString(t time.Time) string {
 
 func ToDateString(t time.Time) string {
 	return t.Format("2006-01-02")
+}
+
+func DiffDays(t time.Time) int {
+	return int(math.Ceil(float64((time.Now().Unix() - t.Unix()) / 86400)))
 }

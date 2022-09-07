@@ -14,6 +14,9 @@
                 <!-- 话题信息 --->
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
                     <h5>{{.data.topic.Title}}</h5>
+                    {{if ge .data.topic.PostDays 180}}
+                    <div class="alert alert-warning">本文发布于 180 天之前，文中所描述的信息可能已发生改变，请注意辨别</div>
+                    {{end}}
                     <div class="mb-0 mt-3" style="font-size: 14px;color: #adb1af;">
                         <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span> &nbsp;
                         <span class="me-2">
@@ -329,6 +332,7 @@
             $('.target_id').val(t.attr("data-cid"))
         })
 
+        {{if .user}}
         // 点赞
         $('.like-btn').on('click', function () {
             let self = $(this)
@@ -372,6 +376,7 @@
                 }
             })
         })
+        {{end}}
 
         // 点赞
         $('.follow-btn').on('click', function () {
