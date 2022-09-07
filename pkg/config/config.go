@@ -27,6 +27,7 @@ type app struct {
 type session struct {
 	Name   string `yaml:"name"`
 	Secret string `yaml:"secret"`
+	MaxAge int    `yaml:"maxAge"`
 }
 
 type upload struct {
