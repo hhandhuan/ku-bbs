@@ -51,6 +51,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 		Avatar:   avatar,
 		Password: encrypt.GenerateFromPassword(req.Password),
 		Gender:   uint8(req.Gender),
+		State:    consts.EnableState,
 	})
 	if res.Error != nil || res.RowsAffected <= 0 {
 		return errors.New("用户注册失败，请稍后在试")
@@ -91,6 +92,11 @@ func (s *sUser) Login(req *fe.LoginReq) error {
 
 	if user.ID <= 0 || !encrypt.CompareHashAndPassword(user.Password, req.Password) {
 		return errors.New("用户名或密码错误")
+	}
+
+	// 账户是否禁用
+	if user.State == consts.DisableState {
+		return errors.New("账户已被禁用")
 	}
 
 	data := map[string]interface{}{
@@ -234,14 +240,12 @@ func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
 	} else {
-		log.Println(123123)
 		var (
 			list   []*fe.Follow
 			total  int64
 			limit  = 20
 			offset = (req.Page - 1) * limit
 		)
-
 		query = model.Follow().M.Where("target_id", req.ID).Where("state", consts.FollowedState)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error

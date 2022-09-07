@@ -43,7 +43,8 @@
                                     </p>
                                     <ul class="list-unstyled d-flex mb-0 pe-xl-5 text-secondary"
                                         style="font-size: 14px;">
-                                        <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{DiffForHumans .CreatedAt}}
+                                        <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{DiffForHumans
+                                            .CreatedAt}}
                                         </li>
                                         <li role="button" class="me-2"><span class="badge text-bg-secondary me-2"
                                                                              style="color: #adaaa8;">{{.Node.Name}}</span>
@@ -177,19 +178,29 @@
                                 class="fa fa-intersex"></i>{{else}}{{end}}
                             <span style="font-size: 12px;" class="text-secondary">(第{{.data.user.ID}}位用户)</span>
                         </p>
-                        {{if .data.user.City}}<p class="text-muted mb-1"><i class="fa fa-location-arrow"></i><span
-                            class="ms-3">{{.data.user.City}}</span></p>{{end}}
-                        {{if .data.user.Email}}<p class="text-muted mb-1"><i class="fa fa-envelope-o"></i><span
-                            class="ms-3">{{.data.user.Email}}</span></p>{{end}}
-                        {{if .data.user.Job}}<p class="text-muted mb-1"><i class="fa fa-suitcase"></i><span
-                            class="ms-3">{{.data.user.Job}}</span></p>{{end}}
+                        {{if .data.user.City}}
+                        <p class="text-muted mb-1"><i class="fa fa-location-arrow">
+                        </i><span class="ms-3">{{.data.user.City}}</span>
+                        </p>
+                        {{end}}
+                        {{if .data.user.Email}}
+                        <p class="text-muted mb-1">
+                            <i class="fa fa-envelope-o"></i><span class="ms-3">{{.data.user.Email}}</span>
+                        </p>
+                        {{end}}
+                        {{if .data.user.Job}}
+                        <p class="text-muted mb-1">
+                            <i class="fa fa-suitcase"></i><span class="ms-3">{{.data.user.Job}}</span>
+                        </p>
+                        {{end}}
                         {{if .data.user.Site}}
                         <p class="text-muted mb-1">
                             <i class="fa fa-home"></i><span class="ms-3">{{.data.user.Site}}</span>
                         </p>
                         {{end}}
                         {{if .data.user.LastLoginAt}}
-                        <p class="text-muted mb-1"><i class="fa fa-circle-o-notch"></i><span class="ms-3">{{.data.user.LastLoginAt | DiffForHumans}}</span></p>
+                        <p class="text-muted mb-1"><i class="fa fa-circle-o-notch"></i><span class="ms-3">{{.data.user.LastLoginAt | DiffForHumans}}</span>
+                        </p>
                         {{end}}
                     </div>
                     {{if .user}}
