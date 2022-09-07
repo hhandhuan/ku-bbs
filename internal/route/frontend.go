@@ -7,8 +7,6 @@ import (
 
 func RegisterFrontedRoute(engine *gin.Engine) {
 	group := engine.Group("/")
-	// 社区首页
-	group.GET("/", frontend.Home.HomePage)
 
 	// 用户注册
 	group.GET("/register", frontend.Auth.RegisterPage)
@@ -19,6 +17,12 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.GET("/login", frontend.Auth.LoginPage)
 	// 登录提交
 	group.POST("/login", frontend.Auth.LoginSubmit)
+
+	//group.Use(IsAuth)
+
+	// 社区首页
+	group.GET("/", frontend.Home.HomePage)
+
 	// 登出用户
 	group.GET("/logout", frontend.Auth.LogoutSubmit)
 
