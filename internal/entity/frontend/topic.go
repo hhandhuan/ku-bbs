@@ -22,4 +22,5 @@ type Topic struct {
 	Node      model.Nodes `gorm:"foreignKey:node_id"`
 	Like      *Like       `gorm:"foreignKey:source_id"`
 	Likes     []*Like     `gorm:"foreignKey:source_id"`
+	PostDays  int         `gorm:"-"`
 }

@@ -4,7 +4,7 @@ app:
   name: "酷社区"
   desc: "酷社区"
   keywords: "酷社区"
-  visitMode: "auth" # 访问模式 auth-需登录才能访问 tourists-无需登录访问
+  visitMode: "guest" # 访问模式 auth-需登录才能访问 guest-无需登录访问
 session:
   name: "ku-bbs"
   secret: "123456"
