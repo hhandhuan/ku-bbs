@@ -228,7 +228,7 @@ CREATE TABLE `users` (
   `name` char(50) DEFAULT NULL COMMENT '用户名',
   `gender` tinyint unsigned DEFAULT '0' COMMENT '性别:1-男/2-女/0-未知',
   `city` char(50) DEFAULT NULL COMMENT '城市',
-  `email` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '用户名',
+  `email` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '邮箱',
   `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像',
   `site` varchar(255) DEFAULT NULL COMMENT '个人网站',
   `job` char(50) DEFAULT NULL COMMENT '职业',
