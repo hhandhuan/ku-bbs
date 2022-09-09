@@ -28,7 +28,7 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 	}
 
 	// 目前限制 M 图片大小
-	if file.Size > 1024*1024*2 {
+	if file.Size > 1024*1024*config.Conf.Upload.TopicFileSize {
 		s.MDFileJson(0, "仅支持小于 2M 大小的图片", "")
 		return
 	}

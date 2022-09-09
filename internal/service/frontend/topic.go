@@ -117,7 +117,12 @@ func (s *sTopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 
 	query := model.Topic().M
 
-	sortMap := map[string]string{"reply": "type DESC,last_reply_at DESC", "latest": "type DESC,created_at DESC"}
+	sortMap := map[string]string{
+		"reply":  "type DESC,last_reply_at DESC",
+		"latest": "type DESC,created_at DESC",
+		"node":   "type DESC,created_at DESC",
+	}
+
 	if sort, ok := sortMap[req.Type]; ok {
 		query = query.Order(sort)
 	} else {
@@ -129,7 +134,7 @@ func (s *sTopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 		if node == nil {
 			query = query.Where("node_id", 0)
 		} else {
-			query = query.Where("node_id", node.ID).Order("type DESC,created_at DESC")
+			query = query.Where("node_id", node.ID).Order(sortMap["node"])
 		}
 	}
 
