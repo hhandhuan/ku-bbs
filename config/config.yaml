@@ -23,3 +23,5 @@ redis:
 upload:
   path: "../assets/upload"
   imageExt: [ "png", "jpg", "jpeg", "gif" ]
+  avatarFileSize: 1 # 单位 M
+  topicFileSize: 2 # 单位 M

@@ -22,6 +22,11 @@
                                 <i class="fa fa-lock"> 修改密码</i>
                             </a>
                         </li>
+                        <li class='list-group-item {{if eq .data.tab "avatar"}}bg-light{{else}}{{end}}'>
+                            <a href="/user/edit?tab=avatar" class="text-secondary text-decoration-none d-inline-block">
+                                <i class="fa fa-file-image-o"> 修改头像</i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="bg-white rounded-1 notice-content">
@@ -86,6 +91,22 @@
                                 </div>
                                 <div class="mb-1">
                                     <button type="submit" class="btn btn-dark col-12">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                        {{end}}
+                        {{if eq .data.tab "avatar"}}
+                        <span class="text-secondary"> <i class="fa fa-file-image-o"></i> 修改头像</span>
+                        <div class="row mt-4">
+                            <form class="text-secondary col-8" method="POST" action="/user/edit?tab=avatar" enctype="multipart/form-data">
+                                <div class="mb-1  col-sm-5">
+                                    <div class="card" style="width: 18rem;">
+                                        <img src="{{.user.Avatar}}" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <input type="file" name="avatar" class="form-control mb-1 text-success" accept="image/*" multiple="multiple">
+                                            <button class="btn btn-dark col-lg-12">上传头像</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
