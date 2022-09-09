@@ -8,7 +8,6 @@ app:
 session:
   name: "ku-bbs"
   secret: "123456"
-  maxAge: 86400 # 默认一天过期，注意: 0-不会自动过期
 db:
   host: "127.0.0.1"
   port: "3306"
