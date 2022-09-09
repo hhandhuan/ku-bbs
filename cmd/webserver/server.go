@@ -21,10 +21,6 @@ func Run() {
 	engine.LoadHTMLGlob("../views/**/**/*")
 
 	store := cookie.NewStore([]byte(config.Conf.Session.Secret))
-	if config.Conf.Session.MaxAge > 0 {
-		store.Options(sessions.Options{MaxAge: config.Conf.Session.MaxAge})
-	}
-
 	engine.Use(sessions.Sessions(config.Conf.Session.Name, store))
 
 	route.RegisterBackendRoute(engine)
