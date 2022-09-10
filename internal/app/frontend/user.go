@@ -36,10 +36,9 @@ func (c *cUser) EditPage(ctx *gin.Context) {
 
 	if !s.Check() {
 		s.To("/login").WithError("请登录后，再继续操作").Redirect()
-		return
+	} else {
+		s.View("frontend.user.edit", gin.H{"tab": t})
 	}
-
-	s.View("frontend.user.edit", gin.H{"tab": t})
 }
 
 // EditSubmit 用户编辑
