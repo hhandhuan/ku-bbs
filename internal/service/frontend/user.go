@@ -183,7 +183,8 @@ func (s *sUser) EditPassword(req *fe.EditPasswordReq) error {
 func (s *sUser) EditAvatar(ctx *gin.Context) error {
 	file, err := ctx.FormFile("avatar")
 	if err != nil {
-		return err
+		log.Println(err)
+		return errors.New("上传文件错误")
 	}
 
 	// 目前限制头像大小
