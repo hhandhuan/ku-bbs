@@ -2,6 +2,7 @@ package frontend
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
@@ -12,6 +13,7 @@ import (
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 	"strings"
+	"unicode/utf8"
 )
 
 func TopicService(ctx *gin.Context) *sTopic {
@@ -32,7 +34,20 @@ func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		MDContent: req.MDContent,
 	}
 
+	tagsLen := 3    // 标签个数
+	tagMaxLen := 15 // 单个标签长度
+
 	if len(req.Tags) > 0 {
+		tags := strings.Split(req.Tags, ",")
+		if len(tags) > tagsLen {
+			return 0, errors.New(fmt.Sprintf("最多添加%d标签", tagsLen))
+		}
+		for _, value := range tags {
+			if utf8.RuneCountInString(value) <= tagMaxLen {
+				continue
+			}
+			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", tagMaxLen))
+		}
 		topic.Tags = strings.Split(req.Tags, ",")
 	}
 
