@@ -9,7 +9,7 @@
     <div class="m-auto box">
         <div class="content bg-white p-4 rounded-2">
             <h5>发布话题</h5>
-            <form action="/publish" method="post" class="mt-4">
+            <form action="/publish" method="post" class="mt-4" onsubmit="return tagsCheck()">
                 <div class="mb-3">
                     <div class="input-group mb-3">
                         <select name="node_id" class="form-select-sm me-2">
@@ -131,6 +131,33 @@
             });
         }
     })
+    
+    function tagsCheck(){
+        const tagsLen = 3    // 标签个数
+        const tagMaxLen = 15 // 单个标签长度
+        const tagStr = document.getElementsByName("tags")[0]
+
+        if (tagStr.value.length > 0) {
+            if (tagStr.value.search("，")!=-1){
+                alert("标签之间的分隔符要使用英文格式哦~")
+                return false
+            }
+            let tags = tagStr.value.split(",")
+            if (tags.length > tagsLen) {
+                alert("最多添加" + tagsLen + "标签")
+                return false
+            }
+
+            for (let tag of tags) {
+                if (tag.length <= tagMaxLen) {
+                    continue
+                }
+                alert("单个标签最多" + tagMaxLen + "个字符")
+                return false
+            }
+        }
+        return true
+    }
 </script>
 {{template "frontend.layout.footer" .}}
 {{end}}
