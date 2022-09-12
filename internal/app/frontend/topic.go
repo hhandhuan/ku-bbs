@@ -37,17 +37,17 @@ func (c *cTopic) PublishSubmit(ctx *gin.Context) {
 
 	var req fe.PublishTopicReq
 	if err := ctx.ShouldBind(&req); err != nil {
-		s.Back().WithError(err).Redirect()
+		s.Back().WithError(err).WithData(req).Redirect()
 		return
 	}
 
 	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Back().WithError(err.FirstError()).Redirect()
+		s.Back().WithError(err.FirstError()).WithData(req).Redirect()
 		return
 	}
 
 	if id, err := frontend.TopicService(ctx).Publish(&req); err != nil {
-		s.Back().WithError(err).Redirect()
+		s.Back().WithError(err).WithData(req).Redirect()
 	} else {
 		s.To(fmt.Sprintf("/topics/%d", id)).WithMsg("发布成功").Redirect()
 	}

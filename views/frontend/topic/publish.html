@@ -13,19 +13,23 @@
                 <div class="mb-3">
                     <div class="input-group mb-3">
                         <select name="node_id" class="form-select-sm me-2">
-                            <option selected>选择话题分类</option>
+                            <option selected value="0">选择话题分类</option>
                             {{range .data.nodes}}
                             <option value="{{.ID}}">{{.Name}}</option>
                             {{end}}
                         </select>
-                        <input type="text" class="form-control" name="title" placeholder="话题标题">
+                        <input type="text" class="form-control" name="title" placeholder="话题标题"
+                               value="{{.flash.Title}}">
+                        <input type="hidden" value="{{.flash.NodeId}}">
                     </div>
                 </div>
                 <div class="mb-3">
                     <div id="md-editor"></div>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="标签（请用半角逗号分隔每个标签，最多3个，每个最长15字符）非必填 " name="tags">
+                    <input type="text" class="form-control"
+                           placeholder="标签（请用半角逗号分隔每个标签，最多3个，每个最长15字符）非必填 " name="tags"
+                           value="{{.flash.Tags}}">
                 </div>
                 <div class="mb-3 error-box"></div>
                 <div class="mb-3">
@@ -50,11 +54,13 @@
                 return ["h2", "h3", "quote", "list-ol", "list-ul", "link", "image", "code-block", "table", "watch", "fullscreen"]
             },
             placeholder: "请使用 Markdown 语法",
+            markdown: "{{.flash.MDContent}}",
             imageUpload: true,
             lineNumbers: false,
             imageFormats: ["jpg", "jpeg", "gif", "png"],
             imageUploadURL: "/md-upload",
             saveHTMLToTextarea: true,
+
             onchange: function () {
                 $("#content").val(this.getHTML())
                 $("#md_content").val(this.getMarkdown())
@@ -130,15 +136,18 @@
                 }
             });
         }
+
+        // 默认选中标签
+        $("select").val({{if .flash.NodeId}} {{.flash.NodeId}} {{else}} 0 {{end}});
     })
-    
-    function tagsCheck(){
+
+    function tagsCheck() {
         const tagsLen = 3    // 标签个数
         const tagMaxLen = 15 // 单个标签长度
         const tagStr = document.getElementsByName("tags")[0]
 
         if (tagStr.value.length > 0) {
-            if (tagStr.value.search("，")!=-1){
+            if (tagStr.value.search("，") != -1) {
                 alert("标签之间的分隔符要使用英文格式哦~")
                 return false
             }
@@ -158,6 +167,8 @@
         }
         return true
     }
+
+
 </script>
 {{template "frontend.layout.footer" .}}
 {{end}}
