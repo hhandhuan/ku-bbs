@@ -30,8 +30,15 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.GET("/publish", frontend.Topic.PublishPage)
 	// 话题提交
 	group.POST("/publish", frontend.Topic.PublishSubmit)
+
 	// 话题详情
 	group.GET("/topics/:id", frontend.Topic.DetailPage)
+	// 删除话题
+	group.POST("/topics/:id/delete", frontend.Topic.DeleteSubmit)
+	// 编辑话题
+	group.GET("/topics/:id/edit", frontend.Topic.EditPage)
+	// 编辑提交
+	group.POST("/topics/:id/edit", frontend.Topic.EditSubmit)
 
 	// 评论话题
 	group.POST("/comments", frontend.Comment.PublishSubmit)
