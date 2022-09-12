@@ -68,8 +68,8 @@ func (c *BaseContext) WithData(data interface{}) *BaseContext {
 }
 
 // ParseFlash 解析闪存数据
-func (c *BaseContext) ParseFlash() map[string]string {
-	flashData := make(map[string]string)
+func (c *BaseContext) ParseFlash() map[string]interface{} {
+	flashData := make(map[string]interface{})
 	if str := c.session.Get(flashKey); str != nil {
 		if v, ok := str.(string); ok {
 			_ = json.Unmarshal([]byte(v), &flashData)
