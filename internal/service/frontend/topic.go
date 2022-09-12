@@ -17,6 +17,9 @@ import (
 	"unicode/utf8"
 )
 
+const MaxTagsLen = 3 // 标签最大长度
+const MaxTagLen = 15 // 单个标签最大长度
+
 func TopicService(ctx *gin.Context) *sTopic {
 	return &sTopic{ctx: service.Context(ctx)}
 }
@@ -36,22 +39,20 @@ func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 	}
 
 	// 检查话题标签
-	tagsLen := 3    // 标签个数
-	tagMaxLen := 15 // 单个标签长度
 	tags := strings.Split(req.Tags, ",")
 	if len(tags) > 0 {
-		if len(tags) > tagsLen {
-			return 0, errors.New(fmt.Sprintf("最多添加%d标签", tagsLen))
+		if len(tags) > MaxTagsLen {
+			return 0, errors.New(fmt.Sprintf("最多添加%d标签", MaxTagsLen))
 		}
 		isOk := true
 		for _, value := range tags {
-			if utf8.RuneCountInString(value) > tagMaxLen {
+			if utf8.RuneCountInString(value) > MaxTagLen {
 				isOk = false
 				break
 			}
 		}
 		if !isOk {
-			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", tagMaxLen))
+			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", MaxTagLen))
 		} else {
 			topic.Tags = strings.Split(req.Tags, ",")
 		}
@@ -253,26 +254,23 @@ func (s *sTopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		MDContent: req.MDContent,
 	}
 
-	tagsLen := 3    // 标签个数
-	tagMaxLen := 15 // 单个标签长度
-
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
 	if len(tags) > 0 {
-		if len(tags) > tagsLen {
-			return 0, errors.New(fmt.Sprintf("最多添加%d标签", tagsLen))
+		if len(tags) > MaxTagsLen {
+			return 0, errors.New(fmt.Sprintf("最多添加%d标签", MaxTagsLen))
 		}
 		isOk := true
 		for _, value := range tags {
-			if utf8.RuneCountInString(value) > tagMaxLen {
+			if utf8.RuneCountInString(value) > MaxTagLen {
 				isOk = false
 				break
 			}
 		}
 		if !isOk {
-			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", tagMaxLen))
+			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", MaxTagLen))
 		} else {
-			updates.Tags = strings.Split(req.Tags, ",")
+			topic.Tags = strings.Split(req.Tags, ",")
 		}
 	}
 
