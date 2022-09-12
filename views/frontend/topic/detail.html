@@ -15,19 +15,31 @@
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
                     <h5>{{.data.topic.Title}}</h5>
                     {{if ge .data.topic.PostDays 180}}
-                    <div class="alert alert-warning">本文发布于 180 天之前，文中所描述的信息可能已发生改变，请注意辨别</div>
+                    <div class="alert alert-warning">本文发布于 180 天之前，文中所描述的信息可能已发生改变，请注意辨别
+                    </div>
                     {{end}}
-                    <div class="mb-0 mt-3" style="font-size: 14px;color: #adb1af;">
-                        <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span> &nbsp;
+                    <div class="mb-0 mt-3 text-secondary small">
+                        <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span>
                         <span class="me-2">
                             <a href="/user?id={{.data.topic.Publisher.ID}}" class="text-decoration-none text-secondary"> {{.data.topic.Publisher.Name}} </a>
                         </span>
                         <span class="me-2"><i class="fa fa-commenting-o"></i> {{.data.topic.CommentCount}} </span>
-                        <span class="me-2"><i class="fa fa-eye"></i> {{.data.topic.ViewCount}} </span> &nbsp;
+                        <span class="me-2"><i class="fa fa-eye"></i> {{.data.topic.ViewCount}} </span>
                         <span class="me-2">
                             <i class="fa fa-clock-o"></i> {{DiffForHumans .data.topic.CreatedAt}}
-                        </span> &nbsp;
-
+                        </span>
+                        {{if .user}}
+                        {{if eq .user.ID .data.topic.Publisher.ID}}
+                        <span class="me-2">
+                             <i class="fa fa-edit"></i> <a href="/topics/{{.data.topic.ID}}/edit" class="text-decoration-none text-secondary">编辑</a>
+                        </span>
+                        <span class="me-2">
+                            <form action="/topics/{{.data.topic.ID}}/delete" method="POST" class="d-inline">
+                              <i class="fa fa-trash"></i> <a href="javascript:;" class="text-decoration-none text-secondary delete-btn">删除</a>
+                            </form>
+                        </span>
+                        {{end}}
+                        {{end}}
                     </div>
                     <hr>
                 </div>
@@ -58,7 +70,8 @@
                     <div class="d-inline-block like-users">
                         {{range .data.topic.Likes}}
                         <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
-                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
+                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail"
+                                 style="height: 38px;width: 38px;"/></a>
                         {{end}}
                     </div>
                 </div>
@@ -76,7 +89,8 @@
                                 <div>
                                     <p class="text-dark">
                                         <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
-                                            {{.Publisher.Name}} {{if eq .Publisher.ID $.data.topic.UserId}} <span class="text-danger fw-bold small">(楼主)</span> {{end}}
+                                            {{.Publisher.Name}} {{if eq .Publisher.ID $.data.topic.UserId}} <span
+                                                class="text-danger fw-bold small">(楼主)</span> {{end}}
                                         </a>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{DiffForHumans .CreatedAt}}</span>
@@ -93,10 +107,13 @@
                                             <span class="text-success">#{{.ReplyFloor}}</span> 回复
                                         </p>
                                         {{end}}
-                                        {{if .DeletedAt}} <span class="text-secondary p-2 bg-light small">内容已删除</span> {{else}} {{Html .Content}}  {{end}}
+                                        {{if .DeletedAt}} <span
+                                            class="text-secondary p-2 bg-light small">内容已删除</span> {{else}} {{Html
+                                        .Content}} {{end}}
                                     </div>
 
-                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5 small" style="display:{{if .DeletedAt}}none !important{{else}}show{{end}};">
+                                    <ul class="list-unstyled d-flex mb-0 pe-xl-5 small"
+                                        style="display:{{if .DeletedAt}}none !important{{else}}show{{end}};">
                                         <li role="button" class="p-1 me-2 like-btn" data-id="{{.ID}}"
                                             data-tuser="{{.UserId}}" data-type="comment">
                                             <i class="fa fa-heart {{if .Like}} text-danger {{end}}"></i> <span
@@ -119,8 +136,6 @@
                                             </a>
                                         </li>
                                         {{end}}
-                                        {{end}}
-                                        {{if $.user}}
                                         <li class="me-2 p-1">
                                             <a class="text-decoration-none text-secondary report-btn"
                                                href="javascript:;"
@@ -157,9 +172,9 @@
                     {{else}}
                     <div class="bg-white p-4 rounded-2 shadow-sm">
                         需要 <a href="/login?back=/topics/{{.data.topic.ID}}"
-                              class="text-decoration-none text-primary">登录</a>
+                                class="text-decoration-none text-primary">登录</a>
                         后方可回复, 如果你还没有账号请 <a href="/register?back=/topics/{{.data.topic.ID}}"
-                                            class="text-decoration-none text-primary">注册新账号</a>
+                                                          class="text-decoration-none text-primary">注册新账号</a>
                     </div>
                     {{end}}
                 </div>
@@ -466,6 +481,13 @@
                     console.log(res)
                 }
             })
+        })
+
+        // 删除话题
+        $('.delete-btn').on('click', function () {
+            if (confirm("是否确认删除话题")) {
+                $(this).parent().submit()
+            }
         })
 
         // 获取 query 参数
