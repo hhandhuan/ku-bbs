@@ -12,7 +12,8 @@ type Nodes struct {
 	Desc  string `gorm:"column:desc" db:"desc" json:"desc" form:"desc"`     //节点介绍
 	Count int64  `gorm:"column:count" db:"count" json:"count" form:"count"` //资源统计
 	Pid   int64  `gorm:"column:pid" db:"pid" json:"pid" form:"pid"`         //节点父级
-	State int8   `gorm:"column:state" db:"state" json:"state" form:"state"` //节点状态:0-关闭/1-开启
+	State uint8  `gorm:"column:state" db:"state" json:"state" form:"state"` //节点状态:0-关闭/1-开启
+	Sort  uint8  `gorm:"column:sort" db:"sort" json:"sort" form:"sort"`     //排序值
 }
 
 type nodeModel struct {

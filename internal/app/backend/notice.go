@@ -7,7 +7,6 @@ import (
 	be "github.com/hhandhuan/ku-bbs/internal/entity/backend"
 	sv "github.com/hhandhuan/ku-bbs/internal/service"
 	bs "github.com/hhandhuan/ku-bbs/internal/service/backend"
-	"log"
 )
 
 var Notice = cNotice{}
@@ -27,7 +26,6 @@ func (c *cNotice) IndexPage(ctx *gin.Context) {
 	if data, err := bs.NoticeService(ctx).GetList(&req); err != nil {
 		s.Back().WithError(err).Redirect()
 	} else {
-		log.Println(data)
 		s.View("backend.notice.index", data)
 	}
 }

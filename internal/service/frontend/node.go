@@ -18,7 +18,7 @@ type sNode struct {
 // GetEnableNodes 获取已开启的所有节点
 func (s *sNode) GetEnableNodes() ([]*model.Nodes, error) {
 	var nodes []*model.Nodes
-	r := model.Node().M.Where("state", consts.EnableState).Find(&nodes)
+	r := model.Node().M.Where("state", consts.EnableState).Order("sort DESC").Find(&nodes)
 	if r.Error != nil {
 		return nil, r.Error
 	} else {
