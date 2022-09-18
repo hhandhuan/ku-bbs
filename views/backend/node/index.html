@@ -1,0 +1,62 @@
+{{ define "backend.node.index" }}
+{{ template "backend.layout.header" .}}
+<div class="container-fluid px-4 mt-2">
+    <div class="card">
+        <div class="card-header">
+            <b>用户管理</b>
+        </div>
+        <div class="card-body">
+
+            <div class="col-3">
+                <form class="form-inline mb-2" method="GET" action="/backend/nodes">
+                    <div class="input-group mr-1">
+                        <input type="text" class="form-control" name="keywords" placeholder="标题检索"
+                               value="{{.data.req.Keywords}}">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark">搜索</button>
+                            <a class="btn btn-dark" href="/backend/nodes/create">添加</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <table class="table table-bordered text-center table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col"># ID</th>
+                    <th scope="col">名称</th>
+                    <th scope="col">别名</th>
+                    <th scope="col">排序</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                {{range .data.list}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Alias}}</td>
+                    <td>{{.Sort}}</td>
+                    <td>
+                        {{if eq .State 1}}
+                        <span class="text-success">开启</span>
+                        {{else}}
+                        <span class="text-secondary">关闭</span>
+                        {{end}}
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-success" href="/backend/nodes/{{.ID}}/edit">编辑</a>
+                        <form method="POST" action="/backend/nodes/{{.ID}}/delete" class="d-inline">
+                            <button class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{ template "backend.layout.footer" .}}
+{{end}}

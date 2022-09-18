@@ -89,8 +89,11 @@
                                 <div>
                                     <p class="text-dark">
                                         <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
-                                            {{.Publisher.Name}} {{if eq .Publisher.ID $.data.topic.UserId}} <span
-                                                class="text-danger fw-bold small">(楼主)</span> {{end}}
+<!--                                            <span class="rounded-circle bg-success" style="height: 8px;width: 8px;display: inline-block;"></span>-->
+                                            {{.Publisher.Name}}
+                                            {{if eq .Publisher.ID $.data.topic.UserId}}
+                                            <span class="text-danger fw-bold small">(楼主)</span>
+                                            {{end}}
                                         </a>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{DiffForHumans .CreatedAt}}</span>
