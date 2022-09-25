@@ -28,6 +28,8 @@
                     <th scope="col">邮箱</th>
                     <th scope="col">职业</th>
                     <th scope="col">管理员</th>
+                    <th scope="col">最后登录时间</th>
+                    <th scope="col">最后登录IP</th>
                     <th scope="col">操作</th>
                 </tr>
                 </thead>
@@ -41,7 +43,7 @@
                         </a>
                     </td>
                     <td>{{.Name}}</td>
-                    <td>{{if eq .IsAdmin 1}}男{{else}}女{{end}}</td>
+                    <td>{{if eq .Gender 1}}男{{else}}女{{end}}</td>
                     <td>{{if .Email}}{{.Email}}{{else}}-{{end}}</td>
                     <td>{{if .Job}}{{.Job}}{{else}}-{{end}}</td>
                     <td>
@@ -51,6 +53,8 @@
                         <span class="text-secondary">否</span>
                         {{end}}
                     </td>
+                    <td>{{ToDateTimeString .LastLoginAt}}</td>
+                    <td>{{.LastLoginIp}}</td>
                     <td>
                         <a class="btn btn-sm btn-success" target="_blank" href="/user?id={{.ID}}">查看</a>
                         {{if eq .State 0}}

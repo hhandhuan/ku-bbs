@@ -3,12 +3,14 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -51,6 +53,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 		Avatar:   avatar,
 		Password: encrypt.GenerateFromPassword(req.Password),
 		Gender:   uint8(req.Gender),
+		State:    consts.EnableState,
 	})
 	if res.Error != nil || res.RowsAffected <= 0 {
 		return errors.New("用户注册失败，请稍后在试")
@@ -91,6 +94,11 @@ func (s *sUser) Login(req *fe.LoginReq) error {
 
 	if user.ID <= 0 || !encrypt.CompareHashAndPassword(user.Password, req.Password) {
 		return errors.New("用户名或密码错误")
+	}
+
+	// 账户是否禁用
+	if user.State == consts.DisableState {
+		return errors.New("账户已被禁用")
 	}
 
 	data := map[string]interface{}{
@@ -171,6 +179,52 @@ func (s *sUser) EditPassword(req *fe.EditPasswordReq) error {
 	return nil
 }
 
+// EditAvatar 修改头像
+func (s *sUser) EditAvatar(ctx *gin.Context) error {
+	file, err := ctx.FormFile("avatar")
+	if err != nil {
+		log.Println(err)
+		return errors.New("上传文件错误")
+	}
+
+	// 目前限制头像大小
+	if file.Size > 1024*1024*config.Conf.Upload.AvatarFileSize {
+		return errors.New("仅支持小于 1M 大小的图片")
+	}
+
+	arr := strings.Split(file.Filename, ".")
+	ext := arr[len(arr)-1]
+
+	// 检查图片格式
+	if !gstr.InArray(config.Conf.Upload.ImageExt, ext) {
+		return errors.New("file format not supported")
+	}
+
+	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
+	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
+	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
+
+	if err := ctx.SaveUploadedFile(file, uploadPath); err != nil {
+		log.Println(err)
+		return errors.New("修改头像失败")
+	}
+
+	userID := s.ctx.Auth().ID
+	savePath := "/assets/upload/" + avatarPath
+	u := model.User().M.Where("id", userID).Update("avatar", savePath)
+	if u.Error != nil || u.RowsAffected <= 0 {
+		log.Println(u.Error)
+		return errors.New("修改头像失败")
+	}
+
+	var user model.Users
+	model.User().M.Where("id", userID).Find(&user)
+
+	s.ctx.SetAuth(user)
+
+	return nil
+}
+
 // Home 用户主页
 func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 	var user *fe.User
@@ -234,14 +288,12 @@ func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
 	} else {
-		log.Println(123123)
 		var (
 			list   []*fe.Follow
 			total  int64
 			limit  = 20
 			offset = (req.Page - 1) * limit
 		)
-
 		query = model.Follow().M.Where("target_id", req.ID).Where("state", consts.FollowedState)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error

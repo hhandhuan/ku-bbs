@@ -38,5 +38,4 @@ func (c *cFollow) FollowSubmit(ctx *gin.Context) {
 	} else {
 		s.Json(gin.H{"code": 0, "msg": "ok", "state": state})
 	}
-
 }

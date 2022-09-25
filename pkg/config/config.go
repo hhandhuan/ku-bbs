@@ -17,11 +17,12 @@ type db struct {
 }
 
 type app struct {
-	Version  string `yaml:"version"`
-	Env      string `yaml:"env"`
-	Name     string `yaml:"name"`
-	Desc     string `yaml:"desc"`
-	Keywords string `yaml:"keywords"`
+	Version   string `yaml:"version"`
+	Env       string `yaml:"env"`
+	Name      string `yaml:"name"`
+	Desc      string `yaml:"desc"`
+	Keywords  string `yaml:"keywords"`
+	VisitMode string `yaml:"visitMode"`
 }
 
 type session struct {
@@ -30,8 +31,10 @@ type session struct {
 }
 
 type upload struct {
-	Path     string   `yaml:"path"`
-	ImageExt []string `yaml:"imageExt"`
+	Path           string   `yaml:"path"`
+	ImageExt       []string `yaml:"imageExt"`
+	AvatarFileSize int64    `yaml:"avatarFileSize"`
+	TopicFileSize  int64    `yaml:"topicFileSize"`
 }
 
 type redis struct {

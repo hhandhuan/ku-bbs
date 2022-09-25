@@ -88,7 +88,7 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		query = query.Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.CommentSource)
 	}
 
-	r := query.
+	r := query.Unscoped().
 		Where("topic_id = ?", topicId).
 		Order("id ASC").
 		Preload("Publisher").
@@ -99,6 +99,15 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 		return nil, r.Error
 	}
 
+	floorMap := make(map[uint64]int, len(list))
+	for index, item := range list {
+		floorMap[item.ID] = index + 1
+		list[index].Floor = floorMap[item.ID]
+		if item.TargetId > 0 {
+			list[index].ReplyFloor = floorMap[item.TargetId]
+		}
+	}
+	
 	return list, nil
 }
 

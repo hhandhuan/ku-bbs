@@ -7,8 +7,6 @@ import (
 
 func RegisterFrontedRoute(engine *gin.Engine) {
 	group := engine.Group("/")
-	// 社区首页
-	group.GET("/", frontend.Home.HomePage)
 
 	// 用户注册
 	group.GET("/register", frontend.Auth.RegisterPage)
@@ -19,6 +17,12 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.GET("/login", frontend.Auth.LoginPage)
 	// 登录提交
 	group.POST("/login", frontend.Auth.LoginSubmit)
+
+	group.Use(visitor)
+
+	// 社区首页
+	group.GET("/", frontend.Home.HomePage)
+
 	// 登出用户
 	group.GET("/logout", frontend.Auth.LogoutSubmit)
 
@@ -26,8 +30,15 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.GET("/publish", frontend.Topic.PublishPage)
 	// 话题提交
 	group.POST("/publish", frontend.Topic.PublishSubmit)
+
 	// 话题详情
 	group.GET("/topics/:id", frontend.Topic.DetailPage)
+	// 删除话题
+	group.POST("/topics/:id/delete", frontend.Topic.DeleteSubmit)
+	// 编辑话题
+	group.GET("/topics/:id/edit", frontend.Topic.EditPage)
+	// 编辑提交
+	group.POST("/topics/:id/edit", frontend.Topic.EditSubmit)
 
 	// 评论话题
 	group.POST("/comments", frontend.Comment.PublishSubmit)

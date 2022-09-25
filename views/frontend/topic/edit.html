@@ -1,4 +1,4 @@
-{{define "frontend.topic.publish"}}
+{{define "frontend.topic.edit"}}
 
 {{template "frontend.layout.header" .}}
 
@@ -8,8 +8,8 @@
 <div class="container-fluid">
     <div class="m-auto box">
         <div class="content bg-white p-4 rounded-2">
-            <h5>发布话题</h5>
-            <form action="/publish" method="post" class="mt-4">
+            <h5>编辑话题</h5>
+            <form action="/topics/{{.data.topic.ID}}/edit" method="post" class="mt-4">
                 <div class="mb-3">
                     <div class="input-group mb-3">
                         <select name="node_id" class="form-select-sm me-2">
@@ -19,7 +19,7 @@
                             {{end}}
                         </select>
                         <input type="text" class="form-control" name="title" placeholder="话题标题"
-                               value="{{.flash.Title}}">
+                               value="{{.data.topic.Title}}">
                     </div>
                 </div>
                 <div class="mb-3">
@@ -28,12 +28,12 @@
                 <div class="mb-3">
                     <input type="text" class="form-control"
                            placeholder="标签（请用半角逗号分隔每个标签，最多3个，每个最长15字符）非必填 " name="tags"
-                           value="{{.flash.Tags}}">
+                           value='{{StrJoin .data.topic.Tags ","}}'>
                 </div>
                 <div class="mb-3 error-box"></div>
                 <div class="mb-3">
-                    <input type="hidden" name="md_content" id="md_content" value="{{.flash.MDContent}}">
-                    <input type="hidden" name="content" id="content" value="{{.flash.Content}}">
+                    <input type="hidden" name="md_content" id="md_content" value="{{.data.topic.MDContent}}">
+                    <input type="hidden" name="content" id="content" value="{{.data.topic.Content}}">
                     <button class="btn btn-dark col-2 form-control-lg submit-btn">提交</button>
                 </div>
             </form>
@@ -53,13 +53,12 @@
                 return ["h2", "h3", "quote", "list-ol", "list-ul", "link", "image", "code-block", "table", "watch", "fullscreen"]
             },
             placeholder: "请使用 Markdown 语法",
-            markdown: "{{.flash.MDContent}}",
+            markdown: "{{.data.topic.MDContent}}",
             imageUpload: true,
             lineNumbers: false,
             imageFormats: ["jpg", "jpeg", "gif", "png"],
             imageUploadURL: "/md-upload",
             saveHTMLToTextarea: true,
-
             onchange: function () {
                 $("#content").val(this.getHTML())
                 $("#md_content").val(this.getMarkdown())
@@ -137,7 +136,7 @@
         }
 
         // 默认选中标签
-        $("select").val({{if .flash.NodeId}}{{.flash.NodeId}}{{else}}0{{end}});
+        $("select").val({{.data.topic.NodeId}});
     })
 </script>
 {{template "frontend.layout.footer" .}}

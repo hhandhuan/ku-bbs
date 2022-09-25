@@ -34,7 +34,10 @@
                                 <a href="/topics/{{.ID}}" class="text-decoration-none table-hover text-dark">{{.Title}}</a>
                             </p>
                             <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">
-                                <span class="badge text-bg-secondary me-2">{{.Node.Name}}</span>
+                                {{if eq .Type 2}}
+                                <span class="badge bg-warning me-1"><span class="text-light">置顶</span></span>
+                                {{end}}
+                                <span class="badge text-bg-secondary me-1">{{.Node.Name}}</span>
                                 <span class="me-1">
                                     <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
                                        style="color: #adaaa8;">
@@ -49,7 +52,7 @@
                                 </a>
                                 {{end}}
                                 <span class="me-1"> <i
-                                        class="fa fa-clock-o"></i> {{.CreatedAt | DiffForHumans}} •</span>
+                                        class="fa fa-clock-o"></i> {{DiffForHumans .CreatedAt}} •</span>
                                 <span class="me-1"> <i class="fa fa-commenting-o"></i> {{.CommentCount}}</span>
                             </p>
                         </div>

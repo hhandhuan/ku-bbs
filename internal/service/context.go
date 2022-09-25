@@ -14,6 +14,7 @@ const (
 	errKey     = "err"
 	msgKey     = "msg"
 	dataKey    = "data"
+	flashKey   = "flash"
 	userKey    = "user"
 	unreadKey  = "unread"
 	versionKey = "version"
@@ -42,6 +43,7 @@ func (c *BaseContext) Redirect() {
 func (c *BaseContext) clear() {
 	c.session.Delete(errKey)
 	c.session.Delete(msgKey)
+	c.session.Delete(flashKey)
 	_ = c.session.Save()
 }
 
@@ -55,6 +57,25 @@ func (c *BaseContext) Back() *BaseContext {
 func (c *BaseContext) To(to string) *BaseContext {
 	c.path = to
 	return c
+}
+
+// WithData 闪存消息
+func (c *BaseContext) WithData(data interface{}) *BaseContext {
+	r, _ := json.Marshal(data)
+	c.session.Set(flashKey, string(r))
+	_ = c.session.Save()
+	return c
+}
+
+// ParseFlash 解析闪存数据
+func (c *BaseContext) ParseFlash() map[string]interface{} {
+	flashData := make(map[string]interface{})
+	if str := c.session.Get(flashKey); str != nil {
+		if v, ok := str.(string); ok {
+			_ = json.Unmarshal([]byte(v), &flashData)
+		}
+	}
+	return flashData
 }
 
 // WithError 错误信息跳转
@@ -160,10 +181,9 @@ func (c *BaseContext) View(tpl string, data interface{}) {
 		userKey:    c.Auth(),
 		unreadKey:  c.unread(),
 		dataKey:    data,
+		flashKey:   c.ParseFlash(),
 	}
-
 	c.clear()
-
 	c.Ctx.HTML(http.StatusOK, tpl, obj)
 }
 
