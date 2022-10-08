@@ -6,7 +6,7 @@
 
 社区主页
 
-<img width="1439" alt="image" src="https://user-images.githubusercontent.com/95403191/180779634-8ae74154-92ab-400b-b5a8-52b799f19063.png">
+![image](https://user-images.githubusercontent.com/95403191/180779634-8ae74154-92ab-400b-b5a8-52b799f19063.png)
 
 话题详情
 
