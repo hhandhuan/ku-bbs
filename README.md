@@ -12,10 +12,3 @@
 
 ![image](https://user-images.githubusercontent.com/95403191/180780015-48a5e2c0-a3df-46a1-8f24-a2550daf9c91.png)
 
-# 技术栈
-
-- go(1.17+)
-- gin(1.8.1)
-- bootstrap(5.2)
-- mysql(8.0+)
-- gogf/gf(2.1.0)
