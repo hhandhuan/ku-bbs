@@ -160,7 +160,7 @@ func (s *sTopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 	}
 
 	f := query.Preload("Publisher").
-		Preload("Node").
+		Preload("Node", "state = ?", consts.EnableState).
 		Preload("Responder").
 		Limit(limit).
 		Offset(offset).
