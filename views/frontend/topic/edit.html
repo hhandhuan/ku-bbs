@@ -12,8 +12,8 @@
             <form action="/topics/{{.data.topic.ID}}/edit" method="post" class="mt-4">
                 <div class="mb-3">
                     <div class="input-group mb-3">
-                        <select name="node_id" class="form-select-sm me-2">
-                            <option selected value="0">选择话题分类</option>
+                        <select name="node_id" class="form-select-sm me-2 node-id-select">
+                            <option value="0">选择话题分类</option>
                             {{range .data.nodes}}
                             <option value="{{.ID}}">{{.Name}}</option>
                             {{end}}
@@ -135,8 +135,7 @@
             });
         }
 
-        // 默认选中标签
-        $("select").val({{.data.topic.NodeId}});
+        $('.node-id-select').val('{{.data.topic.NodeId}}')
     })
 </script>
 {{template "frontend.layout.footer" .}}

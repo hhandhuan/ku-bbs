@@ -14,10 +14,6 @@
                 <!-- 话题信息 --->
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
                     <h5>{{.data.topic.Title}}</h5>
-                    {{if ge .data.topic.PostDays 180}}
-                    <div class="alert alert-warning">本文发布于 180 天之前，文中所描述的信息可能已发生改变，请注意辨别
-                    </div>
-                    {{end}}
                     <div class="mb-0 mt-3 text-secondary small">
                         <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span>
                         <span class="me-2">
@@ -45,6 +41,10 @@
                 </div>
                 <!-- 话题内容 --->
                 <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white lh-lg">
+                    {{if ge .data.topic.PostDays 30}}
+                    <div class="alert alert-warning">本文发布于 {{.data.topic.PostDays}} 天之前，文中所描述的信息可能已发生改变，请注意辨别
+                    </div>
+                    {{end}}
                     {{Html .data.topic.Content}}
                 </div>
                 <div class="topic-operation bg-white pe-4 ps-4 pb-2 rounded-bottom  shadow-sm">
