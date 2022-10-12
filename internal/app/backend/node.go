@@ -91,3 +91,21 @@ func (c *cNode) EditSubmit(ctx *gin.Context) {
 		s.To("/backend/nodes").WithMsg("编辑成功").Redirect()
 	}
 }
+
+// DeleteSubmit 删除提交
+func (c *cNode) DeleteSubmit(ctx *gin.Context) {
+	s := sv.Context(ctx)
+	t := "/backend/nodes"
+
+	id := gconv.Int64(ctx.Param("id"))
+	if id <= 0 {
+		s.To(t).WithError("参数错误").Redirect()
+		return
+	}
+
+	if err := bs.NodeService(ctx).Delete(id); err != nil {
+		s.To(t).WithError("删除失败").Redirect()
+	} else {
+		s.To(t).WithMsg("删除成功").Redirect()
+	}
+}
