@@ -9,7 +9,11 @@ import (
 type SA []string
 
 func (c SA) Value() (driver.Value, error) {
-	return json.Marshal(c)
+	if len(c) > 0 && c[0] == "" {
+		return nil, nil
+	} else {
+		return json.Marshal(c)
+	}
 }
 
 func (c *SA) Scan(data interface{}) error {
