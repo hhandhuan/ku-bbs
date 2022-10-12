@@ -8,7 +8,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	"github.com/hhandhuan/ku-bbs/internal/model"
-	"github.com/hhandhuan/ku-bbs/internal/model/column"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
@@ -37,7 +36,6 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		NodeId:    req.NodeId,
 		UserId:    s.ctx.Auth().ID,
 		MDContent: req.MDContent,
-		Tags:      column.SA{},
 	}
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")

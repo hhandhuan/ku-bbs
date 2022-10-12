@@ -206,7 +206,7 @@ CREATE TABLE `topics` (
   `user_id` bigint DEFAULT NULL COMMENT '用户 ID',
   `reply_id` bigint unsigned DEFAULT '0' COMMENT '最后回复者ID',
   `title` varchar(255) DEFAULT NULL COMMENT '话题标题',
-  `tags` json DEFAULT NULL COMMENT '话题标签',
+  `tags` varchar(255) DEFAULT NULL COMMENT '话题标签',
   `comment_count` bigint unsigned DEFAULT '0' COMMENT '评论统计',
   `view_count` bigint unsigned DEFAULT '0' COMMENT '浏览统计',
   `like_count` bigint unsigned DEFAULT '0' COMMENT '喜欢统计',
