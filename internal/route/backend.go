@@ -25,5 +25,6 @@ func RegisterBackendRoute(engine *gin.Engine) {
 	group.POST("nodes/create", backend.Node.CreateSubmit)
 	group.GET("nodes/:id/edit", backend.Node.EditPage)
 	group.POST("nodes/:id/edit", backend.Node.EditSubmit)
+	group.POST("nodes/:id/delete", backend.Node.DeleteSubmit)
 
 }
