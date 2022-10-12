@@ -6,7 +6,7 @@
 
 {{template "frontend.layout.msg" .}}
 
-<div class="container-fluid ">
+<div class="container-fluid">
     <div class="m-auto box">
         <div class="content">
             <!--左边布局-->
@@ -42,7 +42,8 @@
                 <!-- 话题内容 --->
                 <div class="topic-detail ps-4 pe-4 pb-2 text-dark bg-white lh-lg">
                     {{if ge .data.topic.PostDays 30}}
-                    <div class="alert alert-warning">本文发布于 {{.data.topic.PostDays}} 天之前，文中所描述的信息可能已发生改变，请注意辨别
+                    <div class="alert alert-warning">
+                        本文发布于 {{.data.topic.PostDays}} 天之前，文中所描述的信息可能已发生改变，请注意辨别
                     </div>
                     {{end}}
                     {{Html .data.topic.Content}}
@@ -70,8 +71,7 @@
                     <div class="d-inline-block like-users">
                         {{range .data.topic.Likes}}
                         <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
-                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail"
-                                 style="height: 38px;width: 38px;"/></a>
+                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
                         {{end}}
                     </div>
                 </div>

@@ -13,16 +13,16 @@ import (
 	"time"
 )
 
-func CheckinService(ctx *gin.Context) *sCheckin {
-	return &sCheckin{ctx: service.Context(ctx)}
+func CheckinService(ctx *gin.Context) *SCheckin {
+	return &SCheckin{ctx: service.Context(ctx)}
 }
 
-type sCheckin struct {
+type SCheckin struct {
 	ctx *service.BaseContext
 }
 
 // Store  签到保存
-func (s *sCheckin) Store() error {
+func (s *SCheckin) Store() error {
 	uid := s.ctx.Auth().ID
 
 	var checkin model.Checkins
@@ -97,7 +97,7 @@ func (s *sCheckin) Store() error {
 }
 
 // IsCheckin  今日是否签到
-func (s *sCheckin) IsCheckin() (bool, error) {
+func (s *SCheckin) IsCheckin() (bool, error) {
 	if !s.ctx.Check() {
 		return false, nil
 	}

@@ -17,11 +17,11 @@ type Reports struct {
 	State      uint8  `gorm:"column:state" db:"state" json:"state" form:"state"`                         //状态:0-待处理/1-已处理
 }
 
-type reportModel struct {
+type ReportModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func Report() *reportModel {
-	return &reportModel{M: db.DB.Model(&Reports{}), Table: "reports"}
+func Report() *ReportModel {
+	return &ReportModel{M: db.DB.Model(&Reports{}), Table: "reports"}
 }
