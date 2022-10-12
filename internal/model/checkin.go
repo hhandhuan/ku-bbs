@@ -14,11 +14,11 @@ type Checkins struct {
 	LastTime       time.Time `gorm:"column:last_time" db:"last_time" json:"last_time" form:"last_time"`                         //最后签到时间
 }
 
-type checkinModel struct {
+type CheckinModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func Checkin() *checkinModel {
-	return &checkinModel{M: db.DB.Model(&Checkins{}), Table: "checkins"}
+func Checkin() *CheckinModel {
+	return &CheckinModel{M: db.DB.Model(&Checkins{}), Table: "checkins"}
 }

@@ -17,16 +17,16 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func CommentService(ctx *gin.Context) *sComment {
-	return &sComment{ctx: service.Context(ctx)}
+func CommentService(ctx *gin.Context) *SComment {
+	return &SComment{ctx: service.Context(ctx)}
 }
 
-type sComment struct {
+type SComment struct {
 	ctx *service.BaseContext
 }
 
 // Submit 提交评论
-func (s *sComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
+func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 	comment := &model.Comments{
 		TopicId:   req.TopicId,
 		ReplyId:   req.ReplyId,
@@ -80,7 +80,7 @@ func (s *sComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 }
 
 // GetList 获取列表
-func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
+func (s *SComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 	var list []*frontend.Comment
 
 	query := model.Comment().M
@@ -107,12 +107,12 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 			list[index].ReplyFloor = floorMap[item.TargetId]
 		}
 	}
-	
+
 	return list, nil
 }
 
 // Delete 删除评论
-func (s *sComment) Delete(id uint64) error {
+func (s *SComment) Delete(id uint64) error {
 	if !s.ctx.Check() {
 		return errors.New("权限不足")
 	}

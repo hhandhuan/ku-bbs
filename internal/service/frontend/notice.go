@@ -14,14 +14,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type sNotice struct{ ctx *service.BaseContext }
+type SNotice struct{ ctx *service.BaseContext }
 
-func NoticeService(ctx *gin.Context) *sNotice {
-	return &sNotice{ctx: service.Context(ctx)}
+func NoticeService(ctx *gin.Context) *SNotice {
+	return &SNotice{ctx: service.Context(ctx)}
 }
 
 // GetList 获取消息列表
-func (s *sNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
+func (s *SNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
 	var (
 		total  int64
 		limit  = 30
@@ -69,7 +69,7 @@ func (s *sNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
 }
 
 // GetRemindUnread 获取提醒未读消息
-func (s *sNotice) GetRemindUnread() (int64, error) {
+func (s *SNotice) GetRemindUnread() (int64, error) {
 	var total int64
 	c := model.Remind().M.Where("receiver", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
 	if c.Error != nil {
@@ -80,12 +80,12 @@ func (s *sNotice) GetRemindUnread() (int64, error) {
 }
 
 // GetLetterUnread 获取私信未读数
-func (s *sNotice) GetLetterUnread() (int64, error) {
+func (s *SNotice) GetLetterUnread() (int64, error) {
 	return 0, nil
 }
 
 // GetSystemUnread 获取系统未读数
-func (s *sNotice) GetSystemUnread() (int64, error) {
+func (s *SNotice) GetSystemUnread() (int64, error) {
 	var total int64
 	c := model.SystemUserNotice().M.Where("user_id", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
 	if c.Error != nil {
@@ -96,7 +96,7 @@ func (s *sNotice) GetSystemUnread() (int64, error) {
 }
 
 // ReadAll 读取消息
-func (s *sNotice) ReadAll(t string) {
+func (s *SNotice) ReadAll(t string) {
 	currUser := s.ctx.Auth()
 	if t == consts.RemindNotice {
 		model.Remind().M.Where("readed_at is null AND receiver = ?", currUser.ID).Update("readed_at", time.Now())

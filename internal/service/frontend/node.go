@@ -7,16 +7,16 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func NodeService(ctx *gin.Context) *sNode {
-	return &sNode{ctx: service.Context(ctx)}
+func NodeService(ctx *gin.Context) *SNode {
+	return &SNode{ctx: service.Context(ctx)}
 }
 
-type sNode struct {
+type SNode struct {
 	ctx *service.BaseContext
 }
 
 // GetEnableNodes 获取已开启的所有节点
-func (s *sNode) GetEnableNodes() ([]*model.Nodes, error) {
+func (s *SNode) GetEnableNodes() ([]*model.Nodes, error) {
 	var nodes []*model.Nodes
 	r := model.Node().M.Where("state", consts.EnableState).Order("sort DESC").Find(&nodes)
 	if r.Error != nil {

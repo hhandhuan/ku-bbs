@@ -14,11 +14,11 @@ type IntegralLogs struct {
 	CreatedAt time.Time `gorm:"column:created_at" db:"created_at" json:"created_at" form:"created_at"` //创建时间
 }
 
-type integralLogModel struct {
+type IntegralLogModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func IntegralLog() *integralLogModel {
-	return &integralLogModel{M: db.DB.Model(&IntegralLogs{}), Table: "integral_logs"}
+func IntegralLog() *IntegralLogModel {
+	return &IntegralLogModel{M: db.DB.Model(&IntegralLogs{}), Table: "integral_logs"}
 }

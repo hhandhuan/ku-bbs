@@ -16,11 +16,11 @@ type Nodes struct {
 	Sort  uint8  `gorm:"column:sort" db:"sort" json:"sort" form:"sort"`     //排序值
 }
 
-type nodeModel struct {
+type NodeModel struct {
 	M     *gorm.DB
 	table string
 }
 
-func Node() *nodeModel {
-	return &nodeModel{M: db.DB.Model(&Nodes{}), table: "nodes"}
+func Node() *NodeModel {
+	return &NodeModel{M: db.DB.Model(&Nodes{}), table: "nodes"}
 }

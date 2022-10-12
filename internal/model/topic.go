@@ -24,11 +24,11 @@ type Topics struct {
 	LastReplyAt  *time.Time `gorm:"column:last_reply_at" db:"last_reply_at" json:"last_reply_at" form:"last_reply_at"` //最后回复时间
 }
 
-type topic struct {
+type TopicModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func Topic() *topic {
-	return &topic{M: db.DB.Model(&Topics{}), Table: "topics"}
+func Topic() *TopicModel {
+	return &TopicModel{M: db.DB.Model(&Topics{}), Table: "topics"}
 }

@@ -10,15 +10,15 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func ReportService(ctx *gin.Context) *sReport {
-	return &sReport{ctx: service.Context(ctx)}
+func ReportService(ctx *gin.Context) *SReport {
+	return &SReport{ctx: service.Context(ctx)}
 }
 
-type sReport struct {
+type SReport struct {
 	ctx *service.BaseContext
 }
 
-func (s *sReport) Store(req *fe.SubmitReportReq) error {
+func (s *SReport) Store(req *fe.SubmitReportReq) error {
 	if req.SourceType == consts.ReportTopicSource {
 		var topic *model.Topics
 		f := model.Topic().M.Where("id", req.TargetID).Find(&topic)

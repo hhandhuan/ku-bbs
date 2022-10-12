@@ -5,10 +5,10 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func HomeService(ctx *gin.Context) *sHome {
-	return &sHome{ctx: service.Context(ctx)}
+func HomeService(ctx *gin.Context) *SHome {
+	return &SHome{ctx: service.Context(ctx)}
 }
 
-type sHome struct {
+type SHome struct {
 	ctx *service.BaseContext
 }

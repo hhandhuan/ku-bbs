@@ -5,10 +5,10 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func RemindService(ctx *gin.Context) *sRemind {
-	return &sRemind{ctx: service.Context(ctx)}
+func RemindService(ctx *gin.Context) *SRemind {
+	return &SRemind{ctx: service.Context(ctx)}
 }
 
-type sRemind struct {
+type SRemind struct {
 	ctx *service.BaseContext
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	"github.com/hhandhuan/ku-bbs/internal/model"
+	"github.com/hhandhuan/ku-bbs/internal/model/column"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
@@ -20,24 +21,24 @@ import (
 const MaxTagsLen = 3 // 标签最大长度
 const MaxTagLen = 15 // 单个标签最大长度
 
-func TopicService(ctx *gin.Context) *sTopic {
-	return &sTopic{ctx: service.Context(ctx)}
+func TopicService(ctx *gin.Context) *STopic {
+	return &STopic{ctx: service.Context(ctx)}
 }
 
-type sTopic struct {
+type STopic struct {
 	ctx *service.BaseContext
 }
 
 // Publish 发布话题
-func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
+func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 	topic := &model.Topics{
 		Title:     req.Title,
 		Content:   req.Content,
 		NodeId:    req.NodeId,
 		UserId:    s.ctx.Auth().ID,
 		MDContent: req.MDContent,
+		Tags:      column.SA{},
 	}
-
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
 	if len(tags) > 0 {
@@ -67,7 +68,7 @@ func (s *sTopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 }
 
 // GetDetail 获取详情
-func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
+func (s *STopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 	var topic *fe.Topic
 
 	var uid uint64
@@ -117,7 +118,7 @@ func (s *sTopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 }
 
 // GetList 获取列表
-func (s *sTopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
+func (s *STopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 	if req.Page == 0 {
 		req.Page = 1
 	}
@@ -178,7 +179,7 @@ func (s *sTopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 }
 
 // Delete 删除话题
-func (s *sTopic) Delete(ID uint64) error {
+func (s *STopic) Delete(ID uint64) error {
 	if !s.ctx.Check() {
 		return errors.New("请登录后在继续操作")
 	}
@@ -226,7 +227,7 @@ func (s *sTopic) Delete(ID uint64) error {
 	return nil
 }
 
-func (s *sTopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
+func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 	if !s.ctx.Check() {
 		return 0, errors.New("请登录后在继续操作")
 	}

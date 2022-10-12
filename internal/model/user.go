@@ -24,11 +24,11 @@ type Users struct {
 	LastLoginAt *time.Time `gorm:"column:last_login_at" db:"last_login_at" json:"last_login_at" form:"last_login_at"` //最后登录时间
 }
 
-type userModel struct {
+type UserModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func User() *userModel {
-	return &userModel{M: db.DB.Model(&Users{}), Table: "users"}
+func User() *UserModel {
+	return &UserModel{M: db.DB.Model(&Users{}), Table: "users"}
 }

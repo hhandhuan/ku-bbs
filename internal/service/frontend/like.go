@@ -12,16 +12,16 @@ import (
 	"gorm.io/gorm"
 )
 
-func LikeService(ctx *gin.Context) *sLike {
-	return &sLike{ctx: service.Context(ctx)}
+func LikeService(ctx *gin.Context) *SLike {
+	return &SLike{ctx: service.Context(ctx)}
 }
 
-type sLike struct {
+type SLike struct {
 	ctx *service.BaseContext
 }
 
 // Like 点赞提交
-func (s *sLike) Like(req *frontend.LikeReq) error {
+func (s *SLike) Like(req *frontend.LikeReq) error {
 
 	liked, err := s.IsLiked(req.SourceID, req.SourceType)
 	if err != nil {
@@ -81,7 +81,7 @@ func (s *sLike) Like(req *frontend.LikeReq) error {
 }
 
 // IsLiked 是否点赞
-func (s *sLike) IsLiked(id uint64, source string) (bool, error) {
+func (s *SLike) IsLiked(id uint64, source string) (bool, error) {
 	user := s.ctx.Auth()
 
 	var like *model.Likes
