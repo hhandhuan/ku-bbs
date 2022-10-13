@@ -89,7 +89,6 @@
                                 <div>
                                     <p class="text-dark">
                                         <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
-<!--                                            <span class="rounded-circle bg-success" style="height: 8px;width: 8px;display: inline-block;"></span>-->
                                             {{.Publisher.Name}}
                                             {{if eq .Publisher.ID $.data.topic.UserId}}
                                             <span class="text-danger fw-bold small">(楼主)</span>
@@ -97,6 +96,16 @@
                                         </a>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         <span class="small text-muted font-weight-normal">{{DiffForHumans .CreatedAt}}</span>
+                                        <span class="small text-muted font-weight-normal">•</span>
+                                        {{if eq $.data.author_id 0}}
+                                        <a class="small text-muted font-weight-normal text-decoration-none" href="/topics/{{$.data.topic.ID}}?author_id={{.Publisher.ID}}">
+                                            只看该楼层
+                                        </a>
+                                        {{else}}
+                                        <a class="small text-muted font-weight-normal text-decoration-none" href="/topics/{{$.data.topic.ID}}">
+                                            全部楼层
+                                        </a>
+                                        {{end}}
                                         <span class="small text-secondary text-success">#{{.Floor}}</span>
                                     </p>
                                     <div class="comment-content lh-lg p-1 text-secondary">

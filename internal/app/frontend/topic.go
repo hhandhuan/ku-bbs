@@ -57,19 +57,20 @@ func (c *cTopic) PublishSubmit(ctx *gin.Context) {
 func (c *cTopic) DetailPage(ctx *gin.Context) {
 	s := service.Context(ctx)
 
-	id := gconv.Uint64(ctx.Param("id"))
+	topicID := gconv.Uint64(ctx.Param("id"))
+	authorID := gconv.Uint64(ctx.Query("author_id"))
 
-	topic, err := frontend.TopicService(ctx).GetDetail(id)
+	topic, err := frontend.TopicService(ctx).GetDetail(topicID)
 	if err != nil {
 		s.To("/").WithError(err).Redirect()
 		return
 	}
 
-	list, err := frontend.CommentService(ctx).GetList(id)
+	list, err := frontend.CommentService(ctx).GetList(topicID, authorID)
 	if err != nil {
 		s.To("/").WithError(err).Redirect()
 	} else {
-		s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list})
+		s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list, "author_id": authorID})
 	}
 }
 
