@@ -80,12 +80,16 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 }
 
 // GetList 获取列表
-func (s *SComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
+func (s *SComment) GetList(topicId, authorId uint64) ([]*frontend.Comment, error) {
 	var list []*frontend.Comment
 
 	query := model.Comment().M
 	if s.ctx.Check() {
 		query = query.Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.CommentSource)
+	}
+
+	if authorId > 0 {
+		query = query.Where("user_id", authorId)
 	}
 
 	r := query.Unscoped().
