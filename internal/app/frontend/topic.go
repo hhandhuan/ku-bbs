@@ -80,7 +80,7 @@ func (c *cTopic) DeleteSubmit(ctx *gin.Context) {
 	i := gconv.Uint64(ctx.Param("id"))
 
 	if err := frontend.TopicService(ctx).Delete(i); err != nil {
-		s.To("/").WithError(err).Redirect()
+		s.To(fmt.Sprintf("/topics/%d", i)).WithError(err).Redirect()
 	} else {
 		s.To("/").WithMsg("删除成功").Redirect()
 	}
