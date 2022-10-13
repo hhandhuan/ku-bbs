@@ -76,6 +76,18 @@ body {
     cursor: pointer
 }
 
+.operator-btn {
+    display: inline-block;
+    text-align: center;
+    width: 28px;
+}
+.operator-btn:hover {
+    padding: 4px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .form-control-dark {
     border-color: var(--bs-gray)
 }

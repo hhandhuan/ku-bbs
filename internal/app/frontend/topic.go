@@ -133,3 +133,15 @@ func (c *cTopic) EditSubmit(ctx *gin.Context) {
 		s.To(fmt.Sprintf("/topics/%d", id)).WithMsg("编辑成功").Redirect()
 	}
 }
+
+// SettingCommentStateSubmit 设置话题讨论状态
+func (c *cTopic) SettingCommentStateSubmit(ctx *gin.Context) {
+	s := service.Context(ctx)
+	i := gconv.Uint64(ctx.Param("id"))
+
+	if err := frontend.TopicService(ctx).SettingCommentState(i); err != nil {
+		s.To(fmt.Sprintf("/topics/%d", i)).WithError(err).Redirect()
+	} else {
+		s.To(fmt.Sprintf("/topics/%d", i)).WithMsg("操作成功").Redirect()
+	}
+}

@@ -27,6 +27,21 @@ type SComment struct {
 
 // Submit 提交评论
 func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
+
+	var topic *model.Topics
+	// 检查话题是否存在
+	f := model.Topic().M.Where("id = ?", req.TopicId).Find(&topic)
+	if f.Error != nil {
+		log.Println("delete topic error: ", f.Error)
+		return 0, f.Error
+	}
+	if topic.ID <= 0 {
+		return 0, errors.New("话题资源未找到")
+	}
+	if topic.CommentState == consts.DisableState {
+		return 0, errors.New("此话题已关闭讨论，不再接受任何回复")
+	}
+
 	comment := &model.Comments{
 		TopicId:   req.TopicId,
 		ReplyId:   req.ReplyId,
