@@ -91,7 +91,7 @@
                                         <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none text-dark">
                                             {{.Publisher.Name}}
                                             {{if eq .Publisher.ID $.data.topic.UserId}}
-                                            <span class="text-danger fw-bold small">(楼主)</span>
+                                            <span class="badge text-bg-secondary">楼主</span>
                                             {{end}}
                                         </a>
                                         <span class="small text-muted font-weight-normal">•</span>
