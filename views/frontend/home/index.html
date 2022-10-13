@@ -31,6 +31,7 @@
                         </div>
                         <div style="width: 700px;" class="ms-2 text-secondary d-inline-block align-top">
                             <p class="mb-0 mb-1">
+                                {{if eq .CommentState 0}}<fa class="ms-2 fa fa-check text-success"></fa>{{end}}
                                 <a href="/topics/{{.ID}}" class="text-decoration-none table-hover text-dark">{{.Title}}</a>
                             </p>
                             <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">

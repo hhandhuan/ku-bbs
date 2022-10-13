@@ -31,11 +31,12 @@ type STopic struct {
 // Publish 发布话题
 func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 	topic := &model.Topics{
-		Title:     req.Title,
-		Content:   req.Content,
-		NodeId:    req.NodeId,
-		UserId:    s.ctx.Auth().ID,
-		MDContent: req.MDContent,
+		Title:        req.Title,
+		Content:      req.Content,
+		NodeId:       req.NodeId,
+		UserId:       s.ctx.Auth().ID,
+		MDContent:    req.MDContent,
+		CommentState: consts.EnableState,
 	}
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
@@ -279,4 +280,42 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 	} else {
 		return topic.ID, nil
 	}
+}
+
+// SettingCommentState 设置话题讨论状态
+func (s *STopic) SettingCommentState(ID uint64) error {
+	if !s.ctx.Check() {
+		return errors.New("请登录后在继续操作")
+	}
+
+	var topic *model.Topics
+	// 检查话题是否存在
+	f := model.Topic().M.Where("id = ?", ID).Find(&topic)
+	if f.Error != nil {
+		log.Println("delete topic error: ", f.Error)
+		return f.Error
+	}
+	if topic.ID <= 0 {
+		return errors.New("话题资源未找到")
+	}
+	// 检查权限
+	if s.ctx.Auth().ID != topic.UserId {
+		return errors.New("无权限操作")
+	}
+
+	state := consts.EnableState
+	if topic.CommentState == consts.EnableState {
+		state = consts.DisableState
+	}
+	// 更新评论状态
+	d := model.Topic().M.Where("id", ID).Update("comment_state", state)
+	if d.Error != nil {
+		log.Println("update topic state error: ", d.Error)
+		return f.Error
+	}
+	if d.RowsAffected <= 0 {
+		return errors.New("目标已删除或不存在")
+	}
+
+	return nil
 }

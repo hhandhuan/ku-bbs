@@ -13,7 +13,7 @@
             <div class="left-content">
                 <!-- 话题信息 --->
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
-                    <h5>{{.data.topic.Title}}</h5>
+                    <h5>{{.data.topic.Title}} {{if eq .data.topic.CommentState 0}}<fa class="ms-1 fa fa-check text-success"></fa>{{end}}</h5>
                     <div class="mb-0 mt-3 text-secondary small">
                         <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span>
                         <span class="me-2">
@@ -24,18 +24,6 @@
                         <span class="me-2">
                             <i class="fa fa-clock-o"></i> {{DiffForHumans .data.topic.CreatedAt}}
                         </span>
-                        {{if .user}}
-                        {{if eq .user.ID .data.topic.Publisher.ID}}
-                        <span class="me-2">
-                             <i class="fa fa-edit"></i> <a href="/topics/{{.data.topic.ID}}/edit" class="text-decoration-none text-secondary">编辑</a>
-                        </span>
-                        <span class="me-2">
-                            <form action="/topics/{{.data.topic.ID}}/delete" method="POST" class="d-inline">
-                              <i class="fa fa-trash"></i> <a href="javascript:;" class="text-decoration-none text-secondary delete-btn">删除</a>
-                            </form>
-                        </span>
-                        {{end}}
-                        {{end}}
                     </div>
                     <hr>
                 </div>
@@ -60,6 +48,30 @@
                         <a class="p-1 rounded-1 text-decoration-none text-secondary" style="background: #eee;"
                            href="javascript:;"># {{.}}</a>
                         {{end}}
+                        {{if .user}}
+                        {{if eq .user.ID .data.topic.Publisher.ID}}
+                        <span class="ms-1">
+                            <i class="operator-btn fa fa-ellipsis-v dropdown" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                <li>
+                                    <a class="dropdown-item" href="/topics/{{.data.topic.ID}}/edit">
+                                       编辑话题
+                                    </a>
+                                </li>
+                                <li>
+                                  <form action="/topics/{{.data.topic.ID}}/delete" method="POST" class="dropdown-item">
+                                      <span type="button" href="javascript:;" class="text-decoration-none delete-btn text-dark"> 删除话题</span>
+                                  </form>
+                                </li>
+                                <li>
+                                 <form action="/topics/{{.data.topic.ID}}/comment-state" method="POST" class="dropdown-item">
+                                      <span type="button" href="javascript:;" class="text-decoration-none close-btn text-dark"> {{if eq .data.topic.CommentState 0}}开启{{else}}关闭{{end}}讨论</span>
+                                  </form>
+                                </li>
+                            </ul>
+                        </span>
+                        {{end}}
+                        {{end}}
                     </span>
                 </div>
 
@@ -71,7 +83,8 @@
                     <div class="d-inline-block like-users">
                         {{range .data.topic.Likes}}
                         <a href="/user?id={{.User.ID}}" class="text-decoration-none d-inline-block ms-1">
-                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/></a>
+                            <img src="{{.User.Avatar}}" class="rounded-circle img-thumbnail"
+                                 style="height: 38px;width: 38px;"/></a>
                         {{end}}
                     </div>
                 </div>
@@ -98,11 +111,13 @@
                                         <span class="small text-muted font-weight-normal">{{DiffForHumans .CreatedAt}}</span>
                                         <span class="small text-muted font-weight-normal">•</span>
                                         {{if eq $.data.author_id 0}}
-                                        <a class="small text-muted font-weight-normal text-decoration-none" href="/topics/{{$.data.topic.ID}}?author_id={{.Publisher.ID}}">
+                                        <a class="small text-muted font-weight-normal text-decoration-none"
+                                           href="/topics/{{$.data.topic.ID}}?author_id={{.Publisher.ID}}">
                                             只看该楼层
                                         </a>
                                         {{else}}
-                                        <a class="small text-muted font-weight-normal text-decoration-none" href="/topics/{{$.data.topic.ID}}">
+                                        <a class="small text-muted font-weight-normal text-decoration-none"
+                                           href="/topics/{{$.data.topic.ID}}">
                                             全部楼层
                                         </a>
                                         {{end}}
@@ -168,6 +183,7 @@
                 <!-- 评论编辑器 --->
                 <div class="mt-2 rounded-2" id="comment-form">
                     {{if .user}}
+                    {{if eq $.data.topic.CommentState 1}}
                     <div class="mb-2 reply-div"></div>
                     <form action="/comments" method="post">
                         <input type="hidden" name="topic_id" value="{{.data.topic.ID}}">
@@ -181,6 +197,9 @@
                             <button type="button" class="btn btn-dark col-2 submit-btn">提交</button>
                         </div>
                     </form>
+                    {{else}}
+                    <div class="alert alert-dark shadow-sm rounded-2 p-4">此话题已关闭讨论，不再接受任何回复。</div>
+                    {{end}}
                     {{else}}
                     <div class="bg-white p-4 rounded-2 shadow-sm">
                         需要 <a href="/login?back=/topics/{{.data.topic.ID}}"
@@ -500,6 +519,11 @@
             if (confirm("是否确认删除话题")) {
                 $(this).parent().submit()
             }
+        })
+
+        // 关闭话题讨论
+        $('.close-btn').on('click', function () {
+            $(this).parent().submit()
         })
 
         // 获取 query 参数

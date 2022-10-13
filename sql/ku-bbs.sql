@@ -211,6 +211,7 @@ CREATE TABLE `topics` (
   `view_count` bigint unsigned DEFAULT '0' COMMENT '浏览统计',
   `like_count` bigint unsigned DEFAULT '0' COMMENT '喜欢统计',
   `state` tinyint unsigned DEFAULT '0' COMMENT '话题状态: 0-暂存/1-发布',
+  `comment_state` tinyint unsigned DEFAULT '1' COMMENT '讨论状态:0-关闭/1-开启',
   `type` tinyint unsigned DEFAULT '0' COMMENT '话题类型:0-默认/1-精华/2-置顶',
   `content` text COMMENT '话题内容',
   `md_content` text COMMENT 'markdown内容',
