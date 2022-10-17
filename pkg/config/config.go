@@ -18,7 +18,6 @@ type db struct {
 
 type app struct {
 	Version   string `yaml:"version"`
-	Env       string `yaml:"env"`
 	Name      string `yaml:"name"`
 	Desc      string `yaml:"desc"`
 	Keywords  string `yaml:"keywords"`
@@ -45,8 +44,14 @@ type redis struct {
 	IdleTimeout string `yaml:"idleTimeout"`
 }
 
+type system struct {
+	Env  string `yaml:"env"`
+	Addr string `yaml:"addr"`
+}
+
 type conf struct {
 	App     app     `yaml:"app"`
+	System  system  `yaml:"system"`
 	DB      db      `yaml:"db"`
 	Session session `yaml:"session"`
 	Upload  upload  `yaml:"upload"`

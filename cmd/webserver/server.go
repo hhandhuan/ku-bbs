@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"fmt"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"log"
 
@@ -13,10 +14,14 @@ import (
 )
 
 func Run() {
+	if config.Conf.System.Env == "local" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	engine := gin.Default()
-
 	engine.SetFuncMap(utils.GetTemplateFuncMap())
-
 	engine.Static("/assets", "../assets")
 	engine.LoadHTMLGlob("../views/**/**/*")
 
@@ -26,7 +31,7 @@ func Run() {
 	route.RegisterBackendRoute(engine)
 	route.RegisterFrontedRoute(engine)
 
-	if err := engine.Run(":8081"); err != nil {
+	if err := engine.Run(fmt.Sprintf(":%s", config.Conf.System.Addr)); err != nil {
 		log.Fatalf("server running error: %v", err)
 	}
 }
