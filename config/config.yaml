@@ -1,10 +1,12 @@
 app:
   version: "0.0.1"
-  env: "local"
   name: "酷社区"
   desc: "酷社区"
   keywords: "酷社区"
   visitMode: "guest" # 访问模式 auth-需登录才能访问 guest-无需登录访问
+system:
+  env: "local" # local 本地 prod 正式服
+  addr: "8081"
 session:
   name: "ku-bbs"
   secret: "123456"
