@@ -1,6 +1,6 @@
 # 酷社区
 
-**ku-bbs** 是一个简洁的微社区
+**ku-bbs** 是一个简洁的微社区 访问地址 [访问地址](https://www.kucool.online/topics/1)
 
 ## 社区预览
 
