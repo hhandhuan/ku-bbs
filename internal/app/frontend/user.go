@@ -19,7 +19,7 @@ func (c *cUser) HomePage(ctx *gin.Context) {
 
 	var req fe.GetUserHomeReq
 	if err := ctx.ShouldBind(&req); err != nil {
-		s.Back().WithError(err).Redirect()
+		s.To("/").WithError(err).Redirect()
 		return
 	}
 	if data, err := frontend.UserService(ctx).Home(&req); err != nil {

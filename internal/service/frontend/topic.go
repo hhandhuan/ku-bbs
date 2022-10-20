@@ -3,6 +3,10 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"log"
+	"strings"
+	"unicode/utf8"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
@@ -12,9 +16,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
-	"log"
-	"strings"
-	"unicode/utf8"
 )
 
 const MaxTagsLen = 3 // 标签最大长度
@@ -96,7 +97,7 @@ func (s *STopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 	}
 
 	if topic.ID <= 0 {
-		return nil, errors.New("资源未找到")
+		return nil, errors.New("话题已删除或不存在")
 	}
 
 	data := map[string]interface{}{

@@ -36,7 +36,7 @@ type SUser struct {
 // Register 用户登录
 func (s *SUser) Register(req *fe.RegisterReq) error {
 	var user *model.Users
-	err := model.User().M.Where("name = ?", req.Name).Find(&user).Error
+	err := model.User().M.Where("name", req.Name).Find(&user).Error
 	if err != nil {
 		return errors.New("服务内部错误")
 	}
