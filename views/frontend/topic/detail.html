@@ -15,7 +15,7 @@
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
                     <h5>{{.data.topic.Title}} {{if eq .data.topic.CommentState 0}}<fa class="ms-1 fa fa-check text-success"></fa>{{end}}</h5>
                     <div class="mb-0 mt-3 text-secondary small">
-                        <span class="badge bg-secondary me-1"> {{.data.topic.Node.Name}} </span>
+                        <span class="badge bg-light text-secondary me-1"> {{.data.topic.Node.Name}} </span>
                         <span class="me-2">
                             <a href="/user?id={{.data.topic.Publisher.ID}}" class="text-decoration-none text-secondary"> {{.data.topic.Publisher.Name}} </a>
                         </span>
@@ -403,8 +403,8 @@
                             return
                         }
 
-                        let h = '<a href="/user?id={{if .user}} {{.user.ID}} {{end}}" class="text-decoration-none d-inline-block ms-1">'
-                        h += '<img src="{{if .user}} {{.user.Avatar}} {{end}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
+                        let h = '<a href="/user?id={{if .user}}{{.user.ID}}{{end}}" class="text-decoration-none d-inline-block ms-1">'
+                        h += '<img src="{{if .user}}{{.user.Avatar}}{{end}}" class="rounded-circle img-thumbnail" style="height: 38px;width: 38px;"/>'
                         h += '</a>'
 
                         if (parseInt(ln.html()) > 0) {
