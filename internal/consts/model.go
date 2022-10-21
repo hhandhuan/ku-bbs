@@ -30,6 +30,7 @@ const Female = 2
 const UserTopicTab = "topic"
 const UserFollowTab = "follow"
 const UserFansTab = "fans"
+const UserIntegralTab = "integral"
 
 const ReportCommentSource = "comment"
 const ReportTopicSource = "topic"
