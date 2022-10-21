@@ -96,6 +96,7 @@ DROP TABLE IF EXISTS `integral_logs`;
 CREATE TABLE `integral_logs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `user_id` bigint unsigned DEFAULT '0' COMMENT '用户 ID',
+  `target_id` bigint unsigned DEFAULT '0' COMMENT '目标ID',
   `rewards` bigint DEFAULT NULL COMMENT '奖励积分',
   `mode` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '获取方式',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',

@@ -288,7 +288,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 		pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
-	} else {
+	} else if req.Tab == consts.UserFansTab {
 		var (
 			list   []*fe.Follow
 			total  int64
@@ -301,6 +301,28 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 		}
 
 		f := query.Preload("Follower").Limit(limit).Offset(offset).Find(&list)
+		if f.Error != nil {
+			return nil, f.Error
+		}
+
+		baseUrl := s.ctx.Ctx.Request.RequestURI
+		pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+
+		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
+	} else {
+		var (
+			list   []*model.IntegralLogs
+			total  int64
+			limit  = 20
+			offset = (req.Page - 1) * limit
+		)
+
+		query = model.IntegralLog().M.Where("user_id", user.ID)
+		if c := query.Count(&total); c.Error != nil {
+			return nil, c.Error
+		}
+
+		f := query.Limit(limit).Offset(offset).Order("id DESC").Find(&list)
 		if f.Error != nil {
 			return nil, f.Error
 		}

@@ -2,6 +2,9 @@ package frontend
 
 import (
 	"errors"
+	"log"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
@@ -9,8 +12,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/pkg/db"
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
-	"log"
-	"time"
 )
 
 func CheckinService(ctx *gin.Context) *SCheckin {

@@ -34,15 +34,28 @@
                     <img src="{{.user.Avatar}}" alt="mdo" width="32" height="32" class="rounded-2">
                 </a>
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                    <li>
+                        <a class="dropdown-item" href="/user?id={{.user.ID}}&tab=integral">
+                            酷币 <span class="text-success fw-bold"> ({{.user.Integral}}0) </span>
+                        </a>
+                    </li>
                     <li><a class="dropdown-item" href="/user?id={{.user.ID}}">个人主页</a></li>
-                    <li><a class="dropdown-item" href="/user/edit">账户设置</a></li>
+                    <li>
+                        <a class="dropdown-item" href="/user/edit">
+                            账户设置
+                        </a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     {{if eq .user.IsAdmin 1}}
                     <li><a class="dropdown-item" href="/backend">后台面板</a></li>
                     {{end}}
-                    <li><a class="dropdown-item" href="/logout">退出登录</a></li>
+                    <li>
+                        <a class="dropdown-item" href="/logout">
+                            退出登录
+                        </a>
+                    </li>
                 </ul>
                 {{else}}
                 <a class="btn btn-dark" href="/register">注册</a>

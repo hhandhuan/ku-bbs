@@ -30,13 +30,15 @@ func (o *CommentObs) Update() {
 		return
 	}
 
+	sourceUrl := fmt.Sprintf("/topics/%d?j=comment%d", o.TopicID, o.CommentId)
+
 	r = model.Remind().M.Create(&model.Reminds{
 		Sender:        o.Sender,
 		Receiver:      topic.UserId,
 		SourceId:      topic.ID,
 		SourceContent: topic.Title,
 		SourceType:    model.Topic().Table,
-		SourceUrl:     fmt.Sprintf("/topics/%d?j=comment%d", o.TopicID, o.CommentId),
+		SourceUrl:     sourceUrl,
 		Action:        consts.CommentTopicRemind,
 	})
 
