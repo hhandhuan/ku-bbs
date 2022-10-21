@@ -17,16 +17,31 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 )
 
-func CommentService(ctx *gin.Context) *sComment {
-	return &sComment{ctx: service.Context(ctx)}
+func CommentService(ctx *gin.Context) *SComment {
+	return &SComment{ctx: service.Context(ctx)}
 }
 
-type sComment struct {
+type SComment struct {
 	ctx *service.BaseContext
 }
 
 // Submit 提交评论
-func (s *sComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
+func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
+
+	var topic *model.Topics
+	// 检查话题是否存在
+	f := model.Topic().M.Where("id = ?", req.TopicId).Find(&topic)
+	if f.Error != nil {
+		log.Println("delete topic error: ", f.Error)
+		return 0, f.Error
+	}
+	if topic.ID <= 0 {
+		return 0, errors.New("话题资源未找到")
+	}
+	if topic.CommentState == consts.DisableState {
+		return 0, errors.New("此话题已关闭讨论，不再接受任何回复")
+	}
+
 	comment := &model.Comments{
 		TopicId:   req.TopicId,
 		ReplyId:   req.ReplyId,
@@ -80,12 +95,16 @@ func (s *sComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 }
 
 // GetList 获取列表
-func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
+func (s *SComment) GetList(topicId, authorId uint64) ([]*frontend.Comment, error) {
 	var list []*frontend.Comment
 
 	query := model.Comment().M
 	if s.ctx.Check() {
 		query = query.Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.CommentSource)
+	}
+
+	if authorId > 0 {
+		query = query.Where("user_id", authorId)
 	}
 
 	r := query.Unscoped().
@@ -107,12 +126,12 @@ func (s *sComment) GetList(topicId uint64) ([]*frontend.Comment, error) {
 			list[index].ReplyFloor = floorMap[item.TargetId]
 		}
 	}
-	
+
 	return list, nil
 }
 
 // Delete 删除评论
-func (s *sComment) Delete(id uint64) error {
+func (s *SComment) Delete(id uint64) error {
 	if !s.ctx.Check() {
 		return errors.New("权限不足")
 	}
@@ -133,12 +152,12 @@ func (s *sComment) Delete(id uint64) error {
 		if d.Error != nil || d.RowsAffected <= 0 {
 			return fmt.Errorf("delete comment error: %v", d.Error)
 		}
-		u := tx.Model(&model.Topics{}).Where("id", comment.TopicId).Updates(map[string]interface{}{
-			"comment_count": gorm.Expr("comment_count - 1"),
-		})
-		if u.Error != nil || u.RowsAffected <= 0 {
-			return fmt.Errorf("delete comment error: %v", d.Error)
-		}
+		//u := tx.Model(&model.Topics{}).Where("id", comment.TopicId).Updates(map[string]interface{}{
+		//	"comment_count": gorm.Expr("comment_count - 1"),
+		//})
+		//if u.Error != nil || u.RowsAffected <= 0 {
+		//	return fmt.Errorf("delete comment error: %v", d.Error)
+		//}
 		return nil
 	})
 

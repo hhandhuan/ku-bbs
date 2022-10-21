@@ -3,15 +3,16 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"log"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	fe "github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
-	"log"
-	"os"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -24,18 +25,18 @@ import (
 	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
 )
 
-func UserService(ctx *gin.Context) *sUser {
-	return &sUser{ctx: service.Context(ctx)}
+func UserService(ctx *gin.Context) *SUser {
+	return &SUser{ctx: service.Context(ctx)}
 }
 
-type sUser struct {
+type SUser struct {
 	ctx *service.BaseContext
 }
 
 // Register 用户登录
-func (s *sUser) Register(req *fe.RegisterReq) error {
+func (s *SUser) Register(req *fe.RegisterReq) error {
 	var user *model.Users
-	err := model.User().M.Where("name = ?", req.Name).Find(&user).Error
+	err := model.User().M.Where("name", req.Name).Find(&user).Error
 	if err != nil {
 		return errors.New("服务内部错误")
 	}
@@ -63,7 +64,7 @@ func (s *sUser) Register(req *fe.RegisterReq) error {
 }
 
 // genAvatar 生成用户默认头像
-func (s *sUser) genAvatar(name string, gender uint) (string, error) {
+func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 	path := fmt.Sprintf("%s/users/", config.Conf.Upload.Path)
 
 	// 检查目录是否存在
@@ -85,7 +86,7 @@ func (s *sUser) genAvatar(name string, gender uint) (string, error) {
 }
 
 // Login 处理用户登录
-func (s *sUser) Login(req *fe.LoginReq) error {
+func (s *SUser) Login(req *fe.LoginReq) error {
 	var user model.Users
 	err := model.User().M.Where("name = ?", req.Name).First(&user).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -118,12 +119,12 @@ func (s *sUser) Login(req *fe.LoginReq) error {
 }
 
 // Logout 用户登出
-func (s *sUser) Logout() {
+func (s *SUser) Logout() {
 	s.ctx.Forget()
 }
 
 // Edit 编辑用户
-func (s *sUser) Edit(req *fe.EditUserReq) error {
+func (s *SUser) Edit(req *fe.EditUserReq) error {
 	var user model.Users
 	f := model.User().M.Where("name", req.Name).Find(&user)
 	if f.Error != nil {
@@ -161,7 +162,7 @@ func (s *sUser) Edit(req *fe.EditUserReq) error {
 }
 
 // EditPassword 修改密码
-func (s *sUser) EditPassword(req *fe.EditPasswordReq) error {
+func (s *SUser) EditPassword(req *fe.EditPasswordReq) error {
 	currUser := s.ctx.Auth()
 
 	if !encrypt.CompareHashAndPassword(currUser.Password, req.OldPassword) {
@@ -180,7 +181,7 @@ func (s *sUser) EditPassword(req *fe.EditPasswordReq) error {
 }
 
 // EditAvatar 修改头像
-func (s *sUser) EditAvatar(ctx *gin.Context) error {
+func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	file, err := ctx.FormFile("avatar")
 	if err != nil {
 		log.Println(err)
@@ -226,7 +227,7 @@ func (s *sUser) EditAvatar(ctx *gin.Context) error {
 }
 
 // Home 用户主页
-func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
+func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 	var user *fe.User
 	if req.Tab == "" {
 		req.Tab = consts.UserTopicTab
@@ -312,7 +313,7 @@ func (s *sUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 }
 
 // Follow 关注
-func (s *sUser) Follow(req *fe.FollowUserReq) (int, error) {
+func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
 	if req.UserID == s.ctx.Auth().ID {
 		return 0, errors.New("无法关注自己")
 	}

@@ -31,13 +31,14 @@
                         </div>
                         <div style="width: 700px;" class="ms-2 text-secondary d-inline-block align-top">
                             <p class="mb-0 mb-1">
+                                {{if eq .CommentState 0}}<fa class="ms-2 fa fa-check text-success"></fa>{{end}}
                                 <a href="/topics/{{.ID}}" class="text-decoration-none table-hover text-dark">{{.Title}}</a>
                             </p>
                             <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">
                                 {{if eq .Type 2}}
                                 <span class="badge bg-warning me-1"><span class="text-light">置顶</span></span>
                                 {{end}}
-                                <span class="badge text-bg-secondary me-1">{{.Node.Name}}</span>
+                                <span class="badge text-bg-light me-1 text-secondary">{{.Node.Name}}</span>
                                 <span class="me-1">
                                     <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
                                        style="color: #adaaa8;">
@@ -85,9 +86,15 @@
                     <hr>
                     <p class="small">
                         酷社区是一个使用 Go Gin 框架搭建的社区，主要功能包含用户登录、注册、签到、关注、提醒/系统消息、内容点赞、话题发布、回复评论等基础功能，目前功能还在完善中。
-                        欢迎各位小伙伴在反馈区提出问题。
                     </p>
                 </div>
+<!--                <div class="mt-2 p-3 bg-white rounded-2 shadow-sm rounded-2">-->
+<!--                    <i class="fa fa-line-chart fw-bold"> 社区统计</i>-->
+<!--                    <hr>-->
+<!--                    <div><i class="fa fa-user"></i> 会员数: <span class="text-secondary"> 50</span></div>-->
+<!--                    <div><i class="fa fa-podcast"></i> 话题数: <span class="text-secondary"> 20</span></div>-->
+<!--                    <div><i class="fa fa-comment"></i> 回复数: <span class="text-secondary"> 30</span></div>-->
+<!--                </div>-->
             </div>
         </div>
     </div>

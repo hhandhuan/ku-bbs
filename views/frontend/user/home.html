@@ -46,7 +46,7 @@
                                         <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{DiffForHumans
                                             .CreatedAt}}
                                         </li>
-                                        <li role="button" class="me-2"><span class="badge text-bg-secondary me-2"
+                                        <li role="button" class="me-2"><span class="badge text-bg-light text-secondary me-2"
                                                                              style="color: #adaaa8;">{{.Node.Name}}</span>
                                         </li>
                                         <li role="button" class="me-2"><i class="fa fa-heart-o summary"></i> 点赞
@@ -186,11 +186,6 @@
                         {{if .data.user.City}}
                         <p class="text-muted mb-1"><i class="fa fa-location-arrow">
                         </i><span class="ms-3">{{.data.user.City}}</span>
-                        </p>
-                        {{end}}
-                        {{if .data.user.Email}}
-                        <p class="text-muted mb-1">
-                            <i class="fa fa-envelope-o"></i><span class="ms-3">{{.data.user.Email}}</span>
                         </p>
                         {{end}}
                         {{if .data.user.Job}}

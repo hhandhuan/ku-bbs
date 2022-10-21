@@ -93,3 +93,9 @@ func (s *sNode) GetDetail(id uint64) (*model.Nodes, error) {
 		return node, nil
 	}
 }
+
+// Delete 删除节点
+func (s *sNode) Delete(id int64) error {
+	err := model.Node().M.Where("id", id).Delete(&model.Nodes{}).Error
+	return err
+}

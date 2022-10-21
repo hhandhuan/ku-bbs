@@ -39,6 +39,8 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 	group.GET("/topics/:id/edit", frontend.Topic.EditPage)
 	// 编辑提交
 	group.POST("/topics/:id/edit", frontend.Topic.EditSubmit)
+	// 编辑讨论状态
+	group.POST("/topics/:id/comment-state", frontend.Topic.SettingCommentStateSubmit)
 
 	// 评论话题
 	group.POST("/comments", frontend.Comment.PublishSubmit)

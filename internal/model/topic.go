@@ -18,17 +18,18 @@ type Topics struct {
 	ViewCount    uint64     `gorm:"column:view_count" db:"view_count" json:"view_count" form:"view_count"`             //浏览统计
 	LikeCount    uint64     `gorm:"column:like_count" db:"like_count" json:"like_count" form:"like_count"`             //喜欢统计
 	State        uint8      `gorm:"column:state" db:"state" json:"state" form:"state"`                                 //话题状态: 0-暂存/1-发布
+	CommentState uint8      `gorm:"column:comment_state" db:"comment_state" json:"comment_state" form:"comment_state"` //讨论状态:0-关闭/1-开启
 	Type         uint8      `gorm:"column:type" db:"type" json:"type" form:"type"`                                     //话题类型:0-默认/1-精华/2-置顶
 	Content      string     `gorm:"column:content" db:"content" json:"content" form:"content"`                         //话题内容
 	MDContent    string     `gorm:"column:md_content" db:"md_content" json:"md_content" form:"md_content"`             //MD内容
 	LastReplyAt  *time.Time `gorm:"column:last_reply_at" db:"last_reply_at" json:"last_reply_at" form:"last_reply_at"` //最后回复时间
 }
 
-type topic struct {
+type TopicModel struct {
 	M     *gorm.DB
 	Table string
 }
 
-func Topic() *topic {
-	return &topic{M: db.DB.Model(&Topics{}), Table: "topics"}
+func Topic() *TopicModel {
+	return &TopicModel{M: db.DB.Model(&Topics{}), Table: "topics"}
 }

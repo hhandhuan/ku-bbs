@@ -11,7 +11,7 @@
  Target Server Version : 80027
  File Encoding         : 65001
 
- Date: 18/09/2022 21:27:07
+ Date: 17/10/2022 16:19:53
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,13 @@ CREATE TABLE `checkins` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of checkins
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for comments
@@ -54,7 +60,13 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `topic_id_index` (`topic_id`) USING BTREE,
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of comments
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for follows
@@ -64,12 +76,18 @@ CREATE TABLE `follows` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
   `user_id` bigint unsigned DEFAULT NULL COMMENT '用户 ID',
   `target_id` bigint unsigned DEFAULT NULL COMMENT '被关注用户 ID',
-  `state` tinyint DEFAULT NULL COMMENT '状态:1-关注/0-取消',
+  `state` tinyint unsigned DEFAULT '0' COMMENT '状态:1-关注/0-取消',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `target_id_index` (`target_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of follows
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for integral_logs
@@ -83,7 +101,13 @@ CREATE TABLE `integral_logs` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of integral_logs
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for likes
@@ -100,7 +124,13 @@ CREATE TABLE `likes` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `user_source_id_index` (`user_id`,`source_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of likes
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for nodes
@@ -111,8 +141,8 @@ CREATE TABLE `nodes` (
   `name` char(50) DEFAULT NULL COMMENT '节点名称',
   `alias` char(50) DEFAULT NULL COMMENT '节点别名',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '节点介绍',
-  `count` bigint DEFAULT NULL COMMENT '资源统计',
-  `pid` bigint DEFAULT NULL COMMENT '节点父级',
+  `count` bigint unsigned DEFAULT '0' COMMENT '资源统计',
+  `pid` bigint unsigned DEFAULT '0' COMMENT '节点父级',
   `sort` tinyint unsigned DEFAULT '0' COMMENT '排序值',
   `state` tinyint unsigned DEFAULT '1' COMMENT '节点状态:0-关闭/1-开启',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
@@ -120,7 +150,14 @@ CREATE TABLE `nodes` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `alias_unique_index` (`alias`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of nodes
+-- ----------------------------
+BEGIN;
+INSERT INTO `nodes` (`id`, `name`, `alias`, `desc`, `count`, `pid`, `sort`, `state`, `deleted_at`, `created_at`, `updated_at`) VALUES (1, '测试节点', 'test', 'test node', NULL, 0, 0, 1, NULL, '2022-10-17 14:21:36', '2022-10-17 14:21:37');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for reminds
@@ -141,7 +178,13 @@ CREATE TABLE `reminds` (
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `receiver_index` (`receiver`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=181 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of reminds
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for reports
@@ -161,7 +204,13 @@ CREATE TABLE `reports` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of reports
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for system_notices
@@ -178,7 +227,13 @@ CREATE TABLE `system_notices` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of system_notices
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for system_user_notices
@@ -194,7 +249,13 @@ CREATE TABLE `system_user_notices` (
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of system_user_notices
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for topics
@@ -206,11 +267,12 @@ CREATE TABLE `topics` (
   `user_id` bigint DEFAULT NULL COMMENT '用户 ID',
   `reply_id` bigint unsigned DEFAULT '0' COMMENT '最后回复者ID',
   `title` varchar(255) DEFAULT NULL COMMENT '话题标题',
-  `tags` json DEFAULT NULL COMMENT '话题标签',
+  `tags` varchar(255) DEFAULT NULL COMMENT '话题标签',
   `comment_count` bigint unsigned DEFAULT '0' COMMENT '评论统计',
   `view_count` bigint unsigned DEFAULT '0' COMMENT '浏览统计',
   `like_count` bigint unsigned DEFAULT '0' COMMENT '喜欢统计',
   `state` tinyint unsigned DEFAULT '0' COMMENT '话题状态: 0-暂存/1-发布',
+  `comment_state` tinyint unsigned DEFAULT '1' COMMENT '讨论状态:0-关闭/1-开启',
   `type` tinyint unsigned DEFAULT '0' COMMENT '话题类型:0-默认/1-精华/2-置顶',
   `content` text COMMENT '话题内容',
   `md_content` text COMMENT 'markdown内容',
@@ -220,7 +282,13 @@ CREATE TABLE `topics` (
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=237 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of topics
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for users
@@ -246,6 +314,10 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
