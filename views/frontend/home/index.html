@@ -38,7 +38,7 @@
                                 {{if eq .Type 2}}
                                 <span class="badge bg-warning me-1"><span class="text-light">置顶</span></span>
                                 {{end}}
-                                <span class="badge text-bg-light me-1 text-secondary">{{.Node.Name}}</span>
+                                <a class="badge text-bg-light me-1 text-secondary text-decoration-none" href="/?type={{.Node.Alias}}">{{.Node.Name}}</a>
                                 <span class="me-1">
                                     <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
                                        style="color: #adaaa8;">
