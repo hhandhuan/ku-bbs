@@ -18,6 +18,7 @@ const (
 	userKey    = "user"
 	unreadKey  = "unread"
 	versionKey = "version"
+	titleKey   = "title"
 )
 
 func Context(ctx *gin.Context) *BaseContext {
@@ -25,6 +26,7 @@ func Context(ctx *gin.Context) *BaseContext {
 		Ctx:     ctx,
 		session: sessions.Default(ctx),
 		path:    "/",
+		title:   config.Conf.App.Name,
 	}
 	return stx
 }
@@ -33,6 +35,7 @@ type BaseContext struct {
 	Ctx     *gin.Context
 	session sessions.Session
 	path    string
+	title   string
 }
 
 // Redirect 处理跳转
@@ -145,6 +148,12 @@ func (c *BaseContext) Forget() {
 	_ = c.session.Save()
 }
 
+// SetTitle 设置模版标题
+func (c *BaseContext) SetTitle(title string) *BaseContext {
+	c.title = title
+	return c
+}
+
 // unread 消息未读数
 func (c *BaseContext) unread() bool {
 	if !c.Check() {
@@ -182,6 +191,7 @@ func (c *BaseContext) View(tpl string, data interface{}) {
 		unreadKey:  c.unread(),
 		dataKey:    data,
 		flashKey:   c.ParseFlash(),
+		titleKey:   c.title,
 	}
 	c.clear()
 	c.Ctx.HTML(http.StatusOK, tpl, obj)
