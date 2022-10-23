@@ -52,8 +52,8 @@
                                             <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{DiffForHumans
                                                 .CreatedAt}}
                                             </li>
-                                            <li role="button" class="me-2"><span class="badge text-bg-light text-secondary me-2"
-                                                                                 style="color: #adaaa8;">{{.Node.Name}}</span>
+                                            <li role="button" class="me-2">
+                                                <a class="badge text-bg-light text-secondary me-2 text-decoration-none" href="/?type={{.Node.Alias}}">{{.Node.Name}}</a>
                                             </li>
                                             <li role="button" class="me-2"><i class="fa fa-heart-o summary"></i> 点赞
                                                 ({{.LikeCount}})
