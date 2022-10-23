@@ -69,9 +69,12 @@ func (c *cTopic) DetailPage(ctx *gin.Context) {
 	list, err := frontend.CommentService(ctx).GetList(topicID, authorID)
 	if err != nil {
 		s.To("/").WithError(err).Redirect()
-	} else {
-		s.View("frontend.topic.detail", gin.H{"topic": topic, "comments": list, "author_id": authorID})
+		return
 	}
+
+	data := gin.H{"topic": topic, "comments": list, "author_id": authorID}
+
+	s.SetTitle(topic.Title).View("frontend.topic.detail", data)
 }
 
 // DeleteSubmit 删除话题
