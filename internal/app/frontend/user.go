@@ -47,7 +47,8 @@ func (c *cUser) EditSubmit(ctx *gin.Context) {
 	t := ctx.DefaultQuery("tab", "info")
 	p := ctx.Request.RequestURI
 
-	if t == "info" {
+	switch t {
+	case "info":
 		var req fe.EditUserReq
 		if err := ctx.ShouldBind(&req); err != nil {
 			s.Back().WithError(err).Redirect()
@@ -64,7 +65,7 @@ func (c *cUser) EditSubmit(ctx *gin.Context) {
 		} else {
 			s.Back().WithMsg("修改信息成功").Redirect()
 		}
-	} else if t == "pass" {
+	case "pass":
 		var req fe.EditPasswordReq
 		if err := ctx.ShouldBind(&req); err != nil {
 			s.Back().WithError(err).Redirect()
@@ -81,7 +82,7 @@ func (c *cUser) EditSubmit(ctx *gin.Context) {
 		} else {
 			s.To("/login").WithMsg("修改密码成功，请重新登录").Redirect()
 		}
-	} else {
+	case "avatar":
 		if err := frontend.UserService(ctx).EditAvatar(ctx); err != nil {
 			s.To(p).WithError(err).Redirect()
 		} else {
