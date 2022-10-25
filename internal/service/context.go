@@ -204,5 +204,5 @@ func (c *BaseContext) Json(data interface{}) {
 
 // MDFileJson markdown 上传图片响应
 func (c *BaseContext) MDFileJson(ok int, msg, url string) {
-	c.Ctx.JSON(http.StatusOK, gin.H{"success": ok, "message": msg, "url": url})
+	c.Json(gin.H{"success": ok, "message": msg, "url": url})
 }

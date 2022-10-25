@@ -10,8 +10,8 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 link-dark fw-bolder">酷 • 社区</a></li>
             </ul>
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " role="search">
-                <input type="search" class="form-control" placeholder="社区搜索" aria-label="Search">
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " method="get" action="/search">
+                <input type="search" class="form-control" placeholder="社区搜索" name="keywords" value="{{if .flash.Keywords}}{{.flash.Keywords}}{{end}}">
             </form>
             {{if .user}}
             <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">

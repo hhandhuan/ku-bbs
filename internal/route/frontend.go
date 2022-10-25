@@ -68,4 +68,7 @@ func RegisterFrontedRoute(engine *gin.Engine) {
 
 	// 举报资源
 	group.POST("/reports", frontend.Report.ReportSubmit)
+
+	// 检索列表
+	group.GET("/search", frontend.Search.List)
 }
