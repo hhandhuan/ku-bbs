@@ -13,7 +13,7 @@ const tmpl string = `
 {{ if .HasPages }}
 <nav>
 <ul class="pagination pagination-dark pagination-sm">
-  {{ .GetPreviousButton "<" }}
+  {{ .GetPreviousButton "上一页" }}
   {{ range .FirstPart }}
     {{ . }}
   {{ end }}
@@ -29,7 +29,7 @@ const tmpl string = `
 	  {{ . }}
 	{{ end }}
   {{ end }}
-  {{ .GetNextButton ">" }}
+  {{ .GetNextButton "下一页" }}
 </ul>
 </nav>
 {{end}}
@@ -112,13 +112,13 @@ func (p *Pagination) GetPreviousButton(text string) string { // "&laquo;"
 		return p.GetDisabledPageWrapper(text)
 	}
 
-	return p.getUrl(p.currentPage-1, "<")
+	return p.getUrl(p.currentPage-1, "上一页")
 }
 func (p *Pagination) GetNextButton(text string) string { // &raquo;
 	if p.currentPage == p.TotalPages() {
 		return p.GetDisabledPageWrapper(text)
 	}
-	return p.getUrl(p.currentPage+1, ">")
+	return p.getUrl(p.currentPage+1, "下一页")
 }
 
 // Render 生成html
