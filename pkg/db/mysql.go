@@ -17,6 +17,12 @@ var DB *gorm.DB
 func init() {
 	c := config.Conf.DB
 	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", c.Name, c.Pass, c.Host, c.Port, c.DB)
+
+	logger := gormDefaultLogger.Default.LogMode(gormDefaultLogger.Info)
+	if config.Conf.System.Env == "prod" {
+		logger = gormDefaultLogger.Default.LogMode(gormDefaultLogger.Error)
+	}
+
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         255,   // string 类型字段的默认长度
@@ -25,7 +31,7 @@ func init() {
 		DontSupportRenameColumn:   true,  // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
 		SkipInitializeWithVersion: false, // 根据当前 MySQL 版本自动配置
 	}), &gorm.Config{
-		Logger:                 gormDefaultLogger.Default.LogMode(gormDefaultLogger.Info),
+		Logger:                 logger,
 		SkipDefaultTransaction: true,
 	})
 	if err != nil {
