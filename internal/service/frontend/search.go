@@ -36,7 +36,7 @@ func (s *SSearch) GetList(req *fe.GetSearchListReq) (gin.H, error) {
 		key := fmt.Sprintf("%%%s%%", req.Keywords)
 		query = query.Where("title like ?", key).Or("content like ?", key)
 	} else {
-		return gin.H{"list": topics, "pagination": nil, "req": req, "total": total}, nil
+		return gin.H{"list": topics, "page": nil, "req": req, "total": total}, nil
 	}
 
 	if c := query.Count(&total); c.Error != nil {
@@ -58,5 +58,5 @@ func (s *SSearch) GetList(req *fe.GetSearchListReq) (gin.H, error) {
 
 	pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
-	return gin.H{"list": topics, "pagination": pageObj, "req": req, "total": total}, nil
+	return gin.H{"list": topics, "page": pageObj, "req": req, "total": total}, nil
 }
