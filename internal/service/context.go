@@ -122,6 +122,13 @@ func (c *BaseContext) Auth() *model.Users {
 	return user
 }
 
+// Refresh 刷新授权
+func (c *BaseContext) Refresh() {
+	var user model.Users
+	model.User().M.Where("id", c.Auth().ID).Find(&user)
+	c.SetAuth(user)
+}
+
 // Check 检查授权
 func (c *BaseContext) Check() bool {
 	user := c.Auth()
