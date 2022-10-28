@@ -38,7 +38,7 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		return 0, err
 	}
 
-	topic := &model.Topics{
+	data := &model.Topics{
 		Title:        req.Title,
 		Content:      req.Content,
 		NodeId:       req.NodeId,
@@ -47,6 +47,7 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		CommentState: consts.EnableState,
 		Brief:        str.Limit(brief, 0, 100, "..."),
 	}
+
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
 	if len(tags) > 0 {
@@ -61,17 +62,17 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 			}
 		}
 		if !isOk {
-			return 0, fmt.Errorf("单个标签最多%d个字符", MaxTagsLen)
+			return 0, fmt.Errorf("单个标签最多%d个字符", MaxTagLen)
 		} else {
-			topic.Tags = strings.Split(req.Tags, ",")
+			data.Tags = tags
 		}
 	}
 
-	r := model.Topic().M.Create(topic)
+	r := model.Topic().M.Create(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("发布话题失败，请稍后再试")
 	} else {
-		return topic.ID, nil
+		return data.ID, nil
 	}
 }
 
@@ -261,13 +262,15 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		return 0, err
 	}
 
-	updates := &model.Topics{
+	data := &model.Topics{
 		Title:     req.Title,
 		Content:   req.Content,
 		NodeId:    req.NodeId,
 		MDContent: req.MDContent,
 		Brief:     str.Limit(brief, 0, 100, "..."),
 	}
+
+	log.Println(req.Tags)
 
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
@@ -285,11 +288,11 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		if !isOk {
 			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", MaxTagLen))
 		} else {
-			topic.Tags = strings.Split(req.Tags, ",")
+			data.Tags = tags
 		}
 	}
 
-	r := model.Topic().M.Where("id = ?", ID).Updates(updates)
+	r := model.Topic().M.Where("id = ?", ID).Updates(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("编辑话题失败，请稍后再试")
 	} else {
