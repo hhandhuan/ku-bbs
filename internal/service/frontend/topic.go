@@ -33,7 +33,11 @@ type STopic struct {
 
 // Publish 发布话题
 func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
-	brief, err := s.HtmlToText(req.Content)
+	brief, err := s.ParseBrief(req.Content)
+	if err != nil {
+		return 0, err
+	}
+	images, err := s.ParseHtmlImages(req.Content)
 	if err != nil {
 		return 0, err
 	}
@@ -46,6 +50,7 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		MDContent:    req.MDContent,
 		CommentState: consts.EnableState,
 		Brief:        str.Limit(brief, 0, 100, "..."),
+		Images:       images,
 	}
 
 	// 检查话题标签
@@ -257,7 +262,11 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		return 0, errors.New("无权限操作")
 	}
 
-	brief, err := s.HtmlToText(req.Content)
+	brief, err := s.ParseBrief(req.Content)
+	if err != nil {
+		return 0, err
+	}
+	images, err := s.ParseHtmlImages(req.Content)
 	if err != nil {
 		return 0, err
 	}
@@ -268,6 +277,7 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		NodeId:    req.NodeId,
 		MDContent: req.MDContent,
 		Brief:     str.Limit(brief, 0, 100, "..."),
+		Images:    images,
 	}
 
 	log.Println(req.Tags)
@@ -338,8 +348,8 @@ func (s *STopic) SettingCommentState(ID uint64) error {
 	return nil
 }
 
-// HtmlToText html to text
-func (s *STopic) HtmlToText(html string) (string, error) {
+// ParseBrief parse topic brief
+func (s *STopic) ParseBrief(html string) (string, error) {
 	if doc, err := goquery.NewDocumentFromReader(strings.NewReader(html)); err != nil {
 		return "", fmt.Errorf("html to text error: %v", err)
 	} else {
@@ -348,4 +358,18 @@ func (s *STopic) HtmlToText(html string) (string, error) {
 		rs = strings.Replace(rs, "\n", "", -1)
 		return rs, nil
 	}
+}
+
+// ParseHtmlImages parse topic images
+func (s *STopic) ParseHtmlImages(html string) ([]string, error) {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+	if err != nil {
+		return nil, fmt.Errorf("html to text error: %v", err)
+	}
+	images := make([]string, 0)
+	doc.Find("img").Each(func(i int, selection *goquery.Selection) {
+		img, _ := selection.Attr("src")
+		images = append(images, img)
+	})
+	return images, nil
 }

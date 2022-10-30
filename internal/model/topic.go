@@ -14,6 +14,7 @@ type Topics struct {
 	ReplyId      uint64     `gorm:"column:reply_id" db:"reply_id" json:"reply_id" form:"reply_id"`                     //最后回复者ID
 	Title        string     `gorm:"column:title" db:"title" json:"title" form:"title"`                                 //话题标题
 	Tags         column.SA  `gorm:"column:tags" db:"tags" json:"tags" form:"tags"`                                     //话题标签
+	Images       column.SA  `gorm:"column:images" db:"images" json:"images" form:"images"`                             //图片集合
 	CommentCount uint64     `gorm:"column:comment_count" db:"comment_count" json:"comment_count" form:"comment_count"` //评论统计
 	ViewCount    uint64     `gorm:"column:view_count" db:"view_count" json:"view_count" form:"view_count"`             //浏览统计
 	LikeCount    uint64     `gorm:"column:like_count" db:"like_count" json:"like_count" form:"like_count"`             //喜欢统计
