@@ -28,10 +28,12 @@
                                    href="/user?id={{.data.user.ID}}&tab=fans">粉丝</a>
                             </li>
                             {{if .user}}
+                            {{if eq .user.ID $.data.user.ID}}
                             <li class="nav-item">
                                 <a class='nav-link text-secondary {{if eq .data.req.Tab "integral"}} active {{end}}'
                                    href="/user?id={{.data.user.ID}}&tab=integral">酷币记录</a>
                             </li>
+                            {{end}}
                             {{end}}
                         </ul>
                     </div>
@@ -52,8 +54,8 @@
                                             <li role="button" class="me-2"><i class="fa fa-clock-o"></i> {{DiffForHumans
                                                 .CreatedAt}}
                                             </li>
-                                            <li role="button" class="me-2"><span class="badge text-bg-light text-secondary me-2"
-                                                                                 style="color: #adaaa8;">{{.Node.Name}}</span>
+                                            <li role="button" class="me-2">
+                                                <a class="badge text-bg-light text-secondary me-2 text-decoration-none" href="/?type={{.Node.Alias}}">{{.Node.Name}}</a>
                                             </li>
                                             <li role="button" class="me-2"><i class="fa fa-heart-o summary"></i> 点赞
                                                 ({{.LikeCount}})

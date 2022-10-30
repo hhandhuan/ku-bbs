@@ -154,9 +154,7 @@ func (s *SUser) Edit(req *fe.EditUserReq) error {
 		return errors.New("修改信息失败")
 	}
 
-	model.User().M.Where("id", currUser.ID).Find(&user)
-
-	s.ctx.SetAuth(user)
+	s.ctx.Refresh()
 
 	return nil
 }
@@ -218,10 +216,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 		return errors.New("修改头像失败")
 	}
 
-	var user model.Users
-	model.User().M.Where("id", userID).Find(&user)
-
-	s.ctx.SetAuth(user)
+	s.ctx.Refresh()
 
 	return nil
 }
@@ -262,8 +257,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			return nil, f.Error
 		}
 
-		baseUrl := s.ctx.Ctx.Request.RequestURI
-		pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+		pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
 	} else if req.Tab == consts.UserFollowTab {
@@ -305,8 +299,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			return nil, f.Error
 		}
 
-		baseUrl := s.ctx.Ctx.Request.RequestURI
-		pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+		pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
 	} else {
@@ -327,8 +320,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			return nil, f.Error
 		}
 
-		baseUrl := s.ctx.Ctx.Request.RequestURI
-		pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+		pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
 		return gin.H{"user": user, "list": list, "req": req, "page": pageObj}, nil
 	}

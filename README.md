@@ -6,10 +6,9 @@
 
 社区主页
 
-![image](https://user-images.githubusercontent.com/95403191/180779634-8ae74154-92ab-400b-b5a8-52b799f19063.png)
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/95403191/197700404-4420a152-5fe9-4140-b08b-cdaac0311b5c.png">
 
 话题详情
 
-![image](https://user-images.githubusercontent.com/95403191/180780015-48a5e2c0-a3df-46a1-8f24-a2550daf9c91.png)
+<img width="1439" alt="image" src="https://user-images.githubusercontent.com/95403191/197700592-2b1aafef-96d8-464a-8f12-af1a8d7d0669.png">
 
-QQ群(546408084)

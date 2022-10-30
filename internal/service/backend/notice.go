@@ -49,11 +49,9 @@ func (s *sNotice) GetList(req *eb.GetNoticeListReq) (gin.H, error) {
 		return nil, f.Error
 	}
 
-	baseUrl := s.ctx.Ctx.Request.RequestURI
+	pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
-	pagination := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
-
-	return gin.H{"list": list, "page": pagination, "req": req}, nil
+	return gin.H{"list": list, "page": pageObj, "req": req}, nil
 }
 
 // Publish 发布消息

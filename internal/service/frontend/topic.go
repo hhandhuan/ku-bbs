@@ -3,10 +3,12 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"github.com/hhandhuan/ku-bbs/pkg/utils/str"
 	"log"
 	"strings"
 	"unicode/utf8"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
@@ -31,19 +33,26 @@ type STopic struct {
 
 // Publish 发布话题
 func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
-	topic := &model.Topics{
+	brief, err := s.HtmlToText(req.Content)
+	if err != nil {
+		return 0, err
+	}
+
+	data := &model.Topics{
 		Title:        req.Title,
 		Content:      req.Content,
 		NodeId:       req.NodeId,
 		UserId:       s.ctx.Auth().ID,
 		MDContent:    req.MDContent,
 		CommentState: consts.EnableState,
+		Brief:        str.Limit(brief, 0, 100, "..."),
 	}
+
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
 	if len(tags) > 0 {
 		if len(tags) > MaxTagsLen {
-			return 0, errors.New(fmt.Sprintf("最多添加%d标签", MaxTagsLen))
+			return 0, fmt.Errorf("最多添加%d标签", MaxTagsLen)
 		}
 		isOk := true
 		for _, value := range tags {
@@ -53,17 +62,17 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 			}
 		}
 		if !isOk {
-			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", MaxTagLen))
+			return 0, fmt.Errorf("单个标签最多%d个字符", MaxTagLen)
 		} else {
-			topic.Tags = strings.Split(req.Tags, ",")
+			data.Tags = tags
 		}
 	}
 
-	r := model.Topic().M.Create(topic)
+	r := model.Topic().M.Create(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("发布话题失败，请稍后再试")
 	} else {
-		return topic.ID, nil
+		return data.ID, nil
 	}
 }
 
@@ -173,9 +182,9 @@ func (s *STopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 
 	baseUrl := s.ctx.Ctx.Request.RequestURI
 
-	pagination := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+	pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
 
-	return gin.H{"topics": topics, "pagination": pagination, "type": req.Type}, nil
+	return gin.H{"topics": topics, "page": pageObj, "type": req.Type}, nil
 }
 
 // Delete 删除话题
@@ -248,12 +257,20 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		return 0, errors.New("无权限操作")
 	}
 
-	updates := &model.Topics{
+	brief, err := s.HtmlToText(req.Content)
+	if err != nil {
+		return 0, err
+	}
+
+	data := &model.Topics{
 		Title:     req.Title,
 		Content:   req.Content,
 		NodeId:    req.NodeId,
 		MDContent: req.MDContent,
+		Brief:     str.Limit(brief, 0, 100, "..."),
 	}
+
+	log.Println(req.Tags)
 
 	// 检查话题标签
 	tags := strings.Split(req.Tags, ",")
@@ -271,11 +288,11 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		if !isOk {
 			return 0, errors.New(fmt.Sprintf("单个标签最多%d个字符", MaxTagLen))
 		} else {
-			topic.Tags = strings.Split(req.Tags, ",")
+			data.Tags = tags
 		}
 	}
 
-	r := model.Topic().M.Where("id = ?", ID).Updates(updates)
+	r := model.Topic().M.Where("id = ?", ID).Updates(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("编辑话题失败，请稍后再试")
 	} else {
@@ -319,4 +336,16 @@ func (s *STopic) SettingCommentState(ID uint64) error {
 	}
 
 	return nil
+}
+
+// HtmlToText html to text
+func (s *STopic) HtmlToText(html string) (string, error) {
+	if doc, err := goquery.NewDocumentFromReader(strings.NewReader(html)); err != nil {
+		return "", fmt.Errorf("html to text error: %v", err)
+	} else {
+		doc.Find("img").ReplaceWithHtml("[图片]")
+		rs := strings.Replace(doc.Text(), " ", "", -1)
+		rs = strings.Replace(rs, "\n", "", -1)
+		return rs, nil
+	}
 }

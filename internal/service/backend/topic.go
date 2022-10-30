@@ -52,9 +52,9 @@ func (s *sTopic) GetList(req *eb.GetTopicListReq) (gin.H, error) {
 
 	baseUrl := s.ctx.Ctx.Request.RequestURI
 
-	pagination := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
+	pageObj := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
 
-	return gin.H{"list": list, "page": pagination, "req": req}, nil
+	return gin.H{"list": list, "page": pageObj, "req": req}, nil
 }
 
 // Delete 删除话题

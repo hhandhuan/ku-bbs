@@ -18,6 +18,7 @@ const (
 	userKey    = "user"
 	unreadKey  = "unread"
 	versionKey = "version"
+	titleKey   = "title"
 )
 
 func Context(ctx *gin.Context) *BaseContext {
@@ -25,6 +26,7 @@ func Context(ctx *gin.Context) *BaseContext {
 		Ctx:     ctx,
 		session: sessions.Default(ctx),
 		path:    "/",
+		title:   config.Conf.App.Name,
 	}
 	return stx
 }
@@ -33,6 +35,7 @@ type BaseContext struct {
 	Ctx     *gin.Context
 	session sessions.Session
 	path    string
+	title   string
 }
 
 // Redirect 处理跳转
@@ -119,6 +122,13 @@ func (c *BaseContext) Auth() *model.Users {
 	return user
 }
 
+// Refresh 刷新授权
+func (c *BaseContext) Refresh() {
+	var user model.Users
+	model.User().M.Where("id", c.Auth().ID).Find(&user)
+	c.SetAuth(user)
+}
+
 // Check 检查授权
 func (c *BaseContext) Check() bool {
 	user := c.Auth()
@@ -143,6 +153,12 @@ func (c *BaseContext) IsAdmin() bool {
 func (c *BaseContext) Forget() {
 	c.session.Delete(userKey)
 	_ = c.session.Save()
+}
+
+// SetTitle 设置模版标题
+func (c *BaseContext) SetTitle(title string) *BaseContext {
+	c.title = title
+	return c
 }
 
 // unread 消息未读数
@@ -182,6 +198,7 @@ func (c *BaseContext) View(tpl string, data interface{}) {
 		unreadKey:  c.unread(),
 		dataKey:    data,
 		flashKey:   c.ParseFlash(),
+		titleKey:   c.title,
 	}
 	c.clear()
 	c.Ctx.HTML(http.StatusOK, tpl, obj)
@@ -194,5 +211,5 @@ func (c *BaseContext) Json(data interface{}) {
 
 // MDFileJson markdown 上传图片响应
 func (c *BaseContext) MDFileJson(ok int, msg, url string) {
-	c.Ctx.JSON(http.StatusOK, gin.H{"success": ok, "message": msg, "url": url})
+	c.Json(gin.H{"success": ok, "message": msg, "url": url})
 }

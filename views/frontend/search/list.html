@@ -1,0 +1,69 @@
+{{define "frontend.search.list"}}
+
+{{template "frontend.layout.header" .}}
+
+{{template "frontend.layout.nav" .}}
+
+{{template "frontend.layout.msg" .}}
+
+<div class="container-fluid">
+    <div class="m-auto box">
+        <div class="content">
+            <div class="notice-nav shadow-sm">
+                <ul class="list-group">
+                    <li class='list-group-item'>
+                        <a href="/search?keywords={{.data.req.Keywords}}" class="text-secondary text-decoration-none d-inline-block"
+                           style="width: 100%;">
+                            <i class="fa fa-navicon fw-bold"> 话题 ({{.data.total}})</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-white rounded-1 notice-content">
+                <div class="notice-remind ">
+                    <div class="text-secondary pt-4 ps-4 pe-4" style="border-bottom: 0;">
+                        检索到 {{.data.total}} 条相关信息 关于 <span class="text-success fw-bold">{{.data.req.Keywords}}</span> 的内容
+                        <hr>
+                    </div>
+                    {{if .data.list}}
+                    {{range .data.list}}
+                    <div class="d-flex flex-start p-4 border-bottom">
+                        <img class="rounded-circle shadow-1-strong me-3"
+                             src="{{.Publisher.Avatar}}" alt="avatar" width="40"
+                             height="40"/>
+                        <div>
+                            <h6 class="mb-1 mt-1">
+                                <a href="/topics/{{.ID}}" class="text-decoration-none text-dark">{{.Title}}</a>
+                            </h6>
+                            <div class="d-flex align-items-center mb-3">
+                            </div>
+                            <p class="small text-muted">
+                                {{.Brief}}
+                            </p>
+                            <p class="mb-0 mt-1 small">
+                                    <a class="text-secondary text-decoration-none" href="/user?id={{.Publisher.ID}}">
+                                        <i class="fa fa-user-circle-o"> {{.Publisher.Name}}</i>
+                                    </a>
+                                <a class="badge bg-light text-secondary text-decoration-none" href="/?type={{.Node.Alias}}"> {{.Node.Name}} </a>
+                                <span class="text-secondary">{{DiffForHumans .CreatedAt}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    {{end}}
+                    {{else}}
+                    <div class="d-flex flex-start p-4 border-bottom justify-content-center text-secondary">
+                        暂无数据！
+                    </div>
+                    {{end}}
+                </div>
+                <div class="ms-3">
+                    {{ .data.page.Render }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/static/frontend/js/jquery.min.js"></script>
+<script src="/assets/static/frontend/js/highlight.min.js"></script>
+{{template "frontend.layout.footer" .}}
+{{end}}

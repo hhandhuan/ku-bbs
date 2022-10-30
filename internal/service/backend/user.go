@@ -47,9 +47,7 @@ func (s *sUser) GetList(req *backend.GetUserListReq) (gin.H, error) {
 		return nil, f.Error
 	}
 
-	baseUrl := s.ctx.Ctx.Request.RequestURI
+	pageObj := page.New(int(total), limit, gconv.Int(req.Page), s.ctx.Ctx.Request.RequestURI)
 
-	pagination := page.New(int(total), limit, gconv.Int(req.Page), baseUrl)
-
-	return gin.H{"list": users, "page": pagination, "req": req}, nil
+	return gin.H{"list": users, "page": pageObj, "req": req}, nil
 }
