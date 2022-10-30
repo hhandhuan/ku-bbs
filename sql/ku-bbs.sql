@@ -276,6 +276,7 @@ CREATE TABLE `topics` (
   `comment_state` tinyint unsigned DEFAULT '1' COMMENT '讨论状态:0-关闭/1-开启',
   `type` tinyint unsigned DEFAULT '0' COMMENT '话题类型:0-默认/1-精华/2-置顶',
   `brief` varchar(255) DEFAULT NULL COMMENT '话题简介',
+  `images` varchar(255) DEFAULT NULL COMMENT '话题图片',
   `content` text COMMENT '话题内容',
   `md_content` text COMMENT 'markdown内容',
   `last_reply_at` timestamp NULL DEFAULT NULL COMMENT '回复时间',
