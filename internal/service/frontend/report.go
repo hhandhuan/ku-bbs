@@ -32,7 +32,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 
 		var report *model.Reports
 		f = model.Report().M.Where(map[string]interface{}{
-			"source_id":   req.TargetID,
+			"source_id":   req.SourceID,
 			"source_type": req.SourceType,
 			"target_id":   req.TargetID,
 			"user_id":     s.ctx.Auth().ID,
@@ -40,7 +40,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 		if f.Error != nil {
 			return fmt.Errorf("服务内部错误: %v", f.Error)
 		}
-		if report != nil {
+		if report.ID > 0 {
 			return errors.New("举报已存在")
 		}
 
