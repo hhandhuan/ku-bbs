@@ -43,6 +43,7 @@ func (c *BaseContext) Redirect() {
 	c.Ctx.Redirect(http.StatusFound, c.path)
 }
 
+// clear 清除闪存消息
 func (c *BaseContext) clear() {
 	c.session.Delete(errKey)
 	c.session.Delete(msgKey)
