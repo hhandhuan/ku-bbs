@@ -269,7 +269,7 @@ CREATE TABLE `topics` (
   `reply_id` bigint unsigned DEFAULT '0' COMMENT '最后回复者ID',
   `title` varchar(255) DEFAULT NULL COMMENT '话题标题',
   `tags` varchar(255) DEFAULT NULL COMMENT '话题标签',
-  `images` varchar(255) DEFAULT NULL COMMENT '图片集合',
+  `images` text COMMENT '图片集合',
   `comment_count` bigint unsigned DEFAULT '0' COMMENT '评论统计',
   `view_count` bigint unsigned DEFAULT '0' COMMENT '浏览统计',
   `like_count` bigint unsigned DEFAULT '0' COMMENT '喜欢统计',
