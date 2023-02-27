@@ -16,13 +16,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/o1egl/govatar"
-	"gorm.io/gorm"
-
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
+	"github.com/o1egl/govatar"
 )
 
 func UserService(ctx *gin.Context) *SUser {
@@ -46,7 +44,7 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 
 	avatar, err := s.genAvatar(req.Name, req.Gender)
 	if err != nil {
-		return errors.New("用户默认头像生成失败")
+		return errors.New("头像生成失败")
 	}
 
 	res := model.User().M.Create(&model.Users{
@@ -88,8 +86,8 @@ func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 // Login 处理用户登录
 func (s *SUser) Login(req *fe.LoginReq) error {
 	var user model.Users
-	err := model.User().M.Where("name = ?", req.Name).First(&user).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	err := model.User().M.Where("name = ?", req.Name).Limit(1).Find(&user).Error
+	if err != nil {
 		return errors.New("服务内部错误")
 	}
 
@@ -126,15 +124,16 @@ func (s *SUser) Logout() {
 // Edit 编辑用户
 func (s *SUser) Edit(req *fe.EditUserReq) error {
 	var user model.Users
-	f := model.User().M.Where("name", req.Name).Find(&user)
-	if f.Error != nil {
-		log.Println(f.Error)
-		return fmt.Errorf("修改信息失败: %v", f.Error)
+	err := model.User().M.Where("name", req.Name).Find(&user).Error
+	if err != nil {
+		return fmt.Errorf("修改信息失败: %v", err)
 	}
+
 	currUser := s.ctx.Auth()
 	if user.ID > 0 && currUser.ID != user.ID {
 		return errors.New("用户名已存在")
 	}
+
 	data := &model.Users{
 		Name:    req.Name,
 		Email:   req.Email,
@@ -146,12 +145,11 @@ func (s *SUser) Edit(req *fe.EditUserReq) error {
 		State:   currUser.State,
 		IsAdmin: currUser.IsAdmin,
 	}
+
 	u := model.User().M.Where("id", currUser.ID).Updates(data)
-	if u.Error != nil {
-		return fmt.Errorf("修改信息失败: %v", f.Error)
-	}
-	if u.RowsAffected <= 0 {
-		return errors.New("修改信息失败")
+
+	if u.Error != nil || u.RowsAffected <= 0 {
+		return fmt.Errorf("修改信息失败: %v", u.Error)
 	}
 
 	s.ctx.Refresh()
@@ -204,7 +202,6 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
 
 	if err := ctx.SaveUploadedFile(file, uploadPath); err != nil {
-		log.Println(err)
 		return errors.New("修改头像失败")
 	}
 
