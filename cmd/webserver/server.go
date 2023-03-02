@@ -14,11 +14,7 @@ import (
 )
 
 func Run() {
-	if config.Conf.System.Env == "local" {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-	}
+	gin.SetMode(config.Conf.System.Env)
 
 	engine := gin.Default()
 	engine.SetFuncMap(utils.GetTemplateFuncMap())
