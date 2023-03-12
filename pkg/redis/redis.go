@@ -19,6 +19,7 @@ func init() {
 		DB:       gconv.Int(r.DB),
 		PoolSize: 10,
 	})
+
 	if str, err := RD.Ping(context.Background()).Result(); err != nil || str != "PONG" {
 		log.Fatalf("redis connect ping failed, err: %v", err)
 	}

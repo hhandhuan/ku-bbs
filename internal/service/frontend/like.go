@@ -1,7 +1,9 @@
 package frontend
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/entity/frontend"
@@ -9,7 +11,9 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
 	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/redis"
 	"gorm.io/gorm"
+	"time"
 )
 
 func LikeService(ctx *gin.Context) *SLike {
@@ -22,6 +26,21 @@ type SLike struct {
 
 // Like 点赞提交
 func (s *SLike) Like(req *frontend.LikeReq) error {
+
+	auth := s.ctx.Auth()
+
+	lockKey := fmt.Sprintf("user:%d:source:%d:like", auth.ID, req.SourceID)
+
+	val, err := redis.RD.SetNX(context.Background(), lockKey, 1, time.Second*10).Result()
+	if err != nil {
+		return errors.New("点赞失败，请稍后在试")
+	}
+
+	if !val {
+		return errors.New("点赞失败, 操作太频繁")
+	}
+
+	defer redis.RD.Del(context.Background(), lockKey)
 
 	liked, err := s.IsLiked(req.SourceID, req.SourceType)
 	if err != nil {
@@ -48,17 +67,17 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 			"like_count": gorm.Expr("like_count + ?", 1),
 		}
 
-		if req.SourceType == consts.TopicSource {
+		switch req.SourceType {
+		case consts.TopicSource:
 			u := tx.Model(&model.Topics{}).Where("id", req.SourceID).Updates(data)
 			if u.Error != nil || u.RowsAffected <= 0 {
 				return errors.New("点赞失败，请稍后在试")
 			}
-			return nil
-		}
-
-		u := tx.Model(&model.Comments{}).Where("id", req.SourceID).Updates(data)
-		if u.Error != nil || u.RowsAffected <= 0 {
-			return errors.New("点赞失败，请稍后在试")
+		default:
+			u := tx.Model(&model.Comments{}).Where("id", req.SourceID).Updates(data)
+			if u.Error != nil || u.RowsAffected <= 0 {
+				return errors.New("点赞失败，请稍后在试")
+			}
 		}
 
 		return nil
@@ -68,13 +87,15 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 		return err
 	}
 
-	sub := remindSub.New()
-	sub.Attach(&remindSub.LikeObs{
+	obs := &remindSub.LikeObs{
 		Sender:     s.ctx.Auth().ID,
 		Receiver:   req.TargetUserID,
 		SourceID:   req.SourceID,
 		SourceType: req.SourceType,
-	})
+	}
+
+	sub := remindSub.New()
+	sub.Attach(obs)
 	sub.Notify()
 
 	return nil
