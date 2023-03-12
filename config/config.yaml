@@ -6,7 +6,8 @@ app:
   visitMode: "guest" # 访问模式 auth-需登录才能访问 / guest-无需登录访问
 system:
   env: "debug" # debug/test/release
-  addr: "8081"
+  addr: ":8081"
+  shutdownWaitTime: 5
 session:
   name: "ku-bbs"
   secret: "123456"
