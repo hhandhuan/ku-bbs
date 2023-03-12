@@ -45,8 +45,9 @@ type redis struct {
 }
 
 type system struct {
-	Env  string `yaml:"env"`
-	Addr string `yaml:"addr"`
+	Env              string `yaml:"env"`
+	Addr             string `yaml:"addr"`
+	ShutdownWaitTime int    `yaml:"shutdownWaitTime"`
 }
 
 type conf struct {
