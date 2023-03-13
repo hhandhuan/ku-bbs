@@ -2,16 +2,17 @@ package webserver
 
 import (
 	"context"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-gonic/gin"
-	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
+	"github.com/hhandhuan/ku-bbs/pkg/config"
 
 	"github.com/hhandhuan/ku-bbs/internal/route"
 	"github.com/hhandhuan/ku-bbs/pkg/utils"

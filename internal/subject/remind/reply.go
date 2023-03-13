@@ -2,9 +2,10 @@ package remind
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
-	"log"
 )
 
 // ReplyObs 回复评论提醒
