@@ -1,9 +1,10 @@
 package remind
 
 import (
+	"log"
+
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
-	"log"
 )
 
 // FollowObs 关注提醒

@@ -3,10 +3,11 @@ package remind
 import (
 	"errors"
 	"fmt"
+	"log"
+
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"gorm.io/gorm"
-	"log"
 )
 
 // CommentObs 评论话题提醒
