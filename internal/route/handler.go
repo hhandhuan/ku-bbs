@@ -18,7 +18,7 @@ func isAdmin(ctx *gin.Context) {
 
 // visitor 访问者
 func visitor(ctx *gin.Context) {
-	if s := srv.Context(ctx); config.Conf.App.VisitMode == "auth" && !s.Check() {
+	if s := srv.Context(ctx); config.GetInstance().App.VisitMode == "auth" && !s.Check() {
 		s.To("/login").WithError("请登录后，再继续操作").Redirect()
 		ctx.Abort()
 		return

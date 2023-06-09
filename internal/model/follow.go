@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 )
 
@@ -18,5 +18,5 @@ type FollowModel struct {
 }
 
 func Follow() *FollowModel {
-	return &FollowModel{M: db.DB.Model(&Follows{}), table: "follows"}
+	return &FollowModel{M: mysql.GetInstance().Model(&Follows{}), table: "follows"}
 }

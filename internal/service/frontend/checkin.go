@@ -2,6 +2,7 @@ package frontend
 
 import (
 	"errors"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"log"
 	"time"
 
@@ -9,7 +10,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
-	"github.com/hhandhuan/ku-bbs/pkg/db"
 	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 )
@@ -36,7 +36,7 @@ func (s *SCheckin) Store() error {
 		return errors.New("请勿重复签到")
 	}
 
-	err := db.DB.Transaction(func(tx *gorm.DB) error {
+	err := mysql.GetInstance().Transaction(func(tx *gorm.DB) error {
 		if checkin.ID > 0 {
 			preDate := time.Now().AddDate(0, 0, -1).Format("2006-01-02")
 			data := map[string]interface{}{

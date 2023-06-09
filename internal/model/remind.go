@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -24,5 +24,5 @@ type RemindModel struct {
 }
 
 func Remind() *RemindModel {
-	return &RemindModel{M: db.DB.Model(&Reminds{}), Table: "reminds"}
+	return &RemindModel{M: mysql.GetInstance().Model(&Reminds{}), Table: "reminds"}
 }

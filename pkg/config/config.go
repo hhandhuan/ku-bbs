@@ -1,22 +1,22 @@
 package config
 
 import (
+	"flag"
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
 )
 
-var Conf *conf
-
-type db struct {
-	Host string `yaml:"host"`
-	Port string `yaml:"port"`
-	Name string `yaml:"name"`
-	Pass string `yaml:"pass"`
-	DB   string `yaml:"db"`
+type Mysql struct {
+	Host  string `yaml:"host"`
+	Port  string `yaml:"port"`
+	Name  string `yaml:"name"`
+	Pass  string `yaml:"pass"`
+	DB    string `yaml:"db"`
+	Debug bool   `yaml:"debug"`
 }
 
-type app struct {
+type App struct {
 	Version   string `yaml:"version"`
 	Name      string `yaml:"name"`
 	Desc      string `yaml:"desc"`
@@ -24,19 +24,19 @@ type app struct {
 	VisitMode string `yaml:"visitMode"`
 }
 
-type session struct {
+type Session struct {
 	Name   string `yaml:"name"`
 	Secret string `yaml:"secret"`
 }
 
-type upload struct {
+type Upload struct {
 	Path           string   `yaml:"path"`
 	ImageExt       []string `yaml:"imageExt"`
 	AvatarFileSize int64    `yaml:"avatarFileSize"`
 	TopicFileSize  int64    `yaml:"topicFileSize"`
 }
 
-type redis struct {
+type Redis struct {
 	Host        string `yaml:"host"`
 	Port        string `yaml:"port"`
 	Pass        string `yaml:"pass"`
@@ -44,30 +44,53 @@ type redis struct {
 	IdleTimeout string `yaml:"idleTimeout"`
 }
 
-type system struct {
+type System struct {
 	Env              string `yaml:"env"`
 	Addr             string `yaml:"addr"`
 	ShutdownWaitTime int    `yaml:"shutdownWaitTime"`
 }
 
-type conf struct {
-	App     app     `yaml:"app"`
-	System  system  `yaml:"system"`
-	DB      db      `yaml:"db"`
-	Session session `yaml:"session"`
-	Upload  upload  `yaml:"upload"`
-	Redis   redis   `yaml:"redis"`
+type Logger struct {
+	Path       string `yaml:"path"`
+	Level      int    `yaml:"level"`
+	MaxSize    int    `yaml:"maxSize"`
+	MaxBackups int    `yaml:"maxBackups"`
+	MaxAge     int    `yaml:"maxAge"`
+	Compress   bool   `yaml:"compress"`
 }
 
-func init() {
-	b, err := os.ReadFile("../config/config.yaml")
+type Config struct {
+	App     *App     `yaml:"app"`
+	System  *System  `yaml:"system"`
+	Mysql   *Mysql   `yaml:"db"`
+	Session *Session `yaml:"session"`
+	Upload  *Upload  `yaml:"upload"`
+	Redis   *Redis   `yaml:"redis"`
+	Logger  *Logger  `yaml:"logger"`
+}
+
+var instance *Config
+
+func GetInstance() *Config {
+	return instance
+}
+
+var (
+	path = flag.String("cfg", "../config/config.yaml", "config file path")
+)
+
+func Initialize() {
+	flag.Parse()
+	buf, err := os.ReadFile(*path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	var c *conf
-	err = yaml.Unmarshal(b, &c)
+
+	var c Config
+	err = yaml.Unmarshal(buf, &c)
 	if err != nil {
 		log.Fatal(err)
 	}
-	Conf = c
+
+	instance = &c
 }

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -21,5 +21,5 @@ type IntegralLogModel struct {
 }
 
 func IntegralLog() *IntegralLogModel {
-	return &IntegralLogModel{M: db.DB.Model(&IntegralLogs{}), Table: "integral_logs"}
+	return &IntegralLogModel{M: mysql.GetInstance().Model(&IntegralLogs{}), Table: "integral_logs"}
 }

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 )
 
@@ -20,5 +20,5 @@ type LikeModel struct {
 }
 
 func Like() *LikeModel {
-	return &LikeModel{M: db.DB.Model(&Likes{}), table: "likes"}
+	return &LikeModel{M: mysql.GetInstance().Model(&Likes{}), table: "likes"}
 }

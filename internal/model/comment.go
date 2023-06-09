@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 )
 
@@ -22,5 +22,5 @@ type CommentModel struct {
 }
 
 func Comment() *CommentModel {
-	return &CommentModel{M: db.DB.Model(&Comments{}), Table: "comments"}
+	return &CommentModel{M: mysql.GetInstance().Model(&Comments{}), Table: "comments"}
 }

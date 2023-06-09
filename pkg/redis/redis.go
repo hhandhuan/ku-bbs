@@ -9,18 +9,19 @@ import (
 	"log"
 )
 
-var RD *redis.Client
+var instance *redis.Client
 
-func init() {
-	r := config.Conf.Redis
-	RD = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", r.Host, gconv.Int(r.Port)),
-		Password: r.Pass,
-		DB:       gconv.Int(r.DB),
+func GetInstance() *redis.Client {
+	return instance
+}
+func Initialize(conf *config.Redis) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", conf.Host, gconv.Int(conf.Port)),
+		Password: conf.Pass,
+		DB:       gconv.Int(conf.DB),
 		PoolSize: 10,
 	})
-
-	if str, err := RD.Ping(context.Background()).Result(); err != nil || str != "PONG" {
+	if str, err := client.Ping(context.Background()).Result(); err != nil || str != "PONG" {
 		log.Fatalf("redis connect ping failed, err: %v", err)
 	}
 }

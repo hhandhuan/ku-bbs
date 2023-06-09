@@ -10,7 +10,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"github.com/hhandhuan/ku-bbs/pkg/redis"
 	"gorm.io/gorm"
 	"time"
@@ -31,7 +31,7 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 
 	lockKey := fmt.Sprintf("user:%d:source:%d:like", auth.ID, req.SourceID)
 
-	val, err := redis.RD.SetNX(context.Background(), lockKey, 1, time.Second*10).Result()
+	val, err := redis.GetInstance().SetNX(context.Background(), lockKey, 1, time.Second*10).Result()
 	if err != nil {
 		return errors.New("点赞失败，请稍后在试")
 	}
@@ -40,7 +40,7 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 		return errors.New("点赞失败, 操作太频繁")
 	}
 
-	defer redis.RD.Del(context.Background(), lockKey)
+	defer redis.GetInstance().Del(context.Background(), lockKey)
 
 	liked, err := s.IsLiked(req.SourceID, req.SourceType)
 	if err != nil {
@@ -51,7 +51,7 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 		return errors.New("无法重复点赞")
 	}
 
-	err = db.DB.Transaction(func(tx *gorm.DB) error {
+	err = mysql.GetInstance().Transaction(func(tx *gorm.DB) error {
 		c := tx.Create(&model.Likes{
 			UserId:       s.ctx.Auth().ID,
 			SourceType:   req.SourceType,

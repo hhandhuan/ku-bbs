@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -19,5 +19,5 @@ type SystemUserNoticesModel struct {
 }
 
 func SystemUserNotice() *SystemUserNoticesModel {
-	return &SystemUserNoticesModel{M: db.DB.Model(&SystemUserNotices{}), Table: "system_user_notices"}
+	return &SystemUserNoticesModel{M: mysql.GetInstance().Model(&SystemUserNotices{}), Table: "system_user_notices"}
 }

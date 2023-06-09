@@ -3,15 +3,14 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"log"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/entity/frontend"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
-	"github.com/hhandhuan/ku-bbs/pkg/db"
-
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"github.com/hhandhuan/ku-bbs/internal/model"
@@ -148,7 +147,7 @@ func (s *SComment) Delete(id uint64) error {
 		return errors.New("权限不足")
 	}
 
-	err := db.DB.Transaction(func(tx *gorm.DB) error {
+	err := mysql.GetInstance().Transaction(func(tx *gorm.DB) error {
 		d := tx.Delete(&model.Comments{}, id)
 		if d.Error != nil || d.RowsAffected <= 0 {
 			return fmt.Errorf("delete comment error: %v", d.Error)

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 )
 
@@ -23,5 +23,5 @@ type ReportModel struct {
 }
 
 func Report() *ReportModel {
-	return &ReportModel{M: db.DB.Model(&Reports{}), Table: "reports"}
+	return &ReportModel{M: mysql.GetInstance().Model(&Reports{}), Table: "reports"}
 }

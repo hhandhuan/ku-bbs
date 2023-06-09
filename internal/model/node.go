@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 )
 
@@ -22,5 +22,5 @@ type NodeModel struct {
 }
 
 func Node() *NodeModel {
-	return &NodeModel{M: db.DB.Model(&Nodes{}), table: "nodes"}
+	return &NodeModel{M: mysql.GetInstance().Model(&Nodes{}), table: "nodes"}
 }

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -30,5 +30,5 @@ type UserModel struct {
 }
 
 func User() *UserModel {
-	return &UserModel{M: db.DB.Model(&Users{}), Table: "users"}
+	return &UserModel{M: mysql.GetInstance().Model(&Users{}), Table: "users"}
 }

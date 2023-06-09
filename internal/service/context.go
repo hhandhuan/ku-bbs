@@ -27,7 +27,7 @@ func Context(ctx *gin.Context) *BaseContext {
 		Ctx:     ctx,
 		session: sessions.Default(ctx),
 		path:    "/",
-		title:   config.Conf.App.Name,
+		title:   config.GetInstance().App.Name,
 	}
 	return stx
 }
@@ -193,7 +193,7 @@ func (c *BaseContext) unread() bool {
 // View 模版返回
 func (c *BaseContext) View(tpl string, data interface{}) {
 	obj := gin.H{
-		versionKey: config.Conf.App.Version,
+		versionKey: config.GetInstance().App.Version,
 		errKey:     c.session.Get(errKey),
 		msgKey:     c.session.Get(msgKey),
 		userKey:    c.Auth(),

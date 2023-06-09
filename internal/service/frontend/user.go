@@ -63,7 +63,7 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 
 // genAvatar 生成用户默认头像
 func (s *SUser) genAvatar(name string, gender uint) (string, error) {
-	path := fmt.Sprintf("%s/users/", config.Conf.Upload.Path)
+	path := fmt.Sprintf("%s/users/", config.GetInstance().Upload.Path)
 
 	// 检查目录是否存在
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -73,7 +73,7 @@ func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 
 	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
-	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
+	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 
 	if err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath); err != nil {
 		log.Println(err)
@@ -185,7 +185,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	}
 
 	// 目前限制头像大小
-	if file.Size > 1024*1024*config.Conf.Upload.AvatarFileSize {
+	if file.Size > 1024*1024*config.GetInstance().Upload.AvatarFileSize {
 		return errors.New("仅支持小于 1M 大小的图片")
 	}
 
@@ -193,13 +193,13 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	ext := arr[len(arr)-1]
 
 	// 检查图片格式
-	if !gstr.InArray(config.Conf.Upload.ImageExt, ext) {
+	if !gstr.InArray(config.GetInstance().Upload.ImageExt, ext) {
 		return errors.New("file format not supported")
 	}
 
 	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
-	uploadPath := fmt.Sprintf("%s/%s", config.Conf.Upload.Path, avatarPath)
+	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 
 	if err := ctx.SaveUploadedFile(file, uploadPath); err != nil {
 		return errors.New("修改头像失败")

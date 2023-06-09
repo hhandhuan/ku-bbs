@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -20,5 +20,5 @@ type CheckinModel struct {
 }
 
 func Checkin() *CheckinModel {
-	return &CheckinModel{M: db.DB.Model(&Checkins{}), Table: "checkins"}
+	return &CheckinModel{M: mysql.GetInstance().Model(&Checkins{}), Table: "checkins"}
 }

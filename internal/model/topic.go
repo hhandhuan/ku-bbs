@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/hhandhuan/ku-bbs/internal/model/column"
-	"github.com/hhandhuan/ku-bbs/pkg/db"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
 	"time"
 )
@@ -33,5 +33,5 @@ type TopicModel struct {
 }
 
 func Topic() *TopicModel {
-	return &TopicModel{M: db.DB.Model(&Topics{}), Table: "topics"}
+	return &TopicModel{M: mysql.GetInstance().Model(&Topics{}), Table: "topics"}
 }

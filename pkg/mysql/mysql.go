@@ -1,4 +1,4 @@
-package db
+package mysql
 
 import (
 	"fmt"
@@ -11,17 +11,21 @@ import (
 	gormDefaultLogger "gorm.io/gorm/logger"
 )
 
-var DB *gorm.DB
+var instance *gorm.DB
 
-// MysqlInit 初始化数据库
-func init() {
-	c := config.Conf.DB
-	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", c.Name, c.Pass, c.Host, c.Port, c.DB)
+func GetInstance() *gorm.DB {
+	return instance
+}
 
-	logger := gormDefaultLogger.Default.LogMode(gormDefaultLogger.Info)
-	if config.Conf.System.Env == "prod" {
-		logger = gormDefaultLogger.Default.LogMode(gormDefaultLogger.Error)
+func Initialize(conf *config.Mysql) {
+	dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", conf.Name, conf.Pass, conf.Host, conf.Port, conf.DB)
+
+	logMode := gormDefaultLogger.Error
+	if conf.Debug {
+		logMode = gormDefaultLogger.Info
 	}
+
+	logger := gormDefaultLogger.Default.LogMode(logMode)
 
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
@@ -44,5 +48,5 @@ func init() {
 	db.SetMaxIdleConns(10)           // 设置空闲的最大连接数
 	db.SetMaxOpenConns(40)           // 设置与数据库的最大打开连接数
 	db.SetConnMaxLifetime(time.Hour) // 设置可以重用连接的最长时间
-	DB = gormDB
+	instance = gormDB
 }
