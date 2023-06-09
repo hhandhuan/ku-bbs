@@ -19,15 +19,15 @@ const (
 	userKey    = "user"
 	unreadKey  = "unread"
 	versionKey = "version"
-	titleKey   = "title"
+	nameKey    = "name"
 )
 
 func Context(ctx *gin.Context) *BaseContext {
 	stx := &BaseContext{
 		Ctx:     ctx,
-		session: sessions.Default(ctx),
 		path:    "/",
-		title:   config.GetInstance().App.Name,
+		session: sessions.Default(ctx),
+		name:    config.GetInstance().App.Name,
 	}
 	return stx
 }
@@ -36,7 +36,7 @@ type BaseContext struct {
 	Ctx     *gin.Context
 	session sessions.Session
 	path    string
-	title   string
+	name    string
 }
 
 // Redirect 处理跳转
@@ -159,7 +159,7 @@ func (c *BaseContext) Forget() {
 
 // SetTitle 设置模版标题
 func (c *BaseContext) SetTitle(title string) *BaseContext {
-	c.title = title
+	c.name = title
 	return c
 }
 
@@ -200,7 +200,7 @@ func (c *BaseContext) View(tpl string, data interface{}) {
 		unreadKey:  c.unread(),
 		dataKey:    data,
 		flashKey:   c.ParseFlash(),
-		titleKey:   c.title,
+		nameKey:    c.name,
 	}
 	c.clear()
 	c.Ctx.HTML(http.StatusOK, tpl, obj)

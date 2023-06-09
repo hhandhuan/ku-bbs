@@ -3,6 +3,7 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
 	"log"
 	"os"
 	"strings"
@@ -185,7 +186,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	}
 
 	// 目前限制头像大小
-	if file.Size > 1024*1024*config.GetInstance().Upload.AvatarFileSize {
+	if file.Size > 1024*1024*config.GetInstance().Upload.Filesize {
 		return errors.New("仅支持小于 1M 大小的图片")
 	}
 
@@ -193,7 +194,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	ext := arr[len(arr)-1]
 
 	// 检查图片格式
-	if !gstr.InArray(config.GetInstance().Upload.ImageExt, ext) {
+	if !gstr.InArray(config.GetInstance().Upload.Ext, ext) {
 		return errors.New("file format not supported")
 	}
 
@@ -201,7 +202,9 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 
-	if err := ctx.SaveUploadedFile(file, uploadPath); err != nil {
+	err = ctx.SaveUploadedFile(file, uploadPath)
+	if err != nil {
+		logger.GetInstance().Error().Err(err).Msg("")
 		return errors.New("修改头像失败")
 	}
 
@@ -209,7 +212,6 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 	savePath := "/assets/upload/" + avatarPath
 	u := model.User().M.Where("id", userID).Update("avatar", savePath)
 	if u.Error != nil || u.RowsAffected <= 0 {
-		log.Println(u.Error)
 		return errors.New("修改头像失败")
 	}
 

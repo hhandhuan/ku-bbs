@@ -30,10 +30,9 @@ type Session struct {
 }
 
 type Upload struct {
-	Path           string   `yaml:"path"`
-	ImageExt       []string `yaml:"imageExt"`
-	AvatarFileSize int64    `yaml:"avatarFileSize"`
-	TopicFileSize  int64    `yaml:"topicFileSize"`
+	Path     string   `yaml:"path"`
+	Ext      []string `yaml:"ext"`
+	Filesize int64    `yaml:"filesize"`
 }
 
 type Redis struct {

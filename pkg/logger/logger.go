@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"fmt"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"io"
@@ -25,7 +24,6 @@ func Initialize(config *config.Logger) {
 		return utils.ResolvePathFileName(file) + ":" + strconv.Itoa(line)
 	}
 
-	fmt.Println(123213)
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 	zerolog.TimeFieldFormat = time.RFC3339Nano
 
@@ -38,7 +36,7 @@ func Initialize(config *config.Logger) {
 
 	fileLogger := &lumberjack.Logger{
 		Filename:   config.Path,
-		MaxSize:    config.MaxSize, // 5M
+		MaxSize:    config.MaxSize,
 		MaxBackups: config.MaxBackups,
 		MaxAge:     config.MaxAge,
 		Compress:   config.Compress,

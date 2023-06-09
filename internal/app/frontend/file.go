@@ -28,7 +28,7 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 	}
 
 	// 目前限制 M 图片大小
-	if file.Size > 1024*1024*config.GetInstance().Upload.TopicFileSize {
+	if file.Size > 1024*1024*config.GetInstance().Upload.Filesize {
 		s.MDFileJson(0, "仅支持小于 2M 大小的图片", "")
 		return
 	}
@@ -37,7 +37,7 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 	ext := arr[len(arr)-1]
 
 	// 检查图片格式
-	if !gstr.InArray(config.GetInstance().Upload.ImageExt, ext) {
+	if !gstr.InArray(config.GetInstance().Upload.Ext, ext) {
 		s.MDFileJson(0, "file format not supported", "")
 		return
 	}
