@@ -1,29 +1,29 @@
 app:
-  version: "0.0.1"
-  name: "酷社区"
-  desc: "酷社区"
-  keywords: "酷社区"
-  visitMode: "guest"
+  version: 0.0.1
+  name: 酷社区
+  desc: 酷社区
+  keywords: 酷社区
+  visitMode: guest
 system:
-  env: "debug"
-  addr: ":8081"
+  env: debug
+  addr: :8081
   shutdownWaitTime: 0
 session:
-  name: "ku-bbs"
-  secret: "123456"
+  name: ku-bbs
+  secret: 123456
 db:
-  host: "127.0.0.1"
-  port: "3306"
-  name: "root"
-  pass: ""
-  db: "ku-bbs"
+  host: 127.0.0.1
+  port: 3306
+  name: root
+  pass:
+  db: ku-bbs
   debug: true
 redis:
-  host: "127.0.0.1"
-  pass: ""
-  port: "6379"
-  db: "1"
-  idleTimeout: "10"
+  host: 127.0.0.1
+  pass:
+  port: 6379
+  db: 1
+  idleTimeout: 10
   debug: false
 upload:
   path: ../assets/upload
