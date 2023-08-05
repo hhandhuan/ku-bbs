@@ -10,6 +10,7 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	remindSub "github.com/hhandhuan/ku-bbs/internal/subject/remind"
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
 	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"github.com/hhandhuan/ku-bbs/pkg/redis"
 	"gorm.io/gorm"
@@ -33,6 +34,7 @@ func (s *SLike) Like(req *frontend.LikeReq) error {
 
 	val, err := redis.GetInstance().SetNX(context.Background(), lockKey, 1, time.Second*10).Result()
 	if err != nil {
+		logger.GetInstance().Error().Msgf("set setnx error: %v", err)
 		return errors.New("点赞失败，请稍后在试")
 	}
 

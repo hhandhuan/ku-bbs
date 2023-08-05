@@ -15,7 +15,7 @@ type cache struct {
 	store *redis.Client
 }
 
-func (c *cache) Get(key string, obj interface{}) interface{} {
+func (c *cache) Get(key string, obj interface{}) error {
 	return c.store.Get(context.Background(), key).Scan(&obj)
 }
 

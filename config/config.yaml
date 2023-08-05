@@ -17,6 +17,7 @@ db:
   name: "root"
   pass: ""
   db: "ku-bbs"
+  debug: true
 redis:
   host: "127.0.0.1"
   pass: ""

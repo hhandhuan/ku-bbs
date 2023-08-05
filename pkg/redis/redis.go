@@ -6,7 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
-	"log"
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
 )
 
 var instance *redis.Client
@@ -22,6 +22,7 @@ func Initialize(conf *config.Redis) {
 		PoolSize: 10,
 	})
 	if str, err := client.Ping(context.Background()).Result(); err != nil || str != "PONG" {
-		log.Fatalf("redis connect ping failed, err: %v", err)
+		logger.GetInstance().Fatal().Msgf("redis connect ping failed, err: %v", err)
 	}
+	instance = client
 }

@@ -183,29 +183,24 @@
                 <!-- 评论编辑器 --->
                 <div class="mt-2 rounded-2" id="comment-form">
                     {{if .user}}
-                    {{if eq $.data.topic.CommentState 1}}
-                    <div class="mb-2 reply-div"></div>
-                    <form action="/comments" method="post">
-                        <input type="hidden" name="topic_id" value="{{.data.topic.ID}}">
-                        <input type="hidden" name="reply_id" value="0" class="reply_id">
-                        <input type="hidden" name="target_id" value="0" class="target_id">
-                        <input type="hidden" name="md_content" id="md_content">
-                        <input type="hidden" name="content" id="content">
-                        <div id="md-editor" class="rounded-2"></div>
-                        <div class="rounded-1 preview-input"></div>
-                        <div class="form-outline flex-fill mt-2">
-                            <button type="button" class="btn btn-dark col-2 submit-btn">提交</button>
-                        </div>
-                    </form>
-                    {{else}}
-                    <div class="alert alert-warning shadow-sm rounded-2 p-4">此话题已关闭讨论，不再接受任何回复。</div>
-                    {{end}}
+                        <div class="mb-2 reply-div"></div>
+                        <form action="/comments" method="post" class="{{if eq $.data.topic.CommentState 1}} d-block {{else}} d-none {{end}}">
+                            <input type="hidden" name="topic_id" value="{{.data.topic.ID}}">
+                            <input type="hidden" name="reply_id" value="0" class="reply_id">
+                            <input type="hidden" name="target_id" value="0" class="target_id">
+                            <input type="hidden" name="md_content" id="md_content">
+                            <input type="hidden" name="content" id="content">
+                            <div id="md-editor" class="rounded-2"></div>
+                            <div class="rounded-1 preview-input"></div>
+                            <div class="form-outline flex-fill mt-2">
+                                <button type="button" class="btn btn-dark col-2 submit-btn">提交</button>
+                            </div>
+                        </form>
+                        <div class="alert alert-warning shadow-sm rounded-2 p-4 {{if eq $.data.topic.CommentState 1}} d-none {{else}} d-block {{end}}">此话题已关闭讨论，不再接受任何回复。</div>
                     {{else}}
                     <div class="bg-white p-4 rounded-2 shadow-sm">
-                        需要 <a href="/login?back=/topics/{{.data.topic.ID}}"
-                                class="text-decoration-none text-primary">登录</a>
-                        后方可回复, 如果你还没有账号请 <a href="/register?back=/topics/{{.data.topic.ID}}"
-                                                          class="text-decoration-none text-primary">注册新账号</a>
+                        需要 <a href="/login?back=/topics/{{.data.topic.ID}}" class="text-decoration-none text-primary">登录</a> 后方可回复, 如果你还没有账号请
+                        <a href="/register?back=/topics/{{.data.topic.ID}}" class="text-decoration-none text-primary">注册新账号</a>
                     </div>
                     {{end}}
                 </div>
@@ -215,8 +210,7 @@
                 <div class="p-4 bg-white rounded-2 shadow-sm">
                     <div class="text-center">
                         <a href="/user?id={{.data.topic.Publisher.ID}}">
-                            <img src="{{.data.topic.Publisher.Avatar}}" alt="avatar" class="rounded-2 img-fluid"
-                                 width="150">
+                            <img src="{{.data.topic.Publisher.Avatar}}" alt="avatar" class="rounded-2 img-fluid" width="150">
                         </a>
                         <p class="my-3 fw-bold">{{.data.topic.Publisher.Name}}</p>
                         {{if .user}}
@@ -256,8 +250,8 @@
         </div>
     </div>
 </div>
-<script src="/assets/static/frontend/js/highlight.min.js"></script>
 <script src="/assets/static/frontend/js/jquery.min.js"></script>
+<script src="/assets/static/frontend/js/highlight.min.js"></script>
 <script src="/assets/static/editor/editormd.min.js"></script>
 <script>
     $(function () {

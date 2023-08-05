@@ -32,7 +32,6 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 	// 检查话题是否存在
 	f := model.Topic().M.Where("id = ?", req.TopicId).Find(&topic)
 	if f.Error != nil {
-		log.Println("delete topic error: ", f.Error)
 		return 0, f.Error
 	}
 	if topic.ID <= 0 {
@@ -152,12 +151,6 @@ func (s *SComment) Delete(id uint64) error {
 		if d.Error != nil || d.RowsAffected <= 0 {
 			return fmt.Errorf("delete comment error: %v", d.Error)
 		}
-		//u := tx.Model(&model.Topics{}).Where("id", comment.TopicId).Updates(map[string]interface{}{
-		//	"comment_count": gorm.Expr("comment_count - 1"),
-		//})
-		//if u.Error != nil || u.RowsAffected <= 0 {
-		//	return fmt.Errorf("delete comment error: %v", d.Error)
-		//}
 		return nil
 	})
 
