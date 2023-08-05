@@ -22,7 +22,7 @@ type SReport struct {
 func (s *SReport) Store(req *fe.SubmitReportReq) error {
 	if req.SourceType == consts.ReportTopicSource {
 		var topic *model.Topics
-		f := model.Topic().M.Where("id", req.TargetID).Find(&topic)
+		f := model.Topic().Where("id", req.TargetID).Find(&topic)
 		if f.Error != nil {
 			return fmt.Errorf("服务内部错误: %v", f.Error)
 		}
@@ -31,7 +31,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 		}
 
 		var report *model.Reports
-		f = model.Report().M.Where(map[string]interface{}{
+		f = model.Report().Where(map[string]interface{}{
 			"source_id":   req.SourceID,
 			"source_type": req.SourceType,
 			"target_id":   req.TargetID,
@@ -44,7 +44,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 			return errors.New("举报已存在")
 		}
 
-		c := model.Report().M.Create(&model.Reports{
+		c := model.Report().Create(&model.Reports{
 			UserId:     s.ctx.Auth().ID,
 			Remark:     req.Remark,
 			SourceId:   req.SourceID,
@@ -59,7 +59,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 		return nil
 	} else {
 		var comment *model.Comments
-		f := model.Comment().M.Where("id", req.SourceID).Find(&comment)
+		f := model.Comment().Where("id", req.SourceID).Find(&comment)
 		if f.Error != nil {
 			return fmt.Errorf("服务内部错误: %v", f.Error)
 		}
@@ -68,7 +68,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 		}
 
 		var report *model.Reports
-		f = model.Report().M.Where(map[string]interface{}{
+		f = model.Report().Where(map[string]interface{}{
 			"source_id":   req.SourceID,
 			"source_type": req.SourceType,
 			"target_id":   req.TargetID,
@@ -81,7 +81,7 @@ func (s *SReport) Store(req *fe.SubmitReportReq) error {
 			return errors.New("举报已存在")
 		}
 
-		c := model.Report().M.Create(&model.Reports{
+		c := model.Report().Create(&model.Reports{
 			UserId:     s.ctx.Auth().ID,
 			Remark:     req.Remark,
 			SourceId:   req.SourceID,

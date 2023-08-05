@@ -30,7 +30,7 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 
 	var topic *model.Topics
 	// 检查话题是否存在
-	f := model.Topic().M.Where("id = ?", req.TopicId).Find(&topic)
+	f := model.Topic().Where("id = ?", req.TopicId).Find(&topic)
 	if f.Error != nil {
 		return 0, f.Error
 	}
@@ -49,7 +49,7 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 		Content:   req.Content,
 		MDContent: req.MDContent,
 	}
-	r := model.Comment().M.Create(comment)
+	r := model.Comment().Create(comment)
 	if r.Error != nil {
 		return 0, errors.New("服务内部错误")
 	}
@@ -63,7 +63,7 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 		"last_reply_at": time.Now(),
 	}
 
-	r = model.Topic().M.Where("id = ?", req.TopicId).Updates(data)
+	r = model.Topic().Where("id = ?", req.TopicId).Updates(data)
 	if r.Error != nil {
 		return 0, errors.New("服务内部错误")
 	}
@@ -97,7 +97,7 @@ func (s *SComment) Submit(req *frontend.SubmitCommentReq) (uint64, error) {
 func (s *SComment) GetList(topicId, authorId uint64) ([]*frontend.Comment, error) {
 	var list []*frontend.Comment
 
-	query := model.Comment().M
+	query := model.Comment()
 	if s.ctx.Check() {
 		query = query.Preload("Like", "user_id = ? AND source_type = ?", s.ctx.Auth().ID, consts.CommentSource)
 	}
@@ -136,7 +136,7 @@ func (s *SComment) Delete(id uint64) error {
 	}
 
 	var comment *model.Comments
-	f := model.Comment().M.Where("id", id).Find(&comment)
+	f := model.Comment().Where("id", id).Find(&comment)
 	if f.Error != nil || comment == nil {
 		log.Println(f.Error)
 		return errors.New("删除失败")

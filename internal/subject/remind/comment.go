@@ -20,7 +20,7 @@ type CommentObs struct {
 // Update 评论话题提醒
 func (o *CommentObs) Update() {
 	var topic model.Topics
-	r := model.Topic().M.Where("id", o.TopicID).First(&topic)
+	r := model.Topic().Where("id", o.TopicID).First(&topic)
 	if r.Error != nil && !errors.Is(r.Error, gorm.ErrRecordNotFound) {
 		log.Println(r.Error)
 		return
@@ -33,12 +33,12 @@ func (o *CommentObs) Update() {
 
 	sourceUrl := fmt.Sprintf("/topics/%d?j=comment%d", o.TopicID, o.CommentId)
 
-	r = model.Remind().M.Create(&model.Reminds{
+	r = model.Remind().Create(&model.Reminds{
 		Sender:        o.Sender,
 		Receiver:      topic.UserId,
 		SourceId:      topic.ID,
 		SourceContent: topic.Title,
-		SourceType:    model.Topic().Table,
+		SourceType:    "topic",
 		SourceUrl:     sourceUrl,
 		Action:        consts.CommentTopicRemind,
 	})

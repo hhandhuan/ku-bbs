@@ -21,7 +21,7 @@ type sNode struct {
 func (s *sNode) GetList(req *eb.GetNodeListReq) (gin.H, error) {
 	var list []*model.Nodes
 
-	builder := model.Node().M
+	builder := model.Node()
 	if len(req.Keywords) > 0 {
 		builder = builder.Where("name like ?", fmt.Sprintf("%%%s%%", req.Keywords))
 	}
@@ -36,14 +36,14 @@ func (s *sNode) GetList(req *eb.GetNodeListReq) (gin.H, error) {
 // Create 创建节点
 func (s *sNode) Create(req *eb.CreateNodeReq) error {
 	var node *model.Nodes
-	f := model.Node().M.Where("name", req.Name).Or("alias", req.Alias).Find(&node)
+	f := model.Node().Where("name", req.Name).Or("alias", req.Alias).Find(&node)
 	if f.Error != nil {
 		return f.Error
 	}
 	if node.ID > 0 {
 		return errors.New("节点已存在，无法重复创建")
 	}
-	if c := model.Node().M.Create(&model.Nodes{
+	if c := model.Node().Create(&model.Nodes{
 		Name:  req.Name,
 		Alias: req.Alias,
 		Sort:  req.Sort,
@@ -59,7 +59,7 @@ func (s *sNode) Create(req *eb.CreateNodeReq) error {
 // Edit 编辑节点
 func (s *sNode) Edit(id uint64, req *eb.CreateNodeReq) error {
 	var node *model.Nodes
-	f := model.Node().M.Where("id != ? AND (name = ? OR alias = ?)", id, req.Name, req.Alias).Find(&node)
+	f := model.Node().Where("id != ? AND (name = ? OR alias = ?)", id, req.Name, req.Alias).Find(&node)
 	if f.Error != nil {
 		return f.Error
 	}
@@ -67,7 +67,7 @@ func (s *sNode) Edit(id uint64, req *eb.CreateNodeReq) error {
 		return errors.New("节点已存在，无法重复创建")
 	}
 
-	if c := model.Node().M.Where("id = ?", id).Updates(map[string]interface{}{
+	if c := model.Node().Where("id = ?", id).Updates(map[string]interface{}{
 		"name":  req.Name,
 		"alias": req.Alias,
 		"sort":  req.Sort,
@@ -83,7 +83,7 @@ func (s *sNode) Edit(id uint64, req *eb.CreateNodeReq) error {
 // GetDetail 获取详情
 func (s *sNode) GetDetail(id uint64) (*model.Nodes, error) {
 	var node *model.Nodes
-	c := model.Node().M.Where("id", id).Find(&node)
+	c := model.Node().Where("id", id).Find(&node)
 	if c.Error != nil {
 		return nil, c.Error
 	}
@@ -96,6 +96,6 @@ func (s *sNode) GetDetail(id uint64) (*model.Nodes, error) {
 
 // Delete 删除节点
 func (s *sNode) Delete(id int64) error {
-	err := model.Node().M.Where("id", id).Delete(&model.Nodes{}).Error
+	err := model.Node().Where("id", id).Delete(&model.Nodes{}).Error
 	return err
 }

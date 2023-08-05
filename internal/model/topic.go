@@ -27,11 +27,6 @@ type Topics struct {
 	LastReplyAt  *time.Time `gorm:"column:last_reply_at" db:"last_reply_at" json:"last_reply_at" form:"last_reply_at"` //最后回复时间
 }
 
-type TopicModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func Topic() *TopicModel {
-	return &TopicModel{M: mysql.GetInstance().Model(&Topics{}), Table: "topics"}
+func Topic() *gorm.DB {
+	return mysql.GetInstance().Model(&Topics{})
 }

@@ -127,7 +127,7 @@ func (c *BaseContext) Auth() *model.Users {
 // Refresh 刷新授权
 func (c *BaseContext) Refresh() {
 	var user model.Users
-	model.User().M.Where("id", c.Auth().ID).Find(&user)
+	model.User().Where("id", c.Auth().ID).Find(&user)
 	c.SetAuth(user)
 }
 
@@ -176,13 +176,13 @@ func (c *BaseContext) unread() bool {
 	UID := c.Auth().ID
 
 	// 提醒消息
-	r := model.Remind().M.Where("receiver", UID).Where("readed_at is null").Find(&remind)
+	r := model.Remind().Where("receiver", UID).Where("readed_at is null").Find(&remind)
 	if r.Error == nil && r.RowsAffected > 0 {
 		return true
 	}
 
 	// 未读系统消息
-	s := model.SystemUserNotice().M.Where("user_id", UID).Where("readed_at is null").Find(&notice)
+	s := model.SystemUserNotice().Where("user_id", UID).Where("readed_at is null").Find(&notice)
 	if s.Error == nil && s.RowsAffected > 0 {
 		return true
 	}

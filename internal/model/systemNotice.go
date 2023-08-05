@@ -14,11 +14,6 @@ type SystemNotices struct {
 	MDContent string `gorm:"column:md_content" db:"md_content" json:"md_content" form:"md_content"` //markdown 内容
 }
 
-type SystemNoticesModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func SystemNotice() *SystemNoticesModel {
-	return &SystemNoticesModel{M: mysql.GetInstance().Model(&SystemNotices{}), Table: "system_notices"}
+func SystemNotice() *gorm.DB {
+	return mysql.GetInstance().Model(&SystemNotices{})
 }

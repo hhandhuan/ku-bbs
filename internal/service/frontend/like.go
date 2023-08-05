@@ -108,7 +108,7 @@ func (s *SLike) IsLiked(id uint64, source string) (bool, error) {
 	user := s.ctx.Auth()
 
 	var like *model.Likes
-	f := model.Like().M.Where(&model.Likes{UserId: user.ID, SourceType: source, SourceId: id}).Find(&like)
+	f := model.Like().Where(&model.Likes{UserId: user.ID, SourceType: source, SourceId: id}).Find(&like)
 	if f.Error != nil {
 		return false, f.Error
 	} else {

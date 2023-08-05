@@ -74,7 +74,7 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		}
 	}
 
-	r := model.Topic().M.Create(data)
+	r := model.Topic().Create(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("发布话题失败，请稍后再试")
 	} else {
@@ -91,7 +91,7 @@ func (s *STopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 		uid = s.ctx.Auth().ID
 	}
 
-	query := model.Topic().M
+	query := model.Topic()
 	if uid > 0 {
 		query = query.Preload("Like", "user_id = ? AND source_type = ? AND state = ?", uid, consts.TopicSource, consts.Liked)
 	}
@@ -119,7 +119,7 @@ func (s *STopic) GetDetail(topicId uint64) (*fe.Topic, error) {
 		"view_count": gorm.Expr("view_count + ?", 1),
 	}
 
-	r = model.Topic().M.Where("id = ?", topicId).Updates(data)
+	r = model.Topic().Where("id = ?", topicId).Updates(data)
 	if r.Error != nil {
 		return nil, errors.New("服务内部错误")
 	}
@@ -148,7 +148,7 @@ func (s *STopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 		offset = (req.Page - 1) * limit
 	)
 
-	query := model.Topic().M
+	query := model.Topic()
 
 	sortMap := map[string]string{
 		"reply":  "type DESC,last_reply_at DESC",
@@ -160,7 +160,7 @@ func (s *STopic) GetList(req *fe.GetTopicListReq) (gin.H, error) {
 		query = query.Order(sort)
 	} else {
 		var node *model.Nodes
-		res := model.Node().M.Where("alias", req.Type).Limit(1).Find(&node)
+		res := model.Node().Where("alias", req.Type).Limit(1).Find(&node)
 		if res.Error != nil {
 			return nil, res.Error
 		}
@@ -205,7 +205,7 @@ func (s *STopic) Delete(ID uint64) error {
 	)
 
 	// 检查话题下是否存在评论
-	f := model.Comment().M.Unscoped().Where("topic_id = ?", ID).Find(&comment)
+	f := model.Comment().Unscoped().Where("topic_id = ?", ID).Find(&comment)
 	if f.Error != nil {
 		log.Println("delete topic error: ", f.Error)
 		return f.Error
@@ -215,7 +215,7 @@ func (s *STopic) Delete(ID uint64) error {
 	}
 
 	// 检查话题是否存在
-	f = model.Topic().M.Where("id = ?", ID).Find(&topic)
+	f = model.Topic().Where("id = ?", ID).Find(&topic)
 	if f.Error != nil {
 		log.Println("delete topic error: ", f.Error)
 		return f.Error
@@ -230,7 +230,7 @@ func (s *STopic) Delete(ID uint64) error {
 	}
 
 	// 删除话题
-	d := model.Topic().M.Delete(&model.Topics{}, ID)
+	d := model.Topic().Delete(&model.Topics{}, ID)
 	if d.Error != nil {
 		log.Println("delete topic error: ", d.Error)
 		return f.Error
@@ -249,7 +249,7 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 
 	var topic *model.Topics
 	// 检查话题是否存在
-	f := model.Topic().M.Where("id = ?", ID).Find(&topic)
+	f := model.Topic().Where("id = ?", ID).Find(&topic)
 	if f.Error != nil {
 		log.Println("delete topic error: ", f.Error)
 		return 0, f.Error
@@ -303,7 +303,7 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		}
 	}
 
-	r := model.Topic().M.Where("id = ?", ID).Updates(data)
+	r := model.Topic().Where("id = ?", ID).Updates(data)
 	if r.Error != nil || r.RowsAffected <= 0 {
 		return 0, errors.New("编辑话题失败，请稍后再试")
 	} else {
@@ -319,7 +319,7 @@ func (s *STopic) SettingCommentState(ID uint64) error {
 
 	var topic *model.Topics
 	// 检查话题是否存在
-	f := model.Topic().M.Where("id = ?", ID).Find(&topic)
+	f := model.Topic().Where("id = ?", ID).Find(&topic)
 	if f.Error != nil {
 		log.Println("delete topic error: ", f.Error)
 		return f.Error
@@ -337,7 +337,7 @@ func (s *STopic) SettingCommentState(ID uint64) error {
 		state = consts.DisableState
 	}
 	// 更新评论状态
-	d := model.Topic().M.Where("id", ID).Update("comment_state", state)
+	d := model.Topic().Where("id", ID).Update("comment_state", state)
 	if d.Error != nil {
 		log.Println("update topic state error: ", d.Error)
 		return f.Error

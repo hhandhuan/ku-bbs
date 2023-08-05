@@ -16,11 +16,6 @@ type Comments struct {
 	LikeCount uint64 `gorm:"column:like_count" db:"like_count" json:"like_count" form:"like_count"` //喜欢统计
 }
 
-type CommentModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func Comment() *CommentModel {
-	return &CommentModel{M: mysql.GetInstance().Model(&Comments{}), Table: "comments"}
+func Comment() *gorm.DB {
+	return mysql.GetInstance().Model(&Comments{})
 }

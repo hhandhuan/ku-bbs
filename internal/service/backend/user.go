@@ -31,7 +31,7 @@ func (s *sUser) GetList(req *backend.GetUserListReq) (gin.H, error) {
 		offset = (req.Page - 1) * limit
 	)
 
-	builder := model.User().M
+	builder := model.User()
 
 	if len(req.Keywords) > 0 {
 		builder = builder.Where("name like ?", fmt.Sprintf("%%%s%%", req.Keywords))

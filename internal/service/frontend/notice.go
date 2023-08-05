@@ -36,7 +36,7 @@ func (s *SNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
 	if req.Type == consts.RemindNotice {
 		var list []*fe.Remind
 
-		query := model.Remind().M.Where("receiver", s.ctx.Auth().ID)
+		query := model.Remind().Where("receiver", s.ctx.Auth().ID)
 
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
@@ -53,7 +53,7 @@ func (s *SNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
 	} else {
 		var list []*fe.SystemUserNotice
 
-		query := model.SystemUserNotice().M.Where("user_id", s.ctx.Auth().ID)
+		query := model.SystemUserNotice().Where("user_id", s.ctx.Auth().ID)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
 		}
@@ -72,7 +72,7 @@ func (s *SNotice) GetList(req *fe.GetRemindListReq) (gin.H, error) {
 // GetRemindUnread 获取提醒未读消息
 func (s *SNotice) GetRemindUnread() (int64, error) {
 	var total int64
-	c := model.Remind().M.Where("receiver", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
+	c := model.Remind().Where("receiver", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
 	if c.Error != nil {
 		return 0, c.Error
 	} else {
@@ -88,7 +88,7 @@ func (s *SNotice) GetLetterUnread() (int64, error) {
 // GetSystemUnread 获取系统未读数
 func (s *SNotice) GetSystemUnread() (int64, error) {
 	var total int64
-	c := model.SystemUserNotice().M.Where("user_id", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
+	c := model.SystemUserNotice().Where("user_id", s.ctx.Auth().ID).Where("readed_at is NULL").Count(&total)
 	if c.Error != nil {
 		return 0, c.Error
 	} else {
@@ -100,8 +100,8 @@ func (s *SNotice) GetSystemUnread() (int64, error) {
 func (s *SNotice) ReadAll(t string) {
 	currUser := s.ctx.Auth()
 	if t == consts.RemindNotice {
-		model.Remind().M.Where("readed_at is null AND receiver = ?", currUser.ID).Update("readed_at", time.Now())
+		model.Remind().Where("readed_at is null AND receiver = ?", currUser.ID).Update("readed_at", time.Now())
 	} else {
-		model.SystemUserNotice().M.Where("readed_at is null AND user_id = ?", currUser.ID).Update("readed_at", time.Now())
+		model.SystemUserNotice().Where("readed_at is null AND user_id = ?", currUser.ID).Update("readed_at", time.Now())
 	}
 }

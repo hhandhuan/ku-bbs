@@ -16,11 +16,6 @@ type Nodes struct {
 	Sort  uint8  `gorm:"column:sort" db:"sort" json:"sort" form:"sort"`     //排序值
 }
 
-type NodeModel struct {
-	M     *gorm.DB
-	table string
-}
-
-func Node() *NodeModel {
-	return &NodeModel{M: mysql.GetInstance().Model(&Nodes{}), table: "nodes"}
+func Node() *gorm.DB {
+	return mysql.GetInstance().Model(&Nodes{})
 }

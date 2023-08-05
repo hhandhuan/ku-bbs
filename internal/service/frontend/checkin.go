@@ -27,7 +27,7 @@ func (s *SCheckin) Store() error {
 	uid := s.ctx.Auth().ID
 
 	var checkin model.Checkins
-	f := model.Checkin().M.Where("user_id", uid).Find(&checkin)
+	f := model.Checkin().Where("user_id", uid).Find(&checkin)
 	if f.Error != nil {
 		return f.Error
 	}
@@ -109,7 +109,7 @@ func (s *SCheckin) IsCheckin() (bool, error) {
 	endedAt := date + " 23:59:59"
 
 	var checkin *model.Checkins
-	f := model.Checkin().M.
+	f := model.Checkin().
 		Where("last_time >= ?", startAt).
 		Where("last_time <= ?", endedAt).
 		Where("user_id", s.ctx.Auth().ID).

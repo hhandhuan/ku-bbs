@@ -14,11 +14,6 @@ type Likes struct {
 	State        uint8  `gorm:"column:state" db:"state" json:"state" form:"state"`                                     //状态: 0-否/1-是
 }
 
-type LikeModel struct {
-	M     *gorm.DB
-	table string
-}
-
-func Like() *LikeModel {
-	return &LikeModel{M: mysql.GetInstance().Model(&Likes{}), table: "likes"}
+func Like() *gorm.DB {
+	return mysql.GetInstance().Model(&Likes{})
 }

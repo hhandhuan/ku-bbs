@@ -15,11 +15,6 @@ type IntegralLogs struct {
 	CreatedAt time.Time `gorm:"column:created_at" db:"created_at" json:"created_at" form:"created_at"` //创建时间
 }
 
-type IntegralLogModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func IntegralLog() *IntegralLogModel {
-	return &IntegralLogModel{M: mysql.GetInstance().Model(&IntegralLogs{}), Table: "integral_logs"}
+func IntegralLog() *gorm.DB {
+	return mysql.GetInstance().Model(&IntegralLogs{})
 }

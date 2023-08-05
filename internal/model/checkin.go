@@ -14,11 +14,6 @@ type Checkins struct {
 	LastTime       time.Time `gorm:"column:last_time" db:"last_time" json:"last_time" form:"last_time"`                         //最后签到时间
 }
 
-type CheckinModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func Checkin() *CheckinModel {
-	return &CheckinModel{M: mysql.GetInstance().Model(&Checkins{}), Table: "checkins"}
+func Checkin() *gorm.DB {
+	return mysql.GetInstance().Model(&Checkins{})
 }

@@ -17,11 +17,6 @@ type Reports struct {
 	State      uint8  `gorm:"column:state" db:"state" json:"state" form:"state"`                         //状态:0-待处理/1-已处理
 }
 
-type ReportModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func Report() *ReportModel {
-	return &ReportModel{M: mysql.GetInstance().Model(&Reports{}), Table: "reports"}
+func Report() *gorm.DB {
+	return mysql.GetInstance().Model(&Reports{})
 }

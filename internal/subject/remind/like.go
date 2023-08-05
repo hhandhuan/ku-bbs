@@ -33,11 +33,11 @@ func (o *LikeObs) Update() {
 	)
 
 	if o.SourceType == "comment" {
-		if f := model.Comment().M.Where("id", o.SourceID).Find(&comment); f.Error != nil || comment == nil {
+		if f := model.Comment().Where("id", o.SourceID).Find(&comment); f.Error != nil || comment == nil {
 			log.Println(f.Error)
 			return
 		}
-		if f := model.Topic().M.Where("id", comment.TopicId).Find(&topic); f.Error != nil || topic == nil {
+		if f := model.Topic().Where("id", comment.TopicId).Find(&topic); f.Error != nil || topic == nil {
 			log.Println(f.Error)
 			return
 		}
@@ -46,7 +46,7 @@ func (o *LikeObs) Update() {
 		sourceContent = topic.Title
 		sourceUrl = fmt.Sprintf("/topics/%d?j=comment%d", comment.TopicId, comment.ID)
 	} else {
-		f := model.Topic().M.Where("id", o.SourceID).Find(&topic)
+		f := model.Topic().Where("id", o.SourceID).Find(&topic)
 		if f.Error != nil || topic == nil {
 			log.Println(f.Error)
 			return
@@ -57,7 +57,7 @@ func (o *LikeObs) Update() {
 		sourceUrl = fmt.Sprintf("/topics/%d", topic.ID)
 	}
 
-	c := model.Remind().M.Create(&model.Reminds{
+	c := model.Remind().Create(&model.Reminds{
 		Sender:        o.Sender,
 		Receiver:      o.Receiver,
 		SourceId:      o.SourceID,

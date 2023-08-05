@@ -12,11 +12,6 @@ type Follows struct {
 	State    int8   `gorm:"column:state" db:"state" json:"state" form:"state"`                 //状态:1-关注/0-取消
 }
 
-type FollowModel struct {
-	M     *gorm.DB
-	table string
-}
-
-func Follow() *FollowModel {
-	return &FollowModel{M: mysql.GetInstance().Model(&Follows{}), table: "follows"}
+func Follow() *gorm.DB {
+	return mysql.GetInstance().Model(&Follows{})
 }

@@ -15,7 +15,7 @@ type FollowObs struct {
 
 // Update 回复评论提醒
 func (o *FollowObs) Update() {
-	r := model.Remind().M.Create(&model.Reminds{
+	r := model.Remind().Create(&model.Reminds{
 		Sender:        o.Sender,
 		Receiver:      o.Receiver,
 		SourceId:      0,

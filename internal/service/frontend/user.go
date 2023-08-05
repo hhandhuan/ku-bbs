@@ -35,7 +35,7 @@ type SUser struct {
 // Register 用户登录
 func (s *SUser) Register(req *fe.RegisterReq) error {
 	var user *model.Users
-	err := model.User().M.Where("name", req.Name).Find(&user).Error
+	err := model.User().Where("name", req.Name).Find(&user).Error
 	if err != nil {
 		return errors.New("服务内部错误")
 	}
@@ -48,7 +48,7 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 		return errors.New("头像生成失败")
 	}
 
-	res := model.User().M.Create(&model.Users{
+	res := model.User().Create(&model.Users{
 		Name:     req.Name,
 		Avatar:   avatar,
 		Password: encrypt.GenerateFromPassword(req.Password),
@@ -87,7 +87,7 @@ func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 // Login 处理用户登录
 func (s *SUser) Login(req *fe.LoginReq) error {
 	var user model.Users
-	err := model.User().M.Where("name = ?", req.Name).Limit(1).Find(&user).Error
+	err := model.User().Where("name = ?", req.Name).Limit(1).Find(&user).Error
 	if err != nil {
 		return errors.New("服务内部错误")
 	}
@@ -106,7 +106,7 @@ func (s *SUser) Login(req *fe.LoginReq) error {
 		"last_login_ip": s.ctx.Ctx.ClientIP(),
 	}
 
-	u := model.User().M.Where("id", user.ID).Updates(data)
+	u := model.User().Where("id", user.ID).Updates(data)
 	if u.Error != nil || u.RowsAffected <= 0 {
 		return fmt.Errorf("登录失败，服务内部错误: %v", u.Error)
 	}
@@ -125,7 +125,7 @@ func (s *SUser) Logout() {
 // Edit 编辑用户
 func (s *SUser) Edit(req *fe.EditUserReq) error {
 	var user model.Users
-	err := model.User().M.Where("name", req.Name).Find(&user).Error
+	err := model.User().Where("name", req.Name).Find(&user).Error
 	if err != nil {
 		return fmt.Errorf("修改信息失败: %v", err)
 	}
@@ -147,7 +147,7 @@ func (s *SUser) Edit(req *fe.EditUserReq) error {
 		IsAdmin: currUser.IsAdmin,
 	}
 
-	u := model.User().M.Where("id", currUser.ID).Updates(data)
+	u := model.User().Where("id", currUser.ID).Updates(data)
 
 	if u.Error != nil || u.RowsAffected <= 0 {
 		return fmt.Errorf("修改信息失败: %v", u.Error)
@@ -166,7 +166,7 @@ func (s *SUser) EditPassword(req *fe.EditPasswordReq) error {
 		return errors.New("旧密码错误")
 	}
 
-	u := model.User().M.Where("id", currUser.ID).Update("password", encrypt.GenerateFromPassword(req.Password))
+	u := model.User().Where("id", currUser.ID).Update("password", encrypt.GenerateFromPassword(req.Password))
 	if u.Error != nil || u.RowsAffected <= 0 {
 		log.Println(u.Error)
 		return errors.New("修改密码失败")
@@ -210,7 +210,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 
 	userID := s.ctx.Auth().ID
 	savePath := "/assets/upload/" + avatarPath
-	u := model.User().M.Where("id", userID).Update("avatar", savePath)
+	u := model.User().Where("id", userID).Update("avatar", savePath)
 	if u.Error != nil || u.RowsAffected <= 0 {
 		return errors.New("修改头像失败")
 	}
@@ -227,7 +227,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 		req.Tab = consts.UserTopicTab
 	}
 
-	query := model.User().M.Where("id", req.ID)
+	query := model.User().Where("id", req.ID)
 	if s.ctx.Check() {
 		query = query.Preload("Follow", "user_id = ? AND state = ?", s.ctx.Auth().ID, consts.FollowedState)
 	}
@@ -247,7 +247,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			offset = (req.Page - 1) * limit
 		)
 
-		query = model.Topic().M.Where("user_id", req.ID)
+		query = model.Topic().Where("user_id", req.ID)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
 		}
@@ -267,7 +267,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			offset = (req.Page - 1) * limit
 		)
 
-		query = model.Follow().M.Where("user_id", req.ID).Where("state", consts.FollowedState)
+		query = model.Follow().Where("user_id", req.ID).Where("state", consts.FollowedState)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
 		}
@@ -288,7 +288,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			limit  = 20
 			offset = (req.Page - 1) * limit
 		)
-		query = model.Follow().M.Where("target_id", req.ID).Where("state", consts.FollowedState)
+		query = model.Follow().Where("target_id", req.ID).Where("state", consts.FollowedState)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
 		}
@@ -309,7 +309,7 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 			offset = (req.Page - 1) * limit
 		)
 
-		query = model.IntegralLog().M.Where("user_id", user.ID)
+		query = model.IntegralLog().Where("user_id", user.ID)
 		if c := query.Count(&total); c.Error != nil {
 			return nil, c.Error
 		}
@@ -332,7 +332,7 @@ func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
 	}
 
 	var user *model.Users
-	err := model.User().M.Where("id", req.UserID).Find(&user).Error
+	err := model.User().Where("id", req.UserID).Find(&user).Error
 	if err != nil {
 		return 0, err
 	}
@@ -341,14 +341,14 @@ func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
 	}
 
 	var follow *model.Follows
-	err = model.Follow().M.Where("user_id = ? AND target_id = ?", s.ctx.Auth().ID, req.UserID).Find(&follow).Error
+	err = model.Follow().Where("user_id = ? AND target_id = ?", s.ctx.Auth().ID, req.UserID).Find(&follow).Error
 	if err != nil {
 		return 0, err
 	}
 
 	if follow.ID <= 0 {
 		data := &model.Follows{UserId: s.ctx.Auth().ID, TargetId: req.UserID, State: 1}
-		if c := model.Follow().M.Create(data); c.Error != nil || c.RowsAffected <= 0 {
+		if c := model.Follow().Create(data); c.Error != nil || c.RowsAffected <= 0 {
 			log.Println(c.Error)
 			return 0, errors.New("关注失败")
 		}
@@ -365,7 +365,7 @@ func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
 		state = consts.FollowedState
 	}
 
-	if err = model.Follow().M.Where("id", follow.ID).Update("state", state).Error; err != nil {
+	if err = model.Follow().Where("id", follow.ID).Update("state", state).Error; err != nil {
 		return 0, err
 	}
 

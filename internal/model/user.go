@@ -24,11 +24,6 @@ type Users struct {
 	LastLoginAt *time.Time `gorm:"column:last_login_at" db:"last_login_at" json:"last_login_at" form:"last_login_at"` //最后登录时间
 }
 
-type UserModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func User() *UserModel {
-	return &UserModel{M: mysql.GetInstance().Model(&Users{}), Table: "users"}
+func User() *gorm.DB {
+	return mysql.GetInstance().Model(&Users{})
 }

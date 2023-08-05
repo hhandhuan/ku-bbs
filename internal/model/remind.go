@@ -18,11 +18,6 @@ type Reminds struct {
 	ReadedAt      *time.Time `gorm:"column:readed_at" db:"readed_at" json:"readed_at" form:"readed_at"`                     //阅读时间
 }
 
-type RemindModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func Remind() *RemindModel {
-	return &RemindModel{M: mysql.GetInstance().Model(&Reminds{}), Table: "reminds"}
+func Remind() *gorm.DB {
+	return mysql.GetInstance().Model(&Reminds{})
 }

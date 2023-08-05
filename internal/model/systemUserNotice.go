@@ -13,11 +13,6 @@ type SystemUserNotices struct {
 	ReadedAt *time.Time `gorm:"column:readed_at" db:"readed_at" json:"readed_at" form:"readed_at"` //阅读时间
 }
 
-type SystemUserNoticesModel struct {
-	M     *gorm.DB
-	Table string
-}
-
-func SystemUserNotice() *SystemUserNoticesModel {
-	return &SystemUserNoticesModel{M: mysql.GetInstance().Model(&SystemUserNotices{}), Table: "system_user_notices"}
+func SystemUserNotice() *gorm.DB {
+	return mysql.GetInstance().Model(&SystemUserNotices{})
 }

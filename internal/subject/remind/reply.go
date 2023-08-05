@@ -19,7 +19,7 @@ type ReplyObs struct {
 // Update 回复评论提醒
 func (o *ReplyObs) Update() {
 	var topic *model.Topics
-	r := model.Topic().M.Where("id", o.TopicID).Find(&topic)
+	r := model.Topic().Where("id", o.TopicID).Find(&topic)
 	if r.Error != nil || topic.ID <= 0 {
 		log.Println(r.Error)
 		return
@@ -30,7 +30,7 @@ func (o *ReplyObs) Update() {
 		return
 	}
 
-	r = model.Remind().M.Create(&model.Reminds{
+	r = model.Remind().Create(&model.Reminds{
 		Sender:        o.Sender,
 		Receiver:      o.Receiver,
 		SourceId:      topic.ID,

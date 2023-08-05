@@ -31,7 +31,7 @@ func (s *sTopic) GetList(req *eb.GetTopicListReq) (gin.H, error) {
 		offset = (req.Page - 1) * limit
 	)
 
-	builder := model.Topic().M
+	builder := model.Topic()
 
 	if len(req.Keywords) > 0 {
 		builder = builder.Where("title like ?", fmt.Sprintf("%%%s%%", req.Keywords))
@@ -59,6 +59,6 @@ func (s *sTopic) GetList(req *eb.GetTopicListReq) (gin.H, error) {
 
 // Delete 删除话题
 func (s *sTopic) Delete(id int64) error {
-	err := model.Topic().M.Where("id", id).Delete(&model.Topics{}).Error
+	err := model.Topic().Where("id", id).Delete(&model.Topics{}).Error
 	return err
 }

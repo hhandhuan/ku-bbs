@@ -30,7 +30,7 @@ func (s *SSearch) GetList(req *fe.GetSearchListReq) (gin.H, error) {
 		offset = (req.Page - 1) * limit
 	)
 
-	query := model.Topic().M
+	query := model.Topic()
 
 	if len(req.Keywords) > 0 {
 		key := fmt.Sprintf("%%%s%%", req.Keywords)

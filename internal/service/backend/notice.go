@@ -33,7 +33,7 @@ func (s *sNotice) GetList(req *eb.GetNoticeListReq) (gin.H, error) {
 		offset = (req.Page - 1) * limit
 	)
 
-	builder := model.SystemNotice().M
+	builder := model.SystemNotice()
 
 	if len(req.Keywords) > 0 {
 		builder = builder.Where("title like ?", fmt.Sprintf("%%%s%%", req.Keywords))
@@ -63,7 +63,7 @@ func (s *sNotice) Publish(req *eb.PublishNoticeReq) error {
 		Content:   req.Content,
 		MDContent: req.MDContent,
 	}
-	if err := model.SystemNotice().M.Create(notice).Error; err != nil {
+	if err := model.SystemNotice().Create(notice).Error; err != nil {
 		return err
 	}
 	if notice.ID <= 0 {
@@ -71,7 +71,7 @@ func (s *sNotice) Publish(req *eb.PublishNoticeReq) error {
 	}
 
 	var users []*model.Users
-	f := model.User().M.Select("id").Find(&users)
+	f := model.User().Select("id").Find(&users)
 	if f.Error != nil || users == nil {
 		log.Println(f.Error)
 		return errors.New("消息发布失败")
@@ -88,7 +88,7 @@ func (s *sNotice) Publish(req *eb.PublishNoticeReq) error {
 		})
 	}
 
-	if err := model.SystemUserNotice().M.Create(&userNotices).Error; err != nil {
+	if err := model.SystemUserNotice().Create(&userNotices).Error; err != nil {
 		return f.Error
 	}
 
