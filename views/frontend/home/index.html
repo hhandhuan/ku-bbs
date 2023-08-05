@@ -23,22 +23,22 @@
                 <div class="list p-3  bg-white">
                     {{if .data.topics}}
                     {{range .data.topics}}
-                    <div class="item mb-3 border-bottom pb-3 pe-3 ps-3">
-                        <div class="avatar d-inline-block">
+                    <div class="item mb-3 border-bottom pb-3 pe-3 ps-3 rounded-1">
+                        <div class="avatar d-inline-block mt-2">
                             <a href="/user?id={{.Publisher.ID}}">
                                 <img src="{{.Publisher.Avatar}}" class="rounded-2" height="48" width="48">
                             </a>
                         </div>
-                        <div style="width: 700px;" class="ms-2 text-secondary d-inline-block align-top">
+                        <div class="ms-2 text-secondary d-inline-block align-top">
                             <p class="mb-0 mb-1">
-                                {{if eq .CommentState 0}}<fa class="ms-2 fa fa-check text-success"></fa>{{end}}
+                                {{if eq .CommentState 0}}<i class="ms-2 fa fa-check text-success"></i>{{end}}
                                 <a href="/topics/{{.ID}}" class="text-decoration-none table-hover text-dark">{{.Title}}</a>
                             </p>
-                            <p class="mb-0" style="font-size: 12px;line-height: 1.5;color: #adaaa8;">
+                            <p class="mb-0 small" style="line-height: 1.5;color: #adaaa8;">
                                 {{if eq .Type 2}}
                                 <span class="badge bg-warning me-1"><span class="text-light">置顶</span></span>
                                 {{end}}
-                                <a class="badge text-bg-light me-1 text-secondary text-decoration-none" href="/?type={{.Node.Alias}}">{{.Node.Name}}</a>
+                                <a class="badge bg-dark me-1 text-light text-decoration-none" href="/?type={{.Node.Alias}}">{{.Node.Name}}</a>
                                 <span class="me-1">
                                     <a href="/user?id={{.Publisher.ID}}" class="text-decoration-none"
                                        style="color: #adaaa8;">

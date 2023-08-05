@@ -48,16 +48,20 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 		return errors.New("头像生成失败")
 	}
 
-	res := model.User().Create(&model.Users{
+	user = &model.Users{
 		Name:     req.Name,
 		Avatar:   avatar,
 		Password: encrypt.GenerateFromPassword(req.Password),
 		Gender:   uint8(req.Gender),
 		State:    consts.EnableState,
-	})
+	}
+
+	res := model.User().Create(user)
 	if res.Error != nil || res.RowsAffected <= 0 {
 		return errors.New("用户注册失败，请稍后在试")
 	}
+
+	s.ctx.SetAuth(*user)
 
 	return nil
 }

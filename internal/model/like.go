@@ -6,7 +6,7 @@ import (
 )
 
 type Likes struct {
-	NoDeleteModel
+	Model
 	UserId       uint64 `gorm:"column:user_id" db:"user_id" json:"user_id" form:"user_id"`                             //用户 ID
 	TargetUserId uint64 `gorm:"column:target_user_id" db:"target_user_id" json:"target_user_id" form:"target_user_id"` //目标用户ID
 	SourceId     uint64 `gorm:"column:source_id" db:"source_id" json:"source_id" form:"source_id"`                     //资源 ID
