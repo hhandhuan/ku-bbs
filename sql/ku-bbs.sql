@@ -3,15 +3,15 @@
 
  Source Server         : localhost-db
  Source Server Type    : MySQL
- Source Server Version : 80027
+ Source Server Version : 80031
  Source Host           : localhost:3306
  Source Schema         : ku-bbs
 
  Target Server Type    : MySQL
- Target Server Version : 80027
+ Target Server Version : 80031
  File Encoding         : 65001
 
- Date: 17/10/2022 16:19:53
+ Date: 06/08/2023 20:59:09
 */
 
 SET NAMES utf8mb4;
@@ -29,6 +29,7 @@ CREATE TABLE `checkins` (
   `last_time` timestamp NULL DEFAULT NULL COMMENT '最后签到时间',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -79,6 +80,7 @@ CREATE TABLE `follows` (
   `state` tinyint unsigned DEFAULT '0' COMMENT '状态:1-关注/0-取消',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `target_id_index` (`target_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -100,6 +102,8 @@ CREATE TABLE `integral_logs` (
   `rewards` bigint DEFAULT NULL COMMENT '奖励积分',
   `mode` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '获取方式',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -123,6 +127,7 @@ CREATE TABLE `likes` (
   `state` tinyint unsigned DEFAULT '0' COMMENT '状态: 0-否/1-是',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   KEY `user_source_id_index` (`user_id`,`source_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -146,9 +151,9 @@ CREATE TABLE `nodes` (
   `pid` bigint unsigned DEFAULT '0' COMMENT '节点父级',
   `sort` tinyint unsigned DEFAULT '0' COMMENT '排序值',
   `state` tinyint unsigned DEFAULT '1' COMMENT '节点状态:0-关闭/1-开启',
-  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `alias_unique_index` (`alias`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -157,7 +162,7 @@ CREATE TABLE `nodes` (
 -- Records of nodes
 -- ----------------------------
 BEGIN;
-INSERT INTO `nodes` (`id`, `name`, `alias`, `desc`, `count`, `pid`, `sort`, `state`, `deleted_at`, `created_at`, `updated_at`) VALUES (1, '测试节点', 'test', 'test node', NULL, 0, 0, 1, NULL, '2022-10-17 14:21:36', '2022-10-17 14:21:37');
+INSERT INTO `nodes` (`id`, `name`, `alias`, `desc`, `count`, `pid`, `sort`, `state`, `created_at`, `updated_at`, `deleted_at`) VALUES (1, '测试话题', 'test topic', '测试话题', 0, 0, 0, 1, '2023-08-06 20:58:51', '2023-08-06 20:58:51', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -269,7 +274,7 @@ CREATE TABLE `topics` (
   `reply_id` bigint unsigned DEFAULT '0' COMMENT '最后回复者ID',
   `title` varchar(255) DEFAULT NULL COMMENT '话题标题',
   `tags` varchar(255) DEFAULT NULL COMMENT '话题标签',
-  `images` text COMMENT '图片集合',
+  `images` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '图片集合',
   `comment_count` bigint unsigned DEFAULT '0' COMMENT '评论统计',
   `view_count` bigint unsigned DEFAULT '0' COMMENT '浏览统计',
   `like_count` bigint unsigned DEFAULT '0' COMMENT '喜欢统计',
@@ -316,11 +321,14 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `name_email_index` (`name`,`email`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
+BEGIN;
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
