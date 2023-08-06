@@ -15,7 +15,7 @@
                 <div class="topic-info ps-4 pe-4 pb-2 pt-4 bg-white rounded-top">
                     <h5>{{.data.topic.Title}} {{if eq .data.topic.CommentState 0}}<fa class="ms-1 fa fa-check text-success"></fa>{{end}}</h5>
                     <div class="mb-0 mt-3 text-secondary small">
-                        <a class="badge bg-light text-secondary me-1 text-decoration-none" href="/?type={{.data.topic.Node.Alias}}">{{.data.topic.Node.Name}}</a>
+                        <a class="badge bg-dark me-1 text-light text-decoration-none" href="/?type={{.data.topic.Node.Alias}}">{{.data.topic.Node.Name}}</a>
                         <span class="me-2">
                             <a href="/user?id={{.data.topic.Publisher.ID}}" class="text-decoration-none text-secondary"> {{.data.topic.Publisher.Name}} </a>
                         </span>
