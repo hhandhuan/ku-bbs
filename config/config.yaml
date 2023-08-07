@@ -1,8 +1,8 @@
 app:
   version: 0.0.1
-  name: 酷社区
-  desc: 酷社区
-  keywords: 酷社区
+  name: 酷 • 社区
+  desc: 酷 • 社区
+  keywords: 酷 • 社区
   visitMode: guest
 system:
   env: debug
@@ -24,7 +24,6 @@ redis:
   port: 6379
   db: 1
   idleTimeout: 10
-  debug: false
 upload:
   path: ../assets/upload
   ext: [ png, jpg, jpeg, gif ]

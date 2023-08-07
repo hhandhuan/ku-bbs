@@ -1,6 +1,20 @@
-package view
+package utils
 
-import "html/template"
+import (
+	"html/template"
+	"strings"
+)
+
+func GlobalFunc() template.FuncMap {
+	return template.FuncMap{
+		"DiffForHumans":    DiffForHumans,
+		"ToDateTimeString": ToDateTimeString,
+		"Html":             Html,
+		"RemindName":       RemindName,
+		"StrLimit":         Limit,
+		"StrJoin":          strings.Join,
+	}
+}
 
 // Html 解析 HTML
 func Html(s string) template.HTML {

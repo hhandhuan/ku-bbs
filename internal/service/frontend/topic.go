@@ -3,11 +3,10 @@ package frontend
 import (
 	"errors"
 	"fmt"
+	time2 "github.com/hhandhuan/ku-bbs/pkg/utils"
 	"log"
 	"strings"
 	"unicode/utf8"
-
-	"github.com/hhandhuan/ku-bbs/pkg/utils/str"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/utils/page"
-	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 )
 
@@ -50,7 +48,7 @@ func (s *STopic) Publish(req *fe.PublishTopicReq) (uint64, error) {
 		UserId:       s.ctx.Auth().ID,
 		MDContent:    req.MDContent,
 		CommentState: consts.EnableState,
-		Brief:        str.Limit(brief, 0, 100, "..."),
+		Brief:        time2.Limit(brief, 0, 100, "..."),
 		Images:       images,
 	}
 
@@ -277,7 +275,7 @@ func (s *STopic) Edit(ID uint64, req *fe.PublishTopicReq) (uint64, error) {
 		Content:   req.Content,
 		NodeId:    req.NodeId,
 		MDContent: req.MDContent,
-		Brief:     str.Limit(brief, 0, 100, "..."),
+		Brief:     time2.Limit(brief, 0, 100, "..."),
 		Images:    images,
 	}
 

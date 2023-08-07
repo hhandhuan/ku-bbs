@@ -31,8 +31,10 @@ func init() {
 }
 
 func main() {
+	logger.GetInstance().Info().Msg("service is starting")
+
 	engine := gin.Default()
-	engine.SetFuncMap(utils.GetTemplateFuncMap())
+	engine.SetFuncMap(utils.GlobalFunc())
 	engine.Static("/assets", "../assets")
 	engine.LoadHTMLGlob("../views/**/**/*")
 
@@ -44,14 +46,13 @@ func main() {
 
 	server := http.Server{Addr: config.GetInstance().System.Addr, Handler: engine}
 
-	logger.GetInstance().Info().Msg("service is starting...")
-
 	go func() {
-		err := server.ListenAndServe()
-		if err != nil {
+		if err := server.ListenAndServe(); err != nil {
 			logger.GetInstance().Error().Msgf("listen server error: %v", err)
 		}
 	}()
+
+	logger.GetInstance().Info().Msg("service started successfully")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)

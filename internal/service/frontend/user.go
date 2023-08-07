@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hhandhuan/ku-bbs/pkg/logger"
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"log"
 	"os"
 	"strings"
@@ -20,7 +21,6 @@ import (
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
-	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
 	"github.com/o1egl/govatar"
 )
 
@@ -37,6 +37,7 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 	var user *model.Users
 	err := model.User().Where("name", req.Name).Find(&user).Error
 	if err != nil {
+		logger.GetInstance().Error().Msgf("find user error: %v", err)
 		return errors.New("服务内部错误")
 	}
 	if user.ID > 0 {
@@ -45,19 +46,21 @@ func (s *SUser) Register(req *fe.RegisterReq) error {
 
 	avatar, err := s.genAvatar(req.Name, req.Gender)
 	if err != nil {
+		logger.GetInstance().Error().Msgf("gen avatar error: %v", err)
 		return errors.New("头像生成失败")
 	}
 
 	user = &model.Users{
 		Name:     req.Name,
 		Avatar:   avatar,
-		Password: encrypt.GenerateFromPassword(req.Password),
+		Password: utils.GenerateFromPassword(req.Password),
 		Gender:   uint8(req.Gender),
 		State:    consts.EnableState,
 	}
 
-	res := model.User().Create(user)
-	if res.Error != nil || res.RowsAffected <= 0 {
+	err = model.User().Create(user).Error
+	if err != nil {
+		logger.GetInstance().Error().Msgf("create user error: %v", err)
 		return errors.New("用户注册失败，请稍后在试")
 	}
 
@@ -76,7 +79,7 @@ func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 		_ = os.Chmod(path, os.ModePerm)
 	}
 
-	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
+	avatarName := utils.Md5(gconv.String(time.Now().UnixMicro()))
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 
@@ -96,7 +99,7 @@ func (s *SUser) Login(req *fe.LoginReq) error {
 		return errors.New("服务内部错误")
 	}
 
-	if user.ID <= 0 || !encrypt.CompareHashAndPassword(user.Password, req.Password) {
+	if user.ID <= 0 || !utils.CompareHashAndPassword(user.Password, req.Password) {
 		return errors.New("用户名或密码错误")
 	}
 
@@ -166,11 +169,11 @@ func (s *SUser) Edit(req *fe.EditUserReq) error {
 func (s *SUser) EditPassword(req *fe.EditPasswordReq) error {
 	currUser := s.ctx.Auth()
 
-	if !encrypt.CompareHashAndPassword(currUser.Password, req.OldPassword) {
+	if !utils.CompareHashAndPassword(currUser.Password, req.OldPassword) {
 		return errors.New("旧密码错误")
 	}
 
-	u := model.User().Where("id", currUser.ID).Update("password", encrypt.GenerateFromPassword(req.Password))
+	u := model.User().Where("id", currUser.ID).Update("password", utils.GenerateFromPassword(req.Password))
 	if u.Error != nil || u.RowsAffected <= 0 {
 		log.Println(u.Error)
 		return errors.New("修改密码失败")
@@ -202,7 +205,7 @@ func (s *SUser) EditAvatar(ctx *gin.Context) error {
 		return errors.New("file format not supported")
 	}
 
-	avatarName := encrypt.Md5(gconv.String(time.Now().UnixMicro()))
+	avatarName := utils.Md5(gconv.String(time.Now().UnixMicro()))
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 

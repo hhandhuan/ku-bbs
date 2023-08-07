@@ -1,16 +1,19 @@
 package frontend
 
 import (
+	"context"
 	"errors"
+	"fmt"
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
 	"github.com/hhandhuan/ku-bbs/pkg/mysql"
-	"log"
+	"github.com/hhandhuan/ku-bbs/pkg/redis"
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
 	"github.com/hhandhuan/ku-bbs/internal/model"
 	"github.com/hhandhuan/ku-bbs/internal/service"
-	time2 "github.com/hhandhuan/ku-bbs/pkg/utils/time"
 	"gorm.io/gorm"
 )
 
@@ -26,32 +29,45 @@ type SCheckin struct {
 func (s *SCheckin) Store() error {
 	uid := s.ctx.Auth().ID
 
-	var checkin model.Checkins
-	f := model.Checkin().Where("user_id", uid).Find(&checkin)
-	if f.Error != nil {
-		return f.Error
+	key := fmt.Sprintf("user:%d:checkin", uid)
+	exist, err := redis.GetInstance().SetNX(context.Background(), key, 1, time.Second*10).Result()
+	if err != nil {
+		logger.GetInstance().Error().Msgf("set setnx error: %v", err)
+		return errors.New("请求太频繁")
+	}
+	if !exist {
+		return errors.New("请求太频繁")
 	}
 
-	if checkin.ID > 0 && checkin.LastTime.Format("2006-01-02") >= time.Now().Format("2006-01-02") {
+	defer redis.GetInstance().Del(context.Background(), key)
+
+	var checkin model.Checkins
+	err = model.Checkin().Where("user_id", uid).Find(&checkin).Error
+	if err != nil {
+		logger.GetInstance().Error().Msgf("find checkin error: %v", err)
+		return err
+	}
+
+	if checkin.ID > 0 && utils.ToDateTimeString(checkin.LastTime) >= utils.ToDateString(time.Now()) {
 		return errors.New("请勿重复签到")
 	}
 
-	err := mysql.GetInstance().Transaction(func(tx *gorm.DB) error {
+	err = mysql.GetInstance().Transaction(func(tx *gorm.DB) error {
 		if checkin.ID > 0 {
-			preDate := time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+			preDate := utils.ToDateString(time.Now().AddDate(0, 0, -1))
 			data := map[string]interface{}{
 				"cumulative_days": gorm.Expr("cumulative_days + 1"),
 				"last_time":       time.Now(),
 			}
 			// 判断是否连续签到
-			if checkin.LastTime.Format("2006-01-02") == preDate {
+			if utils.ToDateTimeString(checkin.LastTime) == preDate {
 				data["continuity_days"] = gorm.Expr("continuity_days + 1")
 			} else {
 				data["continuity_days"] = 1
 			}
 			u := tx.Model(&model.Checkins{}).Where("id", checkin.ID).Where("last_time", checkin.LastTime).Updates(data)
-			if u.Error != nil || u.RowsAffected <= 0 {
-				log.Println(u.Error)
+			if u.Error != nil {
+				logger.GetInstance().Error().Msgf("update checkins error: %v", err)
 				return errors.New("签到失败")
 			}
 		} else {
@@ -62,8 +78,8 @@ func (s *SCheckin) Store() error {
 				ContinuityDays: 1,
 				LastTime:       time.Now(),
 			})
-			if c.Error != nil || c.RowsAffected <= 0 {
-				log.Println(c.Error)
+			if c.Error != nil {
+				logger.GetInstance().Error().Msgf("update checkins error: %v", err)
 				return errors.New("签到失败")
 			}
 		}
@@ -74,8 +90,8 @@ func (s *SCheckin) Store() error {
 			Rewards: consts.CHECKINReward,
 			Mode:    consts.CheckinMode,
 		})
-		if c.Error != nil || c.RowsAffected <= 0 {
-			log.Println(c.Error)
+		if c.Error != nil {
+			logger.GetInstance().Error().Msgf("record integral logs error: %v", err)
 			return errors.New("签到失败")
 		}
 
@@ -83,8 +99,8 @@ func (s *SCheckin) Store() error {
 		u := tx.Model(&model.Users{}).Where("id", uid).Updates(map[string]interface{}{
 			"integral": gorm.Expr("integral + ?", consts.CHECKINReward),
 		})
-		if u.Error != nil || u.RowsAffected <= 0 {
-			log.Println(u.Error)
+		if u.Error != nil {
+			logger.GetInstance().Error().Msgf("update users integral error: %v", err)
 			return errors.New("签到失败")
 		}
 
@@ -103,7 +119,7 @@ func (s *SCheckin) IsCheckin() (bool, error) {
 		return false, nil
 	}
 
-	date := time2.ToDateString(time.Now())
+	date := utils.ToDateString(time.Now())
 
 	startAt := date + " 00:00:00"
 	endedAt := date + " 23:59:59"

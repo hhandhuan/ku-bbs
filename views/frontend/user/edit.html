@@ -13,19 +13,13 @@
                 <div class="notice-nav shadow-sm">
                     <ul class="list-group">
                         <li class='list-group-item {{if eq .data.tab "info"}}bg-light{{else}}{{end}}'>
-                            <a href="/user/edit?tab=info" class="text-secondary text-decoration-none d-inline-block">
-                                <i class="fa fa-list"> 个人信息</i>
-                            </a>
+                            <a href="/user/edit?tab=info" class="text-secondary text-decoration-none d-inline-block"><i class="fa fa-list"> 个人信息</i></a>
                         </li>
                         <li class='list-group-item {{if eq .data.tab "pass"}}bg-light{{else}}{{end}}'>
-                            <a href="/user/edit?tab=pass" class="text-secondary text-decoration-none d-inline-block">
-                                <i class="fa fa-lock"> 修改密码</i>
-                            </a>
+                            <a href="/user/edit?tab=pass" class="text-secondary text-decoration-none d-inline-block"><i class="fa fa-lock"> 修改密码</i></a>
                         </li>
                         <li class='list-group-item {{if eq .data.tab "avatar"}}bg-light{{else}}{{end}}'>
-                            <a href="/user/edit?tab=avatar" class="text-secondary text-decoration-none d-inline-block">
-                                <i class="fa fa-file-image-o"> 修改头像</i>
-                            </a>
+                            <a href="/user/edit?tab=avatar" class="text-secondary text-decoration-none d-inline-block"><i class="fa fa-file-image-o"> 修改头像</i></a>
                         </li>
                     </ul>
                 </div>

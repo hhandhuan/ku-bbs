@@ -20,6 +20,7 @@ const (
 	unreadKey  = "unread"
 	versionKey = "version"
 	nameKey    = "name"
+	titleKey   = "title"
 )
 
 func Context(ctx *gin.Context) *BaseContext {
@@ -37,6 +38,7 @@ type BaseContext struct {
 	session sessions.Session
 	path    string
 	name    string
+	title   string
 }
 
 // Redirect 处理跳转
@@ -159,7 +161,7 @@ func (c *BaseContext) Forget() {
 
 // SetTitle 设置模版标题
 func (c *BaseContext) SetTitle(title string) *BaseContext {
-	c.name = title
+	c.title = title
 	return c
 }
 
@@ -201,6 +203,7 @@ func (c *BaseContext) View(tpl string, data interface{}) {
 		dataKey:    data,
 		flashKey:   c.ParseFlash(),
 		nameKey:    c.name,
+		titleKey:   c.title,
 	}
 	c.clear()
 	c.Ctx.HTML(http.StatusOK, tpl, obj)

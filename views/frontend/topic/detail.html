@@ -146,7 +146,7 @@
                                             <i class="fa fa-heart {{if .Like}} text-danger {{end}}"></i> <span
                                                 class="like-count ms-1">{{.LikeCount}}</span>
                                         </li>
-                                        <li class="me-2 reply-btn p-1">
+                                        <li class="me-2 reply-btn p-1 {{if eq $.data.topic.CommentState 1}} d-block {{else}} d-none {{end}}" >
                                             <a href="#comment-form"
                                                class="text-decoration-none text-secondary reply-btn"
                                                data-name="{{.Publisher.Name}}" data-id="{{.UserId}}"

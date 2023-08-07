@@ -2,6 +2,7 @@ package frontend
 
 import (
 	"fmt"
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"os"
 	"strings"
 	"time"
@@ -10,7 +11,6 @@ import (
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hhandhuan/ku-bbs/internal/service"
 	"github.com/hhandhuan/ku-bbs/pkg/config"
-	"github.com/hhandhuan/ku-bbs/pkg/utils/encrypt"
 )
 
 var File = cFile{}
@@ -48,7 +48,7 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 		os.Chmod(path, os.ModePerm)
 	}
 
-	name := encrypt.Md5(time.Now().String()+file.Filename) + "." + ext
+	name := utils.Md5(time.Now().String()+file.Filename) + "." + ext
 
 	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name)); err != nil {
 		s.MDFileJson(0, err.Error(), "")

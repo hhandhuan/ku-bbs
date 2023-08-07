@@ -1,4 +1,4 @@
-package str
+package utils
 
 import "unicode/utf8"
 

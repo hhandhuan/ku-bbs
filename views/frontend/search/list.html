@@ -12,7 +12,8 @@
             <div class="notice-nav shadow-sm">
                 <ul class="list-group">
                     <li class='list-group-item'>
-                        <a href="/search?keywords={{.data.req.Keywords}}" class="text-secondary text-decoration-none d-inline-block"
+                        <a href="/search?keywords={{.data.req.Keywords}}"
+                           class="text-secondary text-decoration-none d-inline-block"
                            style="width: 100%;">
                             <i class="fa fa-navicon fw-bold"> 话题 ({{.data.total}})</i>
                         </a>
@@ -22,7 +23,8 @@
             <div class="bg-white rounded-1 notice-content">
                 <div class="notice-remind ">
                     <div class="text-secondary pt-4 ps-4 pe-4" style="border-bottom: 0;">
-                        检索到 {{.data.total}} 条相关信息 关于 <span class="text-success fw-bold">{{.data.req.Keywords}}</span> 的内容
+                        检索到 {{.data.total}} 条相关信息 关于 <span
+                            class="text-success fw-bold">{{.data.req.Keywords}}</span> 的内容
                         <hr>
                     </div>
                     {{if .data.list}}
@@ -41,10 +43,11 @@
                                 {{.Brief}}
                             </p>
                             <p class="mb-0 mt-1 small">
-                                    <a class="text-secondary text-decoration-none" href="/user?id={{.Publisher.ID}}">
-                                        <i class="fa fa-user-circle-o"> {{.Publisher.Name}}</i>
-                                    </a>
-                                <a class="badge bg-light text-secondary text-decoration-none" href="/?type={{.Node.Alias}}"> {{.Node.Name}} </a>
+                                <a class="text-secondary text-decoration-none" href="/user?id={{.Publisher.ID}}">
+                                    <i class="fa fa-user-circle-o"> {{.Publisher.Name}}</i>
+                                </a>
+                                <a class="badge bg-dark text-light text-decoration-none" href="/?type={{.Node.Alias}}">
+                                    {{.Node.Name}} </a>
                                 <span class="text-secondary">{{DiffForHumans .CreatedAt}}</span>
                             </p>
                         </div>
