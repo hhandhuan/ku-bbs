@@ -28,12 +28,14 @@ func (c *cComment) PublishSubmit(ctx *gin.Context) {
 
 	to := fmt.Sprintf("/topics/%d", req.TopicId)
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.To(to).WithError(err.FirstError()).Redirect()
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.To(to).WithError(verr.FirstError()).Redirect()
 		return
 	}
 
-	if id, err := frontend.CommentService(ctx).Submit(&req); err != nil {
+	id, err := frontend.CommentService(ctx).Submit(&req)
+	if err != nil {
 		s.To(to).WithError(err).Redirect()
 	} else {
 		s.To(fmt.Sprintf("%s?j=comment%d", to, id)).WithMsg("发布成功").Redirect()
@@ -50,12 +52,14 @@ func (c *cComment) DeleteSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Json(gin.H{"code": 1, "msg": err.FirstError()})
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.Json(gin.H{"code": 1, "msg": verr.FirstError()})
 		return
 	}
 
-	if err := frontend.CommentService(ctx).Delete(req.ID); err != nil {
+	derr := frontend.CommentService(ctx).Delete(req.ID)
+	if derr != nil {
 		s.Json(gin.H{"code": 1, "msg": "删除失败"})
 	} else {
 		s.Json(gin.H{"code": 0, "msg": "删除成功"})

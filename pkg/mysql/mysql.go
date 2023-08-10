@@ -2,9 +2,10 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/hhandhuan/ku-bbs/pkg/config"
 	"log"
 	"time"
+
+	"github.com/hhandhuan/ku-bbs/pkg/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

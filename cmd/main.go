@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/hhandhuan/ku-bbs/pkg/logger"
-	"github.com/hhandhuan/ku-bbs/pkg/mysql"
-	"github.com/hhandhuan/ku-bbs/pkg/redis"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
+	"github.com/hhandhuan/ku-bbs/pkg/mysql"
+	"github.com/hhandhuan/ku-bbs/pkg/redis"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -47,7 +48,7 @@ func main() {
 	server := http.Server{Addr: config.GetInstance().System.Addr, Handler: engine}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.GetInstance().Error().Msgf("listen server error: %v", err)
 		}
 	}()
@@ -65,8 +66,7 @@ func main() {
 		logger.GetInstance().Error().Msgf("service shutdown error: %v", err)
 	}
 
-	select {
-	case <-ctx.Done():
-		logger.GetInstance().Info().Msg("service is down")
-	}
+	<-ctx.Done()
+
+	logger.GetInstance().Info().Msg("service has been shut down")
 }

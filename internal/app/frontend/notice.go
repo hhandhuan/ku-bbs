@@ -20,14 +20,16 @@ func (*cNotice) HomePage(ctx *gin.Context) {
 	}
 
 	var req fe.GetRemindListReq
-	if err := ctx.ShouldBind(&req); err != nil {
+
+	err := ctx.ShouldBind(&req)
+	if err != nil {
 		s.To("/").WithError(err).Redirect()
 		return
 	}
 
-	noticeService := frontend.NoticeService(ctx)
+	nsv := frontend.NoticeService(ctx)
 
-	data, err := noticeService.GetList(&req)
+	data, err := nsv.GetList(&req)
 	if err != nil {
 		s.To("/").WithError(err.Error()).Redirect()
 		return
@@ -42,7 +44,7 @@ func (*cNotice) HomePage(ctx *gin.Context) {
 	data["systemUnread"] = systemUnread
 
 	// 更新未读消息状态
-	noticeService.ReadAll(req.Type)
+	nsv.ReadAll(req.Type)
 
 	s.View("frontend.notice.home", data)
 }

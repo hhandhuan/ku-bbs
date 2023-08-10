@@ -2,9 +2,10 @@ package config
 
 import (
 	"flag"
-	"gopkg.in/yaml.v2"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Mysql struct {

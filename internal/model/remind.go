@@ -1,9 +1,10 @@
 package model
 
 import (
+	"time"
+
 	"github.com/hhandhuan/ku-bbs/pkg/mysql"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Reminds struct {

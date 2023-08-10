@@ -29,13 +29,15 @@ func (c *cLike) LikeSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
+	err := g.Validator().Data(req).Run(context.Background())
+	if err != nil {
 		s.Json(gin.H{"code": 1, "msg": err.FirstError()})
 		return
 	}
 
-	if err := frontend.LikeService(ctx).Like(&req); err != nil {
-		s.Json(gin.H{"code": 1, "msg": err.Error()})
+	lerr := frontend.LikeService(ctx).Like(&req)
+	if lerr != nil {
+		s.Json(gin.H{"code": 1, "msg": lerr.Error()})
 	} else {
 		s.Json(gin.H{"code": 0, "msg": "ok"})
 	}

@@ -29,12 +29,14 @@ func (c *cFollow) FollowSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Json(gin.H{"code": 1, "msg": err.FirstError()})
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.Json(gin.H{"code": 1, "msg": verr.FirstError()})
 		return
 	}
 
-	if state, err := frontend.UserService(ctx).Follow(&req); err != nil {
+	state, err := frontend.UserService(ctx).Follow(&req)
+	if err != nil {
 		s.Json(gin.H{"code": 1, "msg": err.Error()})
 	} else {
 		s.Json(gin.H{"code": 0, "msg": "ok", "state": state})

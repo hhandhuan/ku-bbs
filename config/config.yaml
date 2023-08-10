@@ -5,9 +5,9 @@ app:
   keywords: 酷 • 社区
   visitMode: guest
 system:
-  env: debug
+  env: release
   addr: :8081
-  shutdownWaitTime: 0
+  shutdownWaitTime: 3
 session:
   name: ku-bbs
   secret: 123456

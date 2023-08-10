@@ -19,7 +19,8 @@ func (c *cCheckin) StoreSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := frontend.CheckinService(ctx).Store(); err != nil {
+	err := frontend.CheckinService(ctx).Store()
+	if err != nil {
 		s.Json(gin.H{"code": 1, "msg": err.Error()})
 	} else {
 		s.Json(gin.H{"code": 0, "msg": "ok"})

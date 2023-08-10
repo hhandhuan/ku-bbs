@@ -23,7 +23,9 @@ func (c *cUser) HomePage(ctx *gin.Context) {
 		s.To("/").WithError(err).Redirect()
 		return
 	}
-	if data, err := frontend.UserService(ctx).Home(&req); err != nil {
+
+	data, err := frontend.UserService(ctx).Home(&req)
+	if err != nil {
 		s.To("/").WithError(err).Redirect()
 	} else {
 		s.View("frontend.user.home", data)
@@ -56,12 +58,14 @@ func (c *cUser) EditSubmit(ctx *gin.Context) {
 			return
 		}
 
-		if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-			s.To(p).WithError(err.FirstError()).Redirect()
+		verr := g.Validator().Data(req).Run(context.Background())
+		if verr != nil {
+			s.To(p).WithError(verr.FirstError()).Redirect()
 			return
 		}
 
-		if err := frontend.UserService(ctx).Edit(&req); err != nil {
+		err := frontend.UserService(ctx).Edit(&req)
+		if err != nil {
 			s.To(p).WithError(err).Redirect()
 		} else {
 			s.Back().WithMsg("修改信息成功").Redirect()
@@ -73,12 +77,14 @@ func (c *cUser) EditSubmit(ctx *gin.Context) {
 			return
 		}
 
-		if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-			s.To(p).WithError(err.FirstError()).Redirect()
+		verr := g.Validator().Data(req).Run(context.Background())
+		if verr != nil {
+			s.To(p).WithError(verr.FirstError()).Redirect()
 			return
 		}
 
-		if err := frontend.UserService(ctx).EditPassword(&req); err != nil {
+		err := frontend.UserService(ctx).EditPassword(&req)
+		if err != nil {
 			s.To(p).WithError(err).Redirect()
 		} else {
 			s.To("/login").WithMsg("修改密码成功，请重新登录").Redirect()

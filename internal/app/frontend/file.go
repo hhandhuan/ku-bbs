@@ -2,10 +2,11 @@ package frontend
 
 import (
 	"fmt"
-	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/v2/text/gstr"
@@ -50,7 +51,8 @@ func (c *cFile) MDUploadSubmit(ctx *gin.Context) {
 
 	name := utils.Md5(time.Now().String()+file.Filename) + "." + ext
 
-	if err := ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name)); err != nil {
+	err = ctx.SaveUploadedFile(file, fmt.Sprintf("%s/%s", path, name))
+	if err != nil {
 		s.MDFileJson(0, err.Error(), "")
 	} else {
 		s.MDFileJson(1, "ok", fmt.Sprintf("/assets/upload/topic/%s", name))

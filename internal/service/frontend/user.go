@@ -3,12 +3,13 @@ package frontend
 import (
 	"errors"
 	"fmt"
-	"github.com/hhandhuan/ku-bbs/pkg/logger"
-	"github.com/hhandhuan/ku-bbs/pkg/utils"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/hhandhuan/ku-bbs/pkg/logger"
+	"github.com/hhandhuan/ku-bbs/pkg/utils"
 
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/hhandhuan/ku-bbs/internal/consts"
@@ -83,8 +84,8 @@ func (s *SUser) genAvatar(name string, gender uint) (string, error) {
 	avatarPath := fmt.Sprintf("users/%s.png", avatarName)
 	uploadPath := fmt.Sprintf("%s/%s", config.GetInstance().Upload.Path, avatarPath)
 
-	if err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath); err != nil {
-		log.Println(err)
+	err := govatar.GenerateFileForUsername(govatar.Gender(gender-1), name, uploadPath)
+	if err != nil {
 		return "", err
 	} else {
 		return "/assets/upload/" + avatarPath, nil
@@ -175,7 +176,6 @@ func (s *SUser) EditPassword(req *fe.EditPasswordReq) error {
 
 	u := model.User().Where("id", currUser.ID).Update("password", utils.GenerateFromPassword(req.Password))
 	if u.Error != nil || u.RowsAffected <= 0 {
-		log.Println(u.Error)
 		return errors.New("修改密码失败")
 	}
 
@@ -334,23 +334,24 @@ func (s *SUser) Home(req *fe.GetUserHomeReq) (gin.H, error) {
 
 // Follow 关注
 func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
+
 	if req.UserID == s.ctx.Auth().ID {
-		return 0, errors.New("无法关注自己")
+		return consts.UnFollowedState, errors.New("无法关注自己")
 	}
 
 	var user *model.Users
 	err := model.User().Where("id", req.UserID).Find(&user).Error
 	if err != nil {
-		return 0, err
+		return consts.UnFollowedState, err
 	}
 	if user == nil || user.ID <= 0 {
-		return 0, errors.New("用户不存在")
+		return consts.UnFollowedState, errors.New("用户不存在")
 	}
 
 	var follow *model.Follows
 	err = model.Follow().Where("user_id = ? AND target_id = ?", s.ctx.Auth().ID, req.UserID).Find(&follow).Error
 	if err != nil {
-		return 0, err
+		return consts.UnFollowedState, err
 	}
 
 	if follow.ID <= 0 {
@@ -364,17 +365,18 @@ func (s *SUser) Follow(req *fe.FollowUserReq) (int, error) {
 		sub.Attach(&remindSub.FollowObs{Sender: s.ctx.Auth().ID, Receiver: req.UserID})
 		sub.Notify()
 
-		return 1, nil
-	}
+		return consts.FollowedState, nil
+	} else {
+		state := consts.UnFollowedState
+		if follow.State == consts.UnFollowedState {
+			state = consts.FollowedState
+		}
 
-	state := consts.UnFollowedState
-	if follow.State == consts.UnFollowedState {
-		state = consts.FollowedState
-	}
+		err = model.Follow().Where("id", follow.ID).Update("state", state).Error
+		if err != nil {
+			return consts.UnFollowedState, err
+		}
 
-	if err = model.Follow().Where("id", follow.ID).Update("state", state).Error; err != nil {
-		return 0, err
+		return state, nil
 	}
-
-	return state, nil
 }

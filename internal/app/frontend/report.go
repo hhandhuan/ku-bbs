@@ -29,8 +29,9 @@ func (c *cReport) ReportSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Json(gin.H{"code": 1, "msg": err.FirstError()})
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.Json(gin.H{"code": 1, "msg": verr.FirstError()})
 		return
 	}
 

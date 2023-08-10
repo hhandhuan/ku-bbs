@@ -24,8 +24,9 @@ func (c *cSearch) List(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.To("/").WithError(err.FirstError()).Redirect()
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.To("/").WithError(verr.FirstError()).Redirect()
 		return
 	}
 

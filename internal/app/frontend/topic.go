@@ -25,7 +25,8 @@ func (c *cTopic) PublishPage(ctx *gin.Context) {
 		return
 	}
 
-	if nodes, err := frontend.NodeService(ctx).GetEnableNodes(); err != nil {
+	nodes, err := frontend.NodeService(ctx).GetEnableNodes()
+	if err != nil {
 		s.To("/").WithError(err.Error()).Redirect()
 	} else {
 		s.View("frontend.topic.publish", gin.H{"nodes": nodes})
@@ -42,12 +43,14 @@ func (c *cTopic) PublishSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Back().WithError(err.FirstError()).WithData(req).Redirect()
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.Back().WithError(verr.FirstError()).WithData(req).Redirect()
 		return
 	}
 
-	if id, err := frontend.TopicService(ctx).Publish(&req); err != nil {
+	id, err := frontend.TopicService(ctx).Publish(&req)
+	if err != nil {
 		s.Back().WithError(err).WithData(req).Redirect()
 	} else {
 		s.To(fmt.Sprintf("/topics/%d", id)).WithMsg("发布成功").Redirect()
@@ -83,7 +86,8 @@ func (c *cTopic) DeleteSubmit(ctx *gin.Context) {
 	s := service.Context(ctx)
 	i := gconv.Uint64(ctx.Param("id"))
 
-	if err := frontend.TopicService(ctx).Delete(i); err != nil {
+	err := frontend.TopicService(ctx).Delete(i)
+	if err != nil {
 		s.To(fmt.Sprintf("/topics/%d", i)).WithError(err).Redirect()
 	} else {
 		s.To("/").WithMsg("删除成功").Redirect()
@@ -126,12 +130,14 @@ func (c *cTopic) EditSubmit(ctx *gin.Context) {
 		return
 	}
 
-	if err := g.Validator().Data(req).Run(context.Background()); err != nil {
-		s.Back().WithError(err.FirstError()).WithData(req).Redirect()
+	verr := g.Validator().Data(req).Run(context.Background())
+	if verr != nil {
+		s.Back().WithError(verr.FirstError()).WithData(req).Redirect()
 		return
 	}
 
-	if id, err := frontend.TopicService(ctx).Edit(i, &req); err != nil {
+	id, err := frontend.TopicService(ctx).Edit(i, &req)
+	if err != nil {
 		s.Back().WithError(err).WithData(req).Redirect()
 	} else {
 		s.To(fmt.Sprintf("/topics/%d", id)).WithMsg("编辑成功").Redirect()
@@ -143,7 +149,8 @@ func (c *cTopic) SettingCommentStateSubmit(ctx *gin.Context) {
 	s := service.Context(ctx)
 	i := gconv.Uint64(ctx.Param("id"))
 
-	if err := frontend.TopicService(ctx).SettingCommentState(i); err != nil {
+	err := frontend.TopicService(ctx).SettingCommentState(i)
+	if err != nil {
 		s.To(fmt.Sprintf("/topics/%d", i)).WithError(err).Redirect()
 	} else {
 		s.To(fmt.Sprintf("/topics/%d", i)).WithMsg("操作成功").Redirect()
