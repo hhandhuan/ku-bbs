@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"os"
 	"os/signal"
@@ -48,7 +49,7 @@ func main() {
 	server := http.Server{Addr: config.GetInstance().System.Addr, Handler: engine}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.GetInstance().Error().Msgf("listen server error: %v", err)
 		}
 	}()

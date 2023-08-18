@@ -5,7 +5,7 @@ app:
   keywords: 酷 • 社区
   visitMode: guest
 system:
-  env: release
+  env: debug
   addr: :8081
   shutdownWaitTime: 3
 session:
