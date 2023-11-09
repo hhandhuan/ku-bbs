@@ -37,8 +37,8 @@ func main() {
 
 	engine := gin.Default()
 	engine.SetFuncMap(utils.GlobalFunc())
-	engine.Static("/assets", "../assets")
-	engine.LoadHTMLGlob("../views/**/**/*")
+	engine.Static("/assets", "./assets")
+	engine.LoadHTMLGlob("./views/**/**/*")
 
 	store := cookie.NewStore([]byte(config.GetInstance().Session.Secret))
 	engine.Use(sessions.Sessions(config.GetInstance().Session.Name, store))

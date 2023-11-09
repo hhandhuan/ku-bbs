@@ -76,7 +76,7 @@ func GetInstance() *Config {
 }
 
 var (
-	path = flag.String("cfg", "../config/config.yaml", "config file path")
+	path = flag.String("cfg", "./config/config.yaml", "config file path")
 )
 
 func Initialize() {

@@ -25,7 +25,7 @@ redis:
   db: 1
   idleTimeout: 10
 upload:
-  path: ../assets/upload
+  path: ./assets/upload
   ext: [ png, jpg, jpeg, gif ]
   filesize: 1 # 单位 M
 logger:
