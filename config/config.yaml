@@ -29,7 +29,7 @@ upload:
   ext: [ png, jpg, jpeg, gif ]
   filesize: 1 # 单位 M
 logger:
-  path: ../logs/ku-bbs.log
+  path: ./logs/ku-bbs.log
   level: 1
   maxSize: 5
   maxBackups: 10
